@@ -1,0 +1,7 @@
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/atozbfw7/public_html/cognichat"
+PassengerBaseURI "/"
+PassengerNodejs "/home/atozbfw7/nodevenv/public_html/cognichat/10/bin/node"
+PassengerAppType node
+PassengerStartupFile server.js
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
