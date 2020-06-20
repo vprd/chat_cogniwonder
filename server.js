@@ -1,55 +1,20 @@
-/**
-* Real Time chatting app
-* @author Shashank Tiwari
-*/
-'use strict';
-
-const express = require("express");
-const http = require('http');
-const socketio = require('socket.io');
+const express = require('express');
+const app = express();
+const path = require('path');
+const http = require('http').createServer(app);
 const bodyParser = require('body-parser');
 
-const socketEvents = require('./utils/socket'); 
-const routes = require('./utils/routes'); 
-const config = require('./utils/config'); 
+const PORT = process.env.PORT || 8000;
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 
-class Server{
+//serve static
+app.use(express.static(path.resolve(__dirname + '/client/build')));
+app.get('/*', (req, res) => {
+    res.sendFile(path.resolve(__dirname + '/client/build/index.html'));
+});
 
-    constructor(){
-        this.port =  process.env.PORT || 3000;
-        this.host = `localhost`;
-        
-        this.app = express();
-        this.http = http.Server(this.app);
-        this.socket = socketio(this.http);
-    }
 
-    appConfig(){        
-        this.app.use(
-            bodyParser.json()
-        );
-        new config(this.app);
-    }
-
-    /* Including app Routes starts*/
-    includeRoutes(){
-        new routes(this.app).routesConfig();
-        new socketEvents(this.socket).socketConfig();
-    }
-    /* Including app Routes ends*/  
-
-    appExecute(){
-
-        this.appConfig();
-        this.includeRoutes();
-
-        this.http.listen(this.port, this.host, () => {
-            console.log(`Listening on http://${this.host}:${this.port}`);
-        });
-    }
-
-}
-
-const app = new Server();
-app.appExecute();
+http.listen(PORT, () => console.log('server started'));
+module.exports = oki;
