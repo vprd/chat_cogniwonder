@@ -1,12 +1,15 @@
-const express = require('express');
-const app = express();
-const path = require('path');
-const http = require('http').createServer(app);
+const app = require('express')();
+const server = require('http').createServer(app);
+
 const bodyParser = require('body-parser');
+const path = require('path');
+
+const api = require('./src/routes/api')(server);
 
 const PORT = process.env.PORT || 8000;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use('/api', api);
 
 
 //serve static
@@ -16,4 +19,4 @@ app.get('/*', (req, res) => {
     res.sendFile(path.resolve(__dirname + '/client/build/index.html'));
 });
 
-http.listen(PORT, () => console.log('server started'));
+server.listen(PORT, () => console.log('server started'));

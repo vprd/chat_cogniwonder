@@ -32,6 +32,15 @@ function query(sql) {
     });
 }
 
+
+
+function setUpTable(){
+    createConversationsTable();
+    createConversationsUserRelationTable();
+    createMessagedsTable()
+}
+
+
 module.exports = () => {
     con.connect((err) => {
 
@@ -42,4 +51,3 @@ module.exports = () => {
 
     return con;
 }
-
