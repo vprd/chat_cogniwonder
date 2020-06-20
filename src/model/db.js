@@ -10,8 +10,12 @@ const con = mysql.createConnection({
 
 function createConversationsTable() {
 
-    query(`CREATE TABLE conversations (conversation_id INT AUTO_INCREMENT PRIMARY KEY, conversation INT)`);
+    query(`CREATE TABLE conversations (conversation_id INT AUTO_INCREMENT PRIMARY KEY, conversation TEXT)`);
 
+}
+
+function createConversationsUserRelationTable() {
+    query(`CREATE TABLE userconversation (user_id INT ,conversationids TEXT)`);
 }
 
 function createMessagedsTable() {
@@ -39,7 +43,7 @@ module.exports = () => {
         console.log("db connection established");
 
     });
-    
+
     return con;
 }
 
