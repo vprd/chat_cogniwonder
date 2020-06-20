@@ -6,7 +6,6 @@ class Controller {
         this.dbconnection = dbconnection;
     }
 
-
     _testing = async () => {
 
         const result = await this._query('UPDATE conversations SET PWD = "test" WHERE PWD IS NULL');
@@ -32,6 +31,12 @@ class Controller {
         });
     }
 
+    _delete = async () => {
+        control._query(`DELETE FROM conversations`)
+        control._query(`DELETE FROM userconversation`)
+        console.log('reset');
+    }
+
     createConversation = async (userids) => {
         if (Array.isArray(userids)) {
 
@@ -45,14 +50,14 @@ class Controller {
                         let result = await this._query(`INSERT INTO conversations (conversation) VALUES ('${serializeduserids}')`)
                         //insertId
                         for (let id of userids) {
-                            
+
                             const d = await this.listUserConversations(id);
-                            
+
                             if (d.length === 0) {
                                 await this._query(`INSERT INTO userconversation (user_id,conversationids) VALUES (${id},'${JSON.stringify([result.insertId])}')`);
                             } else {
                                 d.push(result.insertId);
-                                await this._query(`UPDATE userconversation SET conversationids='${ JSON.stringify(d) }' WHERE user_id=${id}`);
+                                await this._query(`UPDATE userconversation SET conversationids='${JSON.stringify(d)}' WHERE user_id=${id}`);
                             }
 
                         }
@@ -69,7 +74,6 @@ class Controller {
 
 
     }
-
 
     listConversations = async (userids) => {
 
@@ -100,11 +104,6 @@ class Controller {
 
     }
 
-    deleteConversation = async () => {
-        control._query(`DELETE FROM conversations`)
-        control._query(`DELETE FROM userconversation`)
-        console.log('reset');
-    }
 
     listUserConversations = async (userid) => {
 
@@ -118,18 +117,37 @@ class Controller {
 
     }
 
+    insertMessage = async ({ message, sender, reciever, props = {} }) => {
+        if (message && sender && reciever) {
+
+            const sender_id = (await this._query(`SELECT * FROM users WHERE NAME='${sender}'`))[0].NAME_ID;
+            const reciever_id = (await this._query(`SELECT * FROM users WHERE NAME='${reciever}'`))[0].NAME_ID;
+
+            const createdDate = new Date();
+            const extraProps = JSON.stringify(props);
+
+            await this._query(`INSERT INTO messages (sender_id,reciever_id,date,message,props) VALUES (${sender_id},${reciever_id},'${createdDate}','${message}','${extraProps}')`);
+
+        }
+        else {
+            throw new Error(`message, sender and reciever must be defined`);
+        }
+    }
+
 }
 
 const control = new Controller();
 
 (async () => {
-    console.log(await control.createConversation([1, 2]));
+    /* console.log(await control.createConversation([1, 2]));
     console.log(await control._query(`SELECT * FROM userconversation`));
     console.log(await control.createConversation([1, 3]));
-    console.log(await control.listConversations());
+    console.log(await control.listConversations()); */
 
-    //control.deleteConversation()
+    //control._delete()
     //control._query(`CREATE TABLE userconversation (user_id INT ,conversationids TEXT)`);
-    console.log(await control._query(`SELECT * FROM userconversation`));
+    //console.log(await control._query(`SELECT * FROM userconversation`));
     //console.log(await control._query(`INSERT INTO userconversation (user_id,conversationids) VALUES (1,'[17]')`));
+
+    control._listUsers();
 })();
