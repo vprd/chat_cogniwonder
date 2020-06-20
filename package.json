@@ -4,7 +4,11 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "react-start": "cd client && npm start",
+    "deploy": "cd client && npm run build && cd .. && git add . && git commit -m 'deploying-server-and-client' && git push",
+    "server-deploy": "git add . && git commit -m 'deploying-server' && git push",
+    "client-deploy": "cd client && npm run build && cd .. && git add . && git commit -m 'deploying-server-and-client' && git push"
   },
   "repository": {
     "type": "git",
