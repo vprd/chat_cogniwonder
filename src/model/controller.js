@@ -6,13 +6,14 @@ class Controller {
         this.dbconnection = dbconnection;
     }
 
-    _testing = async () => {
+    /* _testing = async () => {
 
         const result = await this._query('UPDATE conversations SET PWD = "test" WHERE PWD IS NULL');
         console.log(result);
 
         return result
-    }
+    } */
+
     _listUsers = async () => {
 
         const result = await this._query('SELECT * FROM users');
@@ -20,6 +21,7 @@ class Controller {
         return result
     }
 
+    // Async wrapper for sql queries
     _query = (sql) => {
         const con = this.dbconnection;
         return new Promise((resolve, reject) => {
@@ -31,12 +33,15 @@ class Controller {
         });
     }
 
+    // Reset the testing DB tables 
     _delete = async () => {
         control._query(`DELETE FROM conversations`)
         control._query(`DELETE FROM userconversation`)
         console.log('reset');
     }
 
+    // Creates a conversation in the conversation table if it does not already exists
+    // also creates the relation needed in the useruserconversation if not already there
     createConversation = async (userids) => {
         if (Array.isArray(userids)) {
 
@@ -75,11 +80,14 @@ class Controller {
 
     }
 
+    // returns all the conversations in TABLE=conversations
+    // or can return the conversation with the specified userids
     listConversations = async (userids) => {
 
         if (userids) {
             userids = JSON.stringify(userids);
             let result = await this._query(`SELECT * FROM conversations WHERE conversation = '${userids}'`);
+            
             if (result.length > 0) result = result.map(d => {
                 return {
                     ...d,
@@ -89,6 +97,7 @@ class Controller {
             return result;
         } else {
             let result = await this._query('SELECT * FROM conversations');
+            
             if (result.length > 0) {
                 result = result.map(d => {
 
@@ -104,7 +113,8 @@ class Controller {
 
     }
 
-
+    // similar to listConversations but returns all
+    // the conversation ids of a specified user id has made
     listUserConversations = async (userid) => {
 
         let result = await this._query(`SELECT * FROM userconversation WHERE user_id = ${userid}`);
@@ -117,6 +127,8 @@ class Controller {
 
     }
 
+    // inserts a message in the main messages table
+    // props can be any additions properties that may need to be adde in the future
     insertMessage = async ({ message, sender, conversationID, props = {} }) => {
         if (message && sender && conversationID) {
 
@@ -133,13 +145,17 @@ class Controller {
         }
     }
 
+    // returns all the messages in a conversation specified by a conversationID
     getMessages = async (conversationID) => {
-        const result = (await this._query(`SELECT * FROM messages WHERE conversation_id=${conversationID}`));
+        const result = (await this._query(`SELECT * FROM messages WHERE conversation_id=${conversationID}`)); 
         return result;
     }
 
 }
 
+
+// !DO NOT REMOVE THIS
+// Converts javascripts date format to mysqls weird datetime type
 function twoDigits(d) {
     if (0 <= d && d < 10) return "0" + d.toString();
     if (-10 < d && d < 0) return "-0" + (-1 * d).toString();
@@ -150,6 +166,7 @@ Date.prototype.toMysqlFormat = function () {
     return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(this.getUTCDate()) + " " + twoDigits(this.getUTCHours()) + ":" + twoDigits(this.getUTCMinutes()) + ":" + twoDigits(this.getUTCSeconds());
 };
 
+// the instance of the controller used elsewhere
 const control = new Controller();
 
 module.exports = control;
