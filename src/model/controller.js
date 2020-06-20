@@ -117,16 +117,15 @@ class Controller {
 
     }
 
-    insertMessage = async ({ message, sender, reciever, props = {} }) => {
-        if (message && sender && reciever) {
+    insertMessage = async ({ message, sender, conversationID, props = {} }) => {
+        if (message && sender && conversationID) {
 
             const sender_id = (await this._query(`SELECT * FROM users WHERE NAME='${sender}'`))[0].NAME_ID;
-            const reciever_id = (await this._query(`SELECT * FROM users WHERE NAME='${reciever}'`))[0].NAME_ID;
 
             const createdDate = new Date();
             const extraProps = JSON.stringify(props);
 
-            await this._query(`INSERT INTO messages (sender_id,reciever_id,date,message,props) VALUES (${sender_id},${reciever_id},'${createdDate}','${message}','${extraProps}')`);
+            await this._query(`INSERT INTO messages (sender_id,conversation_id,date,message,props) VALUES (${sender_id},${conversationID},'${createdDate.toMysqlFormat()}','${message}','${extraProps}')`);
 
         }
         else {
@@ -134,20 +133,23 @@ class Controller {
         }
     }
 
+    getMessages = async (conversationID) => {
+        const result = (await this._query(`SELECT * FROM messages WHERE conversation_id=${conversationID}`));
+        return result;
+    }
+
 }
+
+function twoDigits(d) {
+    if (0 <= d && d < 10) return "0" + d.toString();
+    if (-10 < d && d < 0) return "-0" + (-1 * d).toString();
+    return d.toString();
+}
+
+Date.prototype.toMysqlFormat = function () {
+    return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(this.getUTCDate()) + " " + twoDigits(this.getUTCHours()) + ":" + twoDigits(this.getUTCMinutes()) + ":" + twoDigits(this.getUTCSeconds());
+};
 
 const control = new Controller();
 
-(async () => {
-    /* console.log(await control.createConversation([1, 2]));
-    console.log(await control._query(`SELECT * FROM userconversation`));
-    console.log(await control.createConversation([1, 3]));
-    console.log(await control.listConversations()); */
-
-    //control._delete()
-    //control._query(`CREATE TABLE userconversation (user_id INT ,conversationids TEXT)`);
-    //console.log(await control._query(`SELECT * FROM userconversation`));
-    //console.log(await control._query(`INSERT INTO userconversation (user_id,conversationids) VALUES (1,'[17]')`));
-
-    control._listUsers();
-})();
+module.exports = control;

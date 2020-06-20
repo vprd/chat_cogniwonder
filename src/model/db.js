@@ -17,7 +17,7 @@ function createConversationsUserRelationTable() {
 }
 
 function createMessagedsTable() {
-    query(`CREATE TABLE messages (message_id INT AUTO_INCREMENT PRIMARY KEY, sender_id INT, reciever_id INT, date DATETIME , message TEXT, props TEXT)`);
+    query(`CREATE TABLE messages (message_id INT AUTO_INCREMENT PRIMARY KEY, sender_id INT, conversation_id INT, date DATETIME , message TEXT, props TEXT)`);
 }
 
 function addUser(username) {
