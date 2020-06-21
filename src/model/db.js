@@ -10,7 +10,7 @@ const con = mysql.createConnection({
 // TABLE NAME = conversations
 // Table to store all conversations, conversation is a serialized array of all the conversations on the entire platform
 function createConversationsTable() {
-    query(`CREATE TABLE conversations (conversation_id INT AUTO_INCREMENT PRIMARY KEY, conversation TEXT)`);
+    query(`CREATE TABLE conversations (conversation_id INT AUTO_INCREMENT PRIMARY KEY, conversation TEXT, conversation_name TEXT)`);
 }
 
 // TABLE NAME = userconversation

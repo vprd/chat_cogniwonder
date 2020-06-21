@@ -39,7 +39,13 @@ class Controller {
         control._query(`DELETE FROM userconversation`)
         console.log('reset');
     }
-
+    authenticate = async ({ username, password }) => {
+        if ((typeof username === 'string') && (typeof password === 'string')) {
+            const result = (await this._query(`SELECT * FROM users WHERE NAME='${username}'`))[0];
+            if (password === result.PWD) return true;
+        }
+        return false;
+    }
     // Creates a conversation in the conversation table if it does not already exists
     // also creates the relation needed in the useruserconversation if not already there
     createConversation = async (userids) => {
@@ -87,7 +93,7 @@ class Controller {
         if (userids) {
             userids = JSON.stringify(userids);
             let result = await this._query(`SELECT * FROM conversations WHERE conversation = '${userids}'`);
-            
+
             if (result.length > 0) result = result.map(d => {
                 return {
                     ...d,
@@ -97,7 +103,7 @@ class Controller {
             return result;
         } else {
             let result = await this._query('SELECT * FROM conversations');
-            
+
             if (result.length > 0) {
                 result = result.map(d => {
 
@@ -147,7 +153,7 @@ class Controller {
 
     // returns all the messages in a conversation specified by a conversationID
     getMessages = async (conversationID) => {
-        const result = (await this._query(`SELECT * FROM messages WHERE conversation_id=${conversationID}`)); 
+        const result = (await this._query(`SELECT * FROM messages WHERE conversation_id=${conversationID}`));
         return result;
     }
 

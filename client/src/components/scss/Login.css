@@ -1,0 +1,69 @@
+.login-page {
+  height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.login-page form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.login-page form input {
+  padding: 10px;
+  margin-bottom: 10px;
+  -webkit-animation: rollin 600ms forwards ease;
+          animation: rollin 600ms forwards ease;
+  -webkit-transition: -webkit-box-shadow 200ms ease;
+  transition: -webkit-box-shadow 200ms ease;
+  transition: box-shadow 200ms ease;
+  transition: box-shadow 200ms ease, -webkit-box-shadow 200ms ease;
+  border: none;
+  -webkit-box-shadow: 0 0 12px 2px rgba(0, 0, 0, 0.158);
+          box-shadow: 0 0 12px 2px rgba(0, 0, 0, 0.158);
+}
+
+@-webkit-keyframes rollin {
+  0% {
+    opacity: 0;
+    width: 10px;
+  }
+  100% {
+    opacity: 1;
+    width: 100%;
+  }
+}
+
+@keyframes rollin {
+  0% {
+    opacity: 0;
+    width: 10px;
+  }
+  100% {
+    opacity: 1;
+    width: 100%;
+  }
+}
+/*# sourceMappingURL=Login.css.map */

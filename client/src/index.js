@@ -1,12 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+// Global styling
 import './index.css';
-import App from './App';
+
+// main app
+import App from './components/App';
 import * as serviceWorker from './serviceWorker';
+
+//global context
+import { GlobalContextProvider } from './components/GloablContext';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <GlobalContextProvider>
+      <App />
+    </GlobalContextProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
@@ -15,3 +24,5 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+
+

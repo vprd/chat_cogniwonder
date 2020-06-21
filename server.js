@@ -1,16 +1,19 @@
-const app = require('express')();
+const express = require('express');
+const app = express();
 //app.listen will not work when using in socket.io
 const server = require('http').createServer(app);
 
 // express middlewares
 const bodyParser = require('body-parser');
 const path = require('path');
+const cors = require('cors');
 
 // api and other routes
 const api = require('./src/routes/api')(server);//the http server instnace is passed to api for socket.io
 
 const PORT = process.env.PORT || 8000;
 
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -24,4 +27,4 @@ app.get('/*', (req, res) => {
     res.sendFile(path.resolve(__dirname + '/client/build/index.html'));
 });
 
-server.listen(PORT, () => console.log('server started'));
+server.listen(PORT,()=>console.log('server started on:'+PORT));
