@@ -26,12 +26,12 @@
 
             .message-input {
                 padding: 10px;
-                padding-left: 0;
+                
                 position: sticky;
                 bottom: 0;
                 width: 100%;
                 height: 60px;
-                background: rgba(255, 255, 255, 0.842);
+                background: rgba(255, 255, 255, 0.596);
                 backdrop-filter: blur(8px);
                 display: flex;
                 align-items: center;
@@ -152,8 +152,7 @@
             position: sticky;
             bottom: 0;
             padding: 10px;
-            //background: #86398b2d;
-            //background: white;
+            background: rgba(245, 245, 245, 0.541);
             backdrop-filter: blur(8px);
             width: 100%;
             height: 60px;
