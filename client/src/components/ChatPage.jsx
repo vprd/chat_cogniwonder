@@ -18,9 +18,77 @@ const ChatPage = () => {
         <Options />
       </div>
 
-      <div className="chat-screen"></div>
+      <ChatScreen />
     </div>
   );
+};
+
+const ChatScreen = () => {
+  return (
+    <div className="chat-screen">
+      <div className="contact-header">
+        <img
+          src="https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg?size=626&ext=jpg"
+          alt="profile"
+        />
+        <div className="about">
+          <h4>First Name</h4>
+          <img src="https://img.icons8.com/android/24/000000/info.png" alt="" />
+        </div>
+      </div>
+
+      <Messages />
+    </div>
+  );
+};
+
+const Messages = () => {
+  return (
+    <div className="messages-container">
+      <div className="messages-view">
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+      </div>
+      <div className="message-input">
+        <textarea type="text" placeholder="type something..." />
+        <div className="send-btn">
+          <img src="https://img.icons8.com/material-outlined/64/000000/filled-sent.png" alt="semdbtn"/>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Message = () => {
+  return <div className="message">
+    <span>this is a test message</span>
+  </div>;
 };
 
 const ConversationList = () => {
@@ -41,16 +109,23 @@ const ConversationList = () => {
 const Conversation = () => {
   return (
     <div className="conversation">
-      <img src="" alt="" />
+      <img
+        src="https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg?size=626&ext=jpg"
+        alt="profile"
+      />
       <div className="about">
-          <h4>Name</h4>
+        <h4>First Name</h4>
       </div>
     </div>
   );
 };
 
 const Options = () => {
-  return <div className="menu-options"></div>;
+  return (
+    <div className="menu-options">
+      <img src="https://img.icons8.com/officel/40/000000/settings.png" alt="" />
+    </div>
+  );
 };
 
 export default ChatPage;
