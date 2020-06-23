@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 // Assets
 import logo from "./assets/img/logo.png";
@@ -12,7 +12,6 @@ const ChatPage = () => {
         <header>
           <img src={logo} alt="logo" />
           <h2>Chat</h2>
-          
         </header>
 
         <ConversationList />
@@ -25,6 +24,10 @@ const ChatPage = () => {
 };
 
 const ChatScreen = () => {
+  useEffect(() => {
+    const list = document.querySelector(".chat-screen");
+    list.scrollTop = list.scrollHeight;
+  },[]);
   return (
     <div className="chat-screen">
       <div className="contact-header">
@@ -44,6 +47,7 @@ const ChatScreen = () => {
 };
 
 const Messages = () => {
+  
   return (
     <div className="messages-container">
       <div className="messages-view">
@@ -98,6 +102,7 @@ const Message = () => {
 };
 
 const ConversationList = () => {
+  
   return (
     <div className="conversation-list">
       <Conversation />
