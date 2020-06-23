@@ -9,6 +9,12 @@ module.exports = (server) => {
         res.send(JSON.stringify(await dbController.authenticate(req.body)));
     });
 
+    router.post('/conversations',async (req,res)=>{
+
+        console.log(req.body);
+
+    })
+
     const io = socketio(server);
 
     io.on('connection', () => {

@@ -160,6 +160,7 @@ class Controller {
 }
 
 
+
 // !DO NOT REMOVE THIS
 // Converts javascripts date format to mysqls weird datetime type
 function twoDigits(d) {
@@ -175,4 +176,5 @@ Date.prototype.toMysqlFormat = function () {
 // the instance of the controller used elsewhere
 const control = new Controller();
 
+//control._query(`DROP TABLE conversations`);
 module.exports = control;

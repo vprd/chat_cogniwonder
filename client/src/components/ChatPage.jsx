@@ -12,6 +12,7 @@ const ChatPage = () => {
         <header>
           <img src={logo} alt="logo" />
           <h2>Chat</h2>
+          
         </header>
 
         <ConversationList />
@@ -78,7 +79,10 @@ const Messages = () => {
       <div className="message-input">
         <textarea type="text" placeholder="type something..." />
         <div className="send-btn">
-          <img src="https://img.icons8.com/material-outlined/64/000000/filled-sent.png" alt="semdbtn"/>
+          <img
+            src="https://img.icons8.com/material-outlined/64/000000/filled-sent.png"
+            alt="semdbtn"
+          />
         </div>
       </div>
     </div>
@@ -86,9 +90,11 @@ const Messages = () => {
 };
 
 const Message = () => {
-  return <div className="message">
-    <span>this is a test message</span>
-  </div>;
+  return (
+    <div className="message">
+      <span>this is a test message too</span>
+    </div>
+  );
 };
 
 const ConversationList = () => {
@@ -123,7 +129,13 @@ const Conversation = () => {
 const Options = () => {
   return (
     <div className="menu-options">
-      <img src="https://img.icons8.com/officel/40/000000/settings.png" alt="" />
+      <div className="option">
+        <img
+          src="https://img.icons8.com/cotton/64/000000/add-to-chat.png"
+          alt=""
+        />
+        <span>start chat</span>
+      </div>
     </div>
   );
 };

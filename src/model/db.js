@@ -26,8 +26,8 @@ function createMessagedsTable() {
 }
 
 // this is just to make test usesrs
-function addUser(username) {
-    var sql = `INSERT INTO users (NAME) VALUES ('${username}')`;
+function addUser(username,pwd) {
+    var sql = `INSERT INTO users (NAME,PWD) VALUES ('${username}','${pwd}')`;
     query(sql);
 }
 
@@ -54,6 +54,8 @@ module.exports = () => {
         console.log("db connection established");
 
     });
+
+    
 
     return con;
 }
