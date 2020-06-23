@@ -23,6 +23,10 @@
           justify-content: space-between;
 }
 
+.chat-page .chat-screen .messages-container {
+  padding-top: 70px;
+}
+
 .chat-page .chat-screen .messages-container .message {
   border-radius: 3px;
   width: -webkit-fit-content;
@@ -78,6 +82,7 @@
 }
 
 .chat-page .chat-screen .contact-header {
+  width: 70vw;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -85,12 +90,21 @@
       -ms-flex-align: center;
           align-items: center;
   padding: 10px 20px;
-  background: rgba(255, 255, 255, 0.842);
+  background: rgba(255, 255, 255, 0.438);
+  -webkit-transition: -webkit-backdrop-filter 200ms ease;
+  transition: -webkit-backdrop-filter 200ms ease;
+  transition: backdrop-filter 200ms ease;
+  transition: backdrop-filter 200ms ease, -webkit-backdrop-filter 200ms ease;
+  -webkit-backdrop-filter: blur(4px);
+          backdrop-filter: blur(4px);
+  position: fixed;
+  top: 0;
+}
+
+.chat-page .chat-screen .contact-header:hover {
   -webkit-backdrop-filter: blur(8px);
           backdrop-filter: blur(8px);
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
+  background: rgba(255, 255, 255, 0.842);
 }
 
 .chat-page .chat-screen .contact-header img {
@@ -187,13 +201,16 @@
 }
 
 .chat-page .menu .menu-options {
-  position: -webkit-sticky;
-  position: sticky;
+  position: fixed;
   bottom: 0;
   padding: 20px;
   background: rgba(245, 245, 245, 0.541);
-  -webkit-backdrop-filter: blur(8px);
-          backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
+  -webkit-transition: -webkit-backdrop-filter 200ms ease;
+  transition: -webkit-backdrop-filter 200ms ease;
+  transition: backdrop-filter 200ms ease;
+  transition: backdrop-filter 200ms ease, -webkit-backdrop-filter 200ms ease;
   width: 100%;
   height: 60px;
   display: -webkit-box;
@@ -202,6 +219,11 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+}
+
+.chat-page .menu .menu-options:hover {
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
 }
 
 .chat-page .menu .menu-options .option {

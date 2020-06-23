@@ -15,6 +15,8 @@
 
 
         .messages-container {
+
+            padding-top: 70px;
             .message {
                 border-radius: 3px;
                 width: fit-content;
@@ -62,12 +64,22 @@
         }
 
         .contact-header {
+            width: 70vw;
             display: flex;
             align-items: center;
             padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.842);
-            backdrop-filter: blur(8px);
-            position: sticky;
+            background: rgba(255, 255, 255, 0.438);
+            transition: backdrop-filter 200ms ease;
+            backdrop-filter: blur(4px);
+
+
+            &:hover {
+                backdrop-filter: blur(8px);
+                background: rgba(255, 255, 255, 0.842);
+
+            }
+
+            position: fixed;
             top: 0;
 
             img {
@@ -150,12 +162,19 @@
         }
 
         .menu-options {
-            position: sticky;
+            position: fixed;
             bottom: 0;
             padding: 20px;
 
             background: rgba(245, 245, 245, 0.541);
-            backdrop-filter: blur(8px);
+
+            backdrop-filter: blur(5px);
+            transition: backdrop-filter 200ms ease;
+
+            &:hover {
+                backdrop-filter: blur(8px);
+            }
+
             width: 100%;
             height: 60px;
             display: flex;
