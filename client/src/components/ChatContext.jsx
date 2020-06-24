@@ -10,6 +10,7 @@ const socket_endpoint =
   window.location.href === "http://localhost:3000/"
     ? "http://localhost:8000/"
     : window.location.href;
+    console.log(socket_endpoint)
 
 function connectToConversationSockets(conversations) {
   
