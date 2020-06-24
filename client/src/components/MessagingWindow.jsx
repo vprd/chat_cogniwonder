@@ -51,12 +51,16 @@ const Messages = () => {
   useEffect(() => {
     (async () => {
       setmessages(await getmessages(openedconversation.conversation_id));
+      const list = document.querySelector(".chat-screen");
+      list.scrollTop = list.scrollHeight;
     })();
   }, [openedconversation, getmessages]);
 
   
   socket.on("message", async(message) => {
       setmessages(await getmessages(openedconversation.conversation_id));
+      const list = document.querySelector(".chat-screen");
+      list.scrollTop = list.scrollHeight;
   });
 
   let message = "";
