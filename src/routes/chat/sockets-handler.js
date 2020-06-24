@@ -18,12 +18,16 @@ class ConversationHandler {
         const allConversations = await dbController.listConversations();
 
         for (let conversation of allConversations) {
-            const namespace = `/conversation/${conversation.conversation_id}`;
+            const namespace = `/conversation-${conversation.conversation_id}`;
 
             const conversationNamespace = this.io.of(namespace);
 
             conversationNamespace.on('connection', socket => {
-                console.log(namespace + ' is entered');
+
+                socket.on('message',async message => {
+                    conversationNamespace.emit('message',message);
+                    (await dbController.insertMessage(message));
+                });
             });
         }
 

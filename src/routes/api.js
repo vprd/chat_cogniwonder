@@ -12,11 +12,16 @@ module.exports = (server) => {
     router.post('/conversations', async (req, res) => {
         if (req.body.userid) {
             const conversations = await dbController.getConversations(req.body.userid);
-            
+
             res.send(JSON.stringify(conversations));
         } else {
             res.send('INVALID USERID');
         }
+    });
+
+    router.post('/messages', async (req, res) => {
+        console.log(req.body);
+        req.body.conversation_id && res.send(JSON.stringify(await dbController.getMessages(req.body.conversation_id)));
     });
 
     //socket io setup

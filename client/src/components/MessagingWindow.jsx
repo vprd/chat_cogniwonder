@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import { ChatContext } from "./ChatContext";
 const MessagingWindow = () => {
@@ -11,8 +11,6 @@ const MessagingWindow = () => {
     }
   }, [openedconversation]);
 
-console.log(openedconversation);
-
   if (Object.keys(openedconversation).length) {
     return (
       <div className="chat-screen">
@@ -22,7 +20,7 @@ console.log(openedconversation);
             alt="profile"
           />
           <div className="about">
-            <h4>{openedconversation.conversation_name.join(',')}</h4>
+            <h4>{openedconversation.conversation_name.join(",")}</h4>
             <img
               src="https://img.icons8.com/android/24/000000/info.png"
               alt=""
@@ -43,41 +41,60 @@ console.log(openedconversation);
 };
 
 const Messages = () => {
+  const { getmessages, openedconversation, getSocket, user } = useContext(
+    ChatContext
+  );
+
+  const socket = getSocket(openedconversation.conversation_id)[0].socket;
+  const [messages, setmessages] = useState();
+
+  useEffect(() => {
+    (async () => {
+      setmessages(await getmessages(openedconversation.conversation_id));
+    })();
+  }, [openedconversation, getmessages]);
+
+  
+  socket.on("message", async(message) => {
+      setmessages(await getmessages(openedconversation.conversation_id));
+  });
+
+  let message = "";
+
+  const onchange = (e) => {
+    message = e.target.value;
+  };
+
+  const sendmessage = () => {
+    socket.emit("message", {
+      message,
+      sender_id: user.userid,
+      conversation_id: openedconversation.conversation_id,
+    });
+    const messageInput = document.querySelector(".message-input textarea");
+    messageInput.value = "";
+  };
+
   return (
     <div className="messages-container">
       <div className="messages-view">
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
+        {messages &&
+          messages.map((message, i) => (
+            <Message
+              key={i}
+              text={message.message}
+              sender_id={message.sender_id}
+            />
+          ))}
       </div>
+
       <div className="message-input">
-        <textarea type="text" placeholder="type something..." />
-        <div className="send-btn">
+        <textarea
+          onChange={onchange}
+          type="text"
+          placeholder="type something..."
+        />
+        <div onClick={sendmessage} className="send-btn">
           <img
             src="https://img.icons8.com/material-outlined/64/000000/filled-sent.png"
             alt="semdbtn"
@@ -88,10 +105,16 @@ const Messages = () => {
   );
 };
 
-const Message = ({ type = "message", text = "this is a test message too" }) => {
+const Message = ({
+  type = "message",
+  text = "this is a test message too",
+  sender_id,
+}) => {
+  const { user } = useContext(ChatContext);
+
   if (type === "message") {
     return (
-      <div className="message">
+      <div className="message" id={(user.userid === sender_id) ? "sent-message" : "message"}>
         <span>{text}</span>
       </div>
     );

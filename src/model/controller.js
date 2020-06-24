@@ -186,16 +186,19 @@ class Controller {
 
     // inserts a message in the main messages table
     // props can be any additions properties that may need to be adde in the future
-    insertMessage = async ({ message, sender, conversationID, props = {} }) => {
-        if (message && sender && conversationID) {
+    insertMessage = async ({ message, sender_id, conversation_id, props = {} }) => {
+        if (message && sender_id && conversation_id) {
 
-            const sender_id = (await this._query(`SELECT * FROM users WHERE NAME='${sender}'`))[0].NAME_ID;
+            
 
             const createdDate = new Date();
             const extraProps = JSON.stringify(props);
 
-            await this._query(`INSERT INTO messages (sender_id,conversation_id,date,message,props) VALUES (${sender_id},${conversationID},'${createdDate.toMysqlFormat()}','${message}','${extraProps}')`);
-
+            await this._query(`INSERT INTO messages (sender_id,conversation_id,date,message,props) VALUES (${sender_id},${conversation_id},'${createdDate.toMysqlFormat()}','${message}','${extraProps}')`);
+            
+            return {
+                message, sender_id, conversation_id, date: createdDate, props
+            }
         }
         else {
             throw new Error(`message, sender and reciever must be defined`);

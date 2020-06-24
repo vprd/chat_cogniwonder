@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react";
 
-import MessagingWindow from './MessagingWindow';
+import MessagingWindow from "./MessagingWindow";
 //context
 import { ChatContext, ChatContextProvider } from "./ChatContext";
 // Assets
@@ -33,12 +33,12 @@ const Menu = () => {
   );
 };
 
-
 const ConversationList = () => {
   const { conversations, updateConversations } = useContext(ChatContext);
 
   useEffect(() => {
     updateConversations();
+    // eslint-disable-next-line
   }, []);
 
   if (conversations) {
@@ -55,11 +55,9 @@ const ConversationList = () => {
 };
 
 const Conversation = ({ conversation }) => {
-
   const { user } = useContext(GlobalContext);
   const { openedconversation, setOpenedconversation } = useContext(ChatContext);
-  console.log(conversation.conversation_id, openedconversation);
-
+  
 
   if (conversation.conversation.length === 2) {
     return (

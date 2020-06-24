@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+
 const endpoint = "http://localhost:8000/api";
 
 const api = {
@@ -15,10 +16,10 @@ const api = {
         return result.data;
     },
 
-    getmessages: async (conversationid) => {
+    getmessages: async (conversation_id) => {
         const point = endpoint + '/messages';
         const result = await axios.post(point, {
-            conversationid
+            conversation_id
         });
 
         return result.data;

@@ -1,9 +1,33 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { useEffect, createContext, useContext, useState } from "react";
 
 import api from "./api";
+import io from "socket.io-client";
 
 //global context
 import { GlobalContext } from "./GloablContext";
+
+const socket_endpoint = "http://localhost:8000";
+
+function connectToConversationSockets(conversations) {
+  
+  if (
+    !window.CONVERSATION_SOCKET_CONNECTION &&
+    Array.isArray(conversations) &&
+    conversations.length
+  ) {
+    
+    const conversation_sockets = conversations.map((conversation) => {
+      const socket = io(
+        `${socket_endpoint}/conversation-${conversation.conversation_id}`
+      );
+
+      return { id: conversation.conversation_id, socket };
+    });
+
+    window.CONVERSATION_SOCKET_CONNECTION = true;
+    return conversation_sockets;
+  }
+}
 
 export const ChatContext = createContext();
 
@@ -13,9 +37,24 @@ export const ChatContextProvider = ({ children }) => {
 
   const [openedconversation, setOpenedconversation] = useState({});
   const [conversations, setconversations] = useState([]);
+  const [conversation_sockets, setconversation_sockets] = useState();
+
+  useEffect(() => {
+    const conversation_sockets = connectToConversationSockets(conversations);
+    if (conversation_sockets) {
+      setconversation_sockets(conversation_sockets);
+      console.log("conversation socket set", conversation_sockets);
+    }
+  }, [conversations]);
+
+  function getSocket(conversation_id) {
+    return conversation_sockets.filter((conversation_socket) => {
+      return conversation_socket.id === conversation_id;
+    });
+  }
 
   async function updateConversations() {
-    console.log("user id:", user.userid);
+    
     const convos = await api.getconversations(user.userid);
     setconversations(convos);
   }
@@ -23,6 +62,9 @@ export const ChatContextProvider = ({ children }) => {
   return (
     <ChatContext.Provider
       value={{
+        getmessages: api.getmessages,
+        user,
+        getSocket,
         openedconversation,
         setOpenedconversation,
         updateConversations,
