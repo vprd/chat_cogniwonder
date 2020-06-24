@@ -7,13 +7,14 @@ const server = require('http').createServer(app);
 const bodyParser = require('body-parser');
 const path = require('path');
 const cors = require('cors');
+app.use(cors());
 
 // api and other routes
 const api = require('./src/routes/api')(server);//the http server instnace is passed to api for socket.io
 
 const PORT = process.env.PORT || 8000;
 
-app.use(cors());
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 

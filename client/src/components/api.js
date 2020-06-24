@@ -1,10 +1,14 @@
 import axios from 'axios';
 
+const endpoint = "http://localhost:8000/api";
+
 const api = {
 
     getconversations: async (userid) => {
 
-        const result = await axios.post('/conversations', {
+        const point = endpoint + '/conversations';
+
+        const result = await axios.post(point, {
             userid
         });
 
@@ -12,14 +16,21 @@ const api = {
     },
 
     getmessages: async (conversationid) => {
-
-        const result = await axios.post('/messages', {
+        const point = endpoint + '/messages';
+        const result = await axios.post(point, {
             conversationid
         });
 
         return result.data;
-    }
+    },
+    authenticate: async (username, password) => {
 
+        const result = await axios.post(endpoint + "/authenticate", {
+            username,
+            password,
+        });
+        return result.data;
+    }
 }
 
 export default api;

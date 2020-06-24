@@ -1,13 +1,12 @@
 import React, { useContext } from "react";
 
-import axios from "axios";
 // contexts
 import { GlobalContext } from "./GloablContext";
 
 //styles
 import "./scss/Login.css";
 const Login = () => {
-  const { setAuthentication } = useContext(GlobalContext);
+  const { Authenticate } = useContext(GlobalContext);
   let username = "",
     password = "";
 
@@ -18,7 +17,7 @@ const Login = () => {
 
   onsubmit = async (e) => {
     e.preventDefault();
-    if (await authenticate(username, password)) setAuthentication(true);
+    Authenticate(username,password);
   };
   return (
     <div className="login-page">
@@ -49,13 +48,6 @@ const Login = () => {
   );
 };
 
-async function authenticate(username, password) {
-  const endpoint = "http://localhost:8000";
-  const result = await axios.post(endpoint + "/api/authenticate", {
-    username,
-    password,
-  });
-  return result.data;
-}
+
 
 export default Login;

@@ -54,8 +54,8 @@ module.exports = () => {
         console.log("db connection established");
 
     });
-
     
+
 
     return con;
 }

@@ -37,12 +37,28 @@ class Controller {
     _delete = async () => {
         control._query(`DELETE FROM conversations`)
         control._query(`DELETE FROM userconversation`)
+        control._query(`DELETE FROM messages`)
         console.log('reset');
     }
+    _resettotestsdata = async () => {
+
+        this._delete();
+
+        console.log(await this.createConversation([1, 2]));
+        console.log(await this.createConversation([1, 2, 3]));
+        console.log(await this.createConversation([1, 2, 3, 4]));
+        console.log(await this.createConversation([3, 4]));
+        console.log(await this.createConversation([7, 1]));
+        console.log(await this.createConversation([7, 8]));
+        console.log(await this.createConversation([4, 6]));
+        console.log(await this.createConversation([3, 1, 7, 5, 2]));
+        console.log(await this.createConversation([7, 1, 3]));
+    }
+
     authenticate = async ({ username, password }) => {
         if ((typeof username === 'string') && (typeof password === 'string')) {
             const result = (await this._query(`SELECT * FROM users WHERE NAME='${username}'`))[0];
-            if (password === result.PWD) return true;
+            if (password === result.PWD) return result.NAME_ID;
         }
         return false;
     }
@@ -58,18 +74,21 @@ class Controller {
                     try {
 
                         const serializeduserids = JSON.stringify(userids);
-                        let result = await this._query(`INSERT INTO conversations (conversation) VALUES ('${serializeduserids}')`)
+                        const conversation_name = JSON.stringify(await this.getUsernames(userids));
+                        let result = await this._query(`INSERT INTO conversations (conversation,conversation_name) VALUES ('${serializeduserids}','${conversation_name}')`)
                         //insertId
                         for (let id of userids) {
 
                             const d = await this.listUserConversations(id);
 
-                            if (d.length === 0) {
+
+                            if ((d.length === 0)) {
                                 await this._query(`INSERT INTO userconversation (user_id,conversationids) VALUES (${id},'${JSON.stringify([result.insertId])}')`);
                             } else {
                                 d.push(result.insertId);
                                 await this._query(`UPDATE userconversation SET conversationids='${JSON.stringify(d)}' WHERE user_id=${id}`);
                             }
+
 
                         }
 
@@ -85,7 +104,15 @@ class Controller {
 
 
     }
-
+    getUsernames = async (userids) => {
+        if (Array.isArray(userids)) {
+            const users = await Promise.all(userids.map(id => {
+                return this._query(`SELECT * FROM users WHERE NAME_ID=${id}`);
+            }));
+            console.log(users);
+            return users.map(user => user[0].NAME);
+        }
+    }
     // returns all the conversations in TABLE=conversations
     // or can return the conversation with the specified userids
     listConversations = async (userids) => {
@@ -93,7 +120,7 @@ class Controller {
         if (userids) {
             userids = JSON.stringify(userids);
             let result = await this._query(`SELECT * FROM conversations WHERE conversation = '${userids}'`);
-
+            console.log('this res', result);
             if (result.length > 0) result = result.map(d => {
                 return {
                     ...d,
@@ -123,14 +150,38 @@ class Controller {
     // the conversation ids of a specified user id has made
     listUserConversations = async (userid) => {
 
-        let result = await this._query(`SELECT * FROM userconversation WHERE user_id = ${userid}`);
-        console.log(result)
-        if (result.length === 1) {
-            return JSON.parse(result[0].conversationids);
+        if (userid) {
+
+            let result = await this._query(`SELECT * FROM userconversation WHERE user_id = ${userid}`);
+            if (result.length === 1) {
+                return JSON.parse(result[0].conversationids);
+            } else {
+                return []
+            }
         } else {
-            return []
+            let result = await this._query(`SELECT * FROM userconversation`);
+            //console.log(result)
+            return result
         }
 
+    }
+    getConversations = async (userid) => {
+        const convoids = await this.listUserConversations(userid);
+
+        const conversations = (await Promise.all(convoids.map(id => {
+            return this._query(`SELECT * FROM conversations WHERE conversation_id=${id}`);
+        }))).map(c => {
+            c[0].conversation = JSON.parse(c[0].conversation);
+            c[0].conversation_name = JSON.parse(c[0].conversation_name);
+            return c[0];
+        });
+
+        return conversations;
+    }
+
+    setConversationName = async (conversation_id, conversation_name) => {
+        const result = await this._query(`UPDATE conversations SET conversation_name='${conversation_name}' WHERE conversation_id=${conversation_id}`);
+        return result;
     }
 
     // inserts a message in the main messages table
@@ -176,5 +227,10 @@ Date.prototype.toMysqlFormat = function () {
 // the instance of the controller used elsewhere
 const control = new Controller();
 
-//control._query(`DROP TABLE conversations`);
+//control._query(`DROP TABLE userconversation`);
+//control._resettotestsdata();
+(async () => {
+    //control.getUsernames([1,2,3])
+})();
+
 module.exports = control;
