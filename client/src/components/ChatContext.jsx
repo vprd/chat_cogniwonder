@@ -11,13 +11,13 @@ export const ChatContextProvider = ({ children }) => {
   //global context
   const { user } = useContext(GlobalContext);
 
-  const [openedconversation, setOpenedconversation] = useState(0);
+  const [openedconversation, setOpenedconversation] = useState({});
   const [conversations, setconversations] = useState([]);
 
   async function updateConversations() {
     console.log("user id:", user.userid);
     const convos = await api.getconversations(user.userid);
-    console.log(convos);
+    setconversations(convos);
   }
 
   return (
@@ -26,6 +26,7 @@ export const ChatContextProvider = ({ children }) => {
         openedconversation,
         setOpenedconversation,
         updateConversations,
+        conversations,
       }}
     >
       {children}

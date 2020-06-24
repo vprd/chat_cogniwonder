@@ -1,5 +1,6 @@
 import React, { useEffect, useContext } from "react";
 
+import MessagingWindow from './MessagingWindow';
 //context
 import { ChatContext, ChatContextProvider } from "./ChatContext";
 // Assets
@@ -7,12 +8,13 @@ import logo from "./assets/img/logo.png";
 
 // style
 import "./scss/chat-page.css";
+import { GlobalContext } from "./GloablContext";
 const ChatPage = () => {
   return (
     <ChatContextProvider>
       <div className="chat-page">
         <Menu />
-        <ChatScreen />
+        <MessagingWindow />
       </div>
     </ChatContextProvider>
   );
@@ -30,151 +32,85 @@ const Menu = () => {
     </div>
   );
 };
-const ChatScreen = ({ conversationID }) => {
-  useEffect(() => {
-    if (conversationID) {
-      const list = document.querySelector(".chat-screen");
-      list.scrollTop = list.scrollHeight;
-    }
-  }, [conversationID]);
 
-  if (conversationID) {
-    return (
-      <div className="chat-screen">
-        <div className="contact-header">
-          <img
-            src="https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg?size=626&ext=jpg"
-            alt="profile"
-          />
-          <div className="about">
-            <h4>First Name</h4>
-            <img
-              src="https://img.icons8.com/android/24/000000/info.png"
-              alt=""
-            />
-          </div>
-        </div>
-
-        <Messages />
-      </div>
-    );
-  }
-  return (
-    <div className="start-chat">
-      <img src="https://img.icons8.com/nolan/256/speech-bubble.png" alt="" />
-      <h2>Chat</h2>
-    </div>
-  );
-};
-
-const Messages = () => {
-  return (
-    <div className="messages-container">
-      <div className="messages-view">
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-      </div>
-      <div className="message-input">
-        <textarea type="text" placeholder="type something..." />
-        <div className="send-btn">
-          <img
-            src="https://img.icons8.com/material-outlined/64/000000/filled-sent.png"
-            alt="semdbtn"
-          />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const Message = ({ type = "message", text = "this is a test message too" }) => {
-  if (type === "message") {
-    return (
-      <div className="message">
-        <span>{text}</span>
-      </div>
-    );
-  } else if (type === "badge") {
-    return (
-      <div className="badge">
-        <span>{text}</span>
-      </div>
-    );
-  }
-};
 
 const ConversationList = () => {
-  const {
-    opeanedconversation,
-    conversations,
-    updateConversations,
-  } = useContext(ChatContext);
+  const { conversations, updateConversations } = useContext(ChatContext);
 
   useEffect(() => {
     updateConversations();
   }, []);
 
-  console.log(opeanedconversation);
-
-  return (
-    <div className="conversation-list">
-      <Conversation />
-      <Conversation />
-      <Conversation />
-      <Conversation />
-      <Conversation />
-      <Conversation />
-      <Conversation />
-      <Conversation />
-      <Conversation />
-      <Conversation />
-      <Conversation />
-      <Conversation />
-      <Conversation />
-      <Conversation />
-      <Conversation />
-    </div>
-  );
+  if (conversations) {
+    return (
+      <div className="conversation-list">
+        {conversations.map((conversation, i) => (
+          <Conversation key={i} conversation={conversation} />
+        ))}
+      </div>
+    );
+  } else {
+    return <div className="empty-conversation-list"></div>;
+  }
 };
 
-const Conversation = () => {
-  return (
-    <div className="conversation">
-      <img
-        src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-5.png"
-        alt="profile"
-      />
-      <div className="about">
-        <h4>First Name</h4>
+const Conversation = ({ conversation }) => {
+
+  const { user } = useContext(GlobalContext);
+  const { openedconversation, setOpenedconversation } = useContext(ChatContext);
+  console.log(conversation.conversation_id, openedconversation);
+
+
+  if (conversation.conversation.length === 2) {
+    return (
+      <div
+        onClick={() => setOpenedconversation(conversation)}
+        className="conversation"
+        id={
+          conversation.conversation_id === openedconversation.conversation_id
+            ? "opened-conversation"
+            : ""
+        }
+      >
+        <img
+          src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-5.png"
+          alt="profile"
+        />
+        <div className="about">
+          <h4>
+            {conversation.conversation_name.filter(
+              (name) => name !== user.name
+            )}
+          </h4>
+        </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    let conversation_name = "group";
+    if (typeof conversation.conversation_name === "string") {
+      conversation_name = conversation.conversation_name.join(",");
+    }
+    conversation_name = conversation.conversation_name.join(", ");
+    return (
+      <div
+        onClick={() => setOpenedconversation(conversation)}
+        className="conversation group-conversation"
+        id={
+          conversation.conversation_id === openedconversation.conversation_id
+            ? "opened-conversation"
+            : ""
+        }
+      >
+        <img
+          src="https://img.icons8.com/color/48/000000/conference-skin-type-7.png"
+          alt="group"
+        />
+        <div className="about">
+          <h4>{conversation_name}</h4>
+        </div>
+      </div>
+    );
+  }
 };
 
 const Options = () => {

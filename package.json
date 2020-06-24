@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
+    "server-setup": "npm i && node server.js",
     "react-start": "cd client && npm start",
     "deploy": "cd client && npm run build && cd .. && git add . && git commit -m 'deploying-server-and-client' && git push",
     "server-deploy": "git add . && git commit -m 'deploying-server' && git push",

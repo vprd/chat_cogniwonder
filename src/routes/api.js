@@ -1,7 +1,7 @@
 const router = require('express').Router();
-const socketio = require('socket.io');
+//const socketio = require('socket.io');
 const dbController = require('../model/controller');
-const chat = require('./chat/sockets-handler');
+const ConversationHandler = require('./chat/sockets-handler');
 module.exports = (server) => {
 
     router.post('/authenticate', async (req, res) => {
@@ -19,11 +19,9 @@ module.exports = (server) => {
         }
     });
 
-    const io = socketio(server);
-
-    io.on('connection', () => {
-        console.log('connected');
-    });
+    //socket io setup
+    const socketListener = new ConversationHandler(server);
+    socketListener.conversations();
 
     return router;
 }

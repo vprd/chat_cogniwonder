@@ -178,6 +178,7 @@
 .chat-page .menu .conversation {
   padding: 10px 12px;
   margin: 10px;
+  margin-right: 0;
   background: whitesmoke;
   border-radius: 4px;
   display: -webkit-box;
@@ -268,6 +269,7 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  background: whitesmoke;
 }
 
 .chat-page .start-chat img {
@@ -275,5 +277,27 @@
   height: 256px;
   -o-object-fit: contain;
      object-fit: contain;
+}
+
+.group-conversation {
+  max-height: 120px;
+}
+
+.group-conversation img {
+  width: 40px;
+  height: 40px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 50%;
+  background: white;
+}
+
+.group-conversation .about {
+  overflow: hidden;
+}
+
+#opened-conversation {
+  background: var(--accent-color);
+  color: white;
 }
 /*# sourceMappingURL=chat-page.css.map */

@@ -230,7 +230,7 @@ const control = new Controller();
 //control._query(`DROP TABLE userconversation`);
 //control._resettotestsdata();
 (async () => {
-    //control.getUsernames([1,2,3])
+    //console.log(await control.listConversations())
 })();
 
 module.exports = control;
