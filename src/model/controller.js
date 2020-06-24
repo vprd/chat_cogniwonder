@@ -17,7 +17,7 @@ class Controller {
     _listUsers = async () => {
 
         const result = await this._query('SELECT * FROM users');
-        console.log(result);
+        
         return result
     }
 
@@ -120,7 +120,7 @@ class Controller {
         if (userids) {
             userids = JSON.stringify(userids);
             let result = await this._query(`SELECT * FROM conversations WHERE conversation = '${userids}'`);
-            console.log('this res', result);
+            
             if (result.length > 0) result = result.map(d => {
                 return {
                     ...d,

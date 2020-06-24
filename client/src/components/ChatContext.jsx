@@ -6,7 +6,10 @@ import io from "socket.io-client";
 //global context
 import { GlobalContext } from "./GloablContext";
 
-const socket_endpoint = "http://localhost:8000";
+const socket_endpoint =
+  window.location.href === "http://localhost:3000/"
+    ? "http://localhost:8000/"
+    : window.location.href;
 
 function connectToConversationSockets(conversations) {
   
@@ -18,7 +21,7 @@ function connectToConversationSockets(conversations) {
     
     const conversation_sockets = conversations.map((conversation) => {
       const socket = io(
-        `${socket_endpoint}/conversation-${conversation.conversation_id}`
+        `${socket_endpoint}conversation-${conversation.conversation_id}`
       );
 
       return { id: conversation.conversation_id, socket };

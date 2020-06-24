@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 
-const endpoint = "http://localhost:8000/api";
+const endpoint = window.location.href === "http://localhost:3000/"
+    ? "http://localhost:8000/api"
+    : window.location.href+'api';
 
 const api = {
 
