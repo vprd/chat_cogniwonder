@@ -13,6 +13,7 @@
         flex-direction: column;
         justify-content: space-between;
 
+
         .message-view {
             height: 100%;
             margin-top: auto;
@@ -23,21 +24,23 @@
             padding-top: 70px;
 
 
-            .messages-view{
+            .messages-view {
                 padding-bottom: 70px;
             }
-             .message {
+
+            .message {
                 border-radius: 3px;
                 width: fit-content;
                 padding: 10px 12px;
                 background: rgba(226, 151, 255, 0.212);
                 margin: 10px;
-
+                animation: fadein-left 350ms forwards ease;
             }
 
             #sent-message {
                 margin-left: auto;
                 background: white;
+                animation: fadein-right 350ms forwards ease;
             }
 
             .message-input {
@@ -51,6 +54,7 @@
                 backdrop-filter: blur(8px);
                 display: flex;
                 align-items: center;
+                animation: fadein 600ms forwards ease;
 
                 textarea {
                     padding: 10px;
@@ -86,6 +90,7 @@
             transition: backdrop-filter 200ms ease;
             backdrop-filter: blur(4px);
 
+            animation: fadein 800ms forwards ease;
 
             &:hover {
                 backdrop-filter: blur(8px);
@@ -125,6 +130,7 @@
         height: 100vh;
         overflow-y: scroll;
         padding-bottom: 70px;
+        animation: fadein-left 400ms forwards ease;
 
         header {
 
@@ -138,7 +144,6 @@
             top: 0;
             z-index: 10;
             backdrop-filter: blur(10px);
-
 
             img {
                 width: 35px;
@@ -166,6 +171,8 @@
             align-items: center;
             transition: background 100ms ease;
             cursor: pointer;
+
+            animation: fadein-left 500ms forwards ease;
 
             .about {
                 padding-left: 10px;
@@ -236,6 +243,7 @@
         justify-content: center;
         align-items: center;
         background: whitesmoke;
+        animation: fadein-right 800ms forwards ease;
 
         img {
             width: 256px;

@@ -45,11 +45,15 @@
   padding: 10px 12px;
   background: rgba(226, 151, 255, 0.212);
   margin: 10px;
+  -webkit-animation: fadein-left 350ms forwards ease;
+          animation: fadein-left 350ms forwards ease;
 }
 
 .chat-page .chat-screen .messages-container #sent-message {
   margin-left: auto;
   background: white;
+  -webkit-animation: fadein-right 350ms forwards ease;
+          animation: fadein-right 350ms forwards ease;
 }
 
 .chat-page .chat-screen .messages-container .message-input {
@@ -67,6 +71,8 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  -webkit-animation: fadein 600ms forwards ease;
+          animation: fadein 600ms forwards ease;
 }
 
 .chat-page .chat-screen .messages-container .message-input textarea {
@@ -110,6 +116,8 @@
   transition: backdrop-filter 200ms ease, -webkit-backdrop-filter 200ms ease;
   -webkit-backdrop-filter: blur(4px);
           backdrop-filter: blur(4px);
+  -webkit-animation: fadein 800ms forwards ease;
+          animation: fadein 800ms forwards ease;
   position: fixed;
   top: 0;
 }
@@ -151,6 +159,8 @@
   height: 100vh;
   overflow-y: scroll;
   padding-bottom: 70px;
+  -webkit-animation: fadein-left 400ms forwards ease;
+          animation: fadein-left 400ms forwards ease;
 }
 
 .chat-page .menu header {
@@ -203,6 +213,8 @@
   -webkit-transition: background 100ms ease;
   transition: background 100ms ease;
   cursor: pointer;
+  -webkit-animation: fadein-left 500ms forwards ease;
+          animation: fadein-left 500ms forwards ease;
 }
 
 .chat-page .menu .conversation .about {
@@ -287,6 +299,8 @@
       -ms-flex-align: center;
           align-items: center;
   background: whitesmoke;
+  -webkit-animation: fadein-right 800ms forwards ease;
+          animation: fadein-right 800ms forwards ease;
 }
 
 .chat-page .start-chat img {

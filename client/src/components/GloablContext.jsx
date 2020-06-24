@@ -3,7 +3,7 @@ import api from "./api";
 export const GlobalContext = createContext();
 
 export const GlobalContextProvider = ({ children }) => {
-  const [authentication, setAuthentication] = useState(false);
+  const [authentication, setAuthentication] = useState(!false);
   const [user, setuser] = useState({ userid: 1, name: "raj" });
 
   async function Authenticate(username, password) {
