@@ -30,6 +30,13 @@
 
             .message {
 
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+
                 width: fit-content;
                 border-radius: 0 12px 12px 0;
 
@@ -231,7 +238,12 @@
 
             animation: fadein-left 500ms forwards ease;
 
-
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
             //border-right: 7px solid rgb(143, 255, 143);
 
             .about {

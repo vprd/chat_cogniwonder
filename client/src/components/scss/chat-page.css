@@ -47,6 +47,11 @@
 }
 
 .chat-page .chat-screen .messages-container .message {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
@@ -264,6 +269,11 @@
   cursor: pointer;
   -webkit-animation: fadein-left 500ms forwards ease;
           animation: fadein-left 500ms forwards ease;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .chat-page .menu .conversation .about {
