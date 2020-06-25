@@ -48,12 +48,18 @@ export const ChatContextProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    const conversation_sockets = connectToConversationSockets(conversations);
-    if (conversation_sockets) {
-      setconversation_sockets(conversation_sockets);
-      console.log("conversation socket set", conversation_sockets);
-    }
-  }, [conversations]);
+                    const conversation_sockets = connectToConversationSockets(
+                      conversations
+                    );
+                    if (conversation_sockets) {
+                      setconversation_sockets(conversation_sockets);
+                      console.log(
+                        "conversation socket set",
+                        conversation_sockets
+                      );
+                    }
+                    // eslint-disable-next-line
+                  }, [conversations]);
 
   function getSocket(conversation_id) {
     return conversation_sockets.filter((conversation_socket) => {
