@@ -23,6 +23,9 @@ function createConversationsUserRelationTable() {
 // Contains every message sent on the platform with all its properties
 function createMessagedsTable() {
     query(`CREATE TABLE messages (message_id INT AUTO_INCREMENT PRIMARY KEY, sender TEXT, conversation_id INT, date DATETIME , message TEXT, props TEXT)`);
+    
+    //does not support emojies by default
+    //query(`ALTER TABLE messages CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin`)
 }
 
 // this is just to make test usesrs

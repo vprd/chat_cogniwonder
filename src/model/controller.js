@@ -237,6 +237,7 @@ const control = new Controller();
     //control._resettotestsdata();
     //console.log(await control.listConversations())
     //control._query(`ALTER TABLE conversations ADD props TEXT`)
+    //control._query(`ALTER TABLE messages CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin`)
 })();
 
 module.exports = control;
