@@ -17,7 +17,7 @@ class Controller {
     _listUsers = async () => {
 
         const result = await this._query('SELECT * FROM users');
-        
+
         return result
     }
 
@@ -35,9 +35,11 @@ class Controller {
 
     // Reset the testing DB tables 
     _delete = async () => {
-        control._query(`DELETE FROM conversations`)
-        control._query(`DELETE FROM userconversation`)
-        control._query(`DELETE FROM messages`)
+
+        control._query(`TRUNCATE TABLE conversations`);
+        control._query(`TRUNCATE TABLE userconversation`);
+        control._query(`TRUNCATE TABLE messages`);
+
         console.log('reset');
     }
     _resettotestsdata = async () => {
@@ -45,14 +47,14 @@ class Controller {
         this._delete();
 
         console.log(await this.createConversation([1, 2]));
-        console.log(await this.createConversation([1, 2, 3]));
-        console.log(await this.createConversation([1, 2, 3, 4]));
-        console.log(await this.createConversation([3, 4]));
-        console.log(await this.createConversation([7, 1]));
-        console.log(await this.createConversation([7, 8]));
-        console.log(await this.createConversation([4, 6]));
-        console.log(await this.createConversation([3, 1, 7, 5, 2]));
-        console.log(await this.createConversation([7, 1, 3]));
+        console.log(await this.createConversation([2, 3]));
+        console.log(await this.createConversation([ 3, 4]));
+        console.log(await this.createConversation([4,5]));
+        console.log(await this.createConversation([5,6]));
+        console.log(await this.createConversation([6,1]));
+        console.log(await this.createConversation([1,2,3,4,5,6]));
+        console.log(await this.createConversation([1,2,3]));
+        console.log(await this.createConversation([1,3,5]));
     }
 
     authenticate = async ({ username, password }) => {
@@ -120,7 +122,7 @@ class Controller {
         if (userids) {
             userids = JSON.stringify(userids);
             let result = await this._query(`SELECT * FROM conversations WHERE conversation = '${userids}'`);
-            
+
             if (result.length > 0) result = result.map(d => {
                 return {
                     ...d,
@@ -153,6 +155,7 @@ class Controller {
         if (userid) {
 
             let result = await this._query(`SELECT * FROM userconversation WHERE user_id = ${userid}`);
+            console.log(userid, result)
             if (result.length === 1) {
                 return JSON.parse(result[0].conversationids);
             } else {
@@ -160,14 +163,15 @@ class Controller {
             }
         } else {
             let result = await this._query(`SELECT * FROM userconversation`);
-            //console.log(result)
-            return result
+            console.log('nooo',result)
+            return []
         }
 
     }
     getConversations = async (userid) => {
-        const convoids = await this.listUserConversations(userid);
 
+        const convoids = await this.listUserConversations(userid);
+        console.log(convoids);
         const conversations = (await Promise.all(convoids.map(id => {
             return this._query(`SELECT * FROM conversations WHERE conversation_id=${id}`);
         }))).map(c => {
@@ -187,15 +191,14 @@ class Controller {
     // inserts a message in the main messages table
     // props can be any additions properties that may need to be adde in the future
     insertMessage = async ({ message, sender_id, conversation_id, props = {} }) => {
-        if (message && sender_id && conversation_id) {
 
-            
+        if (message && sender_id && conversation_id) {
 
             const createdDate = new Date();
             const extraProps = JSON.stringify(props);
 
             await this._query(`INSERT INTO messages (sender_id,conversation_id,date,message,props) VALUES (${sender_id},${conversation_id},'${createdDate.toMysqlFormat()}','${message}','${extraProps}')`);
-            
+
             return {
                 message, sender_id, conversation_id, date: createdDate, props
             }
@@ -231,8 +234,8 @@ Date.prototype.toMysqlFormat = function () {
 const control = new Controller();
 
 //control._query(`DROP TABLE userconversation`);
-//control._resettotestsdata();
 (async () => {
+    //control._resettotestsdata();
     //console.log(await control.listConversations())
 })();
 

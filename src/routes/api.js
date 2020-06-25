@@ -11,7 +11,7 @@ module.exports = (server) => {
     router.post('/conversations', async (req, res) => {
         if (req.body.userid) {
             const conversations = await dbController.getConversations(req.body.userid);
-
+            console.log(conversations)
             res.send(JSON.stringify(conversations));
         } else {
             res.send('INVALID USERID');

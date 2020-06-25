@@ -26,15 +26,18 @@ function createMessagedsTable() {
 }
 
 // this is just to make test usesrs
-function addUser(username,pwd) {
-    var sql = `INSERT INTO users (NAME,PWD) VALUES ('${username}','${pwd}')`;
-    query(sql);
+async function addUser(username,pwd) {
+    const sql = `INSERT INTO users (NAME,PWD) VALUES ('${username}','${pwd}')`;
+    await query(sql);
 }
 
 function query(sql) {
-    con.query(sql, function (err, result) {
-        if (err) throw err;
-        console.log(result);
+    return new Promise((resolve, reject) => {
+
+        con.query(sql, function (err, result) {
+            if (err) reject(err);
+            resolve(result);
+        });
     });
 }
 
@@ -55,7 +58,19 @@ module.exports = () => {
 
     });
     
-
+    
 
     return con;
+}
+
+async function Users(){
+    await query(`TRUNCATE TABLE users`)
+    await query(`TRUNCATE TABLE users`)
+
+    addUser('raj','test');
+    addUser('admin','test');
+    addUser('Yash','test');
+    addUser('Jeet','test');
+    addUser('John','test');
+    addUser('Surya','test');
 }

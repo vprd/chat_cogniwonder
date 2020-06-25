@@ -56,12 +56,20 @@ const Messages = () => {
     })();
   }, [openedconversation, getmessages]);
 
-  
-  socket.on("message", async(message) => {
-      setmessages(await getmessages(openedconversation.conversation_id));
-      const list = document.querySelector(".chat-screen");
-      list.scrollTop = list.scrollHeight;
-  });
+  useEffect(() => {
+    socket.on("message", async (message) => {
+      if (message.conversation_id === openedconversation.conversation_id) {
+        setmessages(await getmessages(openedconversation.conversation_id));
+        const list = document.querySelector(".chat-screen");
+        list.scrollTop = list.scrollHeight;
+      }
+    });
+    return () => {
+      socket.on("message", (message) => {
+        console.log(message);
+      });
+    };
+  }, [getmessages, openedconversation, socket]);
 
   let message = "";
 
@@ -70,13 +78,15 @@ const Messages = () => {
   };
 
   const sendmessage = () => {
+    message = message.trim();
     socket.emit("message", {
       message,
       sender_id: user.userid,
       conversation_id: openedconversation.conversation_id,
     });
     const messageInput = document.querySelector(".message-input textarea");
-    messageInput.value = "";
+    setTimeout(() => (messageInput.value = ""));
+    messageInput.focus();
   };
 
   return (
@@ -95,6 +105,11 @@ const Messages = () => {
       <div className="message-input">
         <textarea
           onChange={onchange}
+          onKeyDown={(e) => {
+            if (!e.shiftKey && e.keyCode === 13 && message.trim() !== "") {
+              sendmessage();
+            }
+          }}
           type="text"
           placeholder="type something..."
         />
@@ -118,7 +133,10 @@ const Message = ({
 
   if (type === "message") {
     return (
-      <div className="message" id={(user.userid === sender_id) ? "sent-message" : "message"}>
+      <div
+        className="message"
+        id={user.userid === sender_id ? "sent-message" : "message"}
+      >
         <span>{text}</span>
       </div>
     );

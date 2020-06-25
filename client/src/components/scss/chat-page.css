@@ -47,6 +47,7 @@
   margin: 10px;
   -webkit-animation: fadein-left 350ms forwards ease;
           animation: fadein-left 350ms forwards ease;
+  white-space: pre-wrap;
 }
 
 .chat-page .chat-screen .messages-container #sent-message {
@@ -118,6 +119,7 @@
           backdrop-filter: blur(4px);
   -webkit-animation: fadein 800ms forwards ease;
           animation: fadein 800ms forwards ease;
+  z-index: 100;
   position: fixed;
   top: 0;
 }

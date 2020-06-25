@@ -35,6 +35,7 @@
                 background: rgba(226, 151, 255, 0.212);
                 margin: 10px;
                 animation: fadein-left 350ms forwards ease;
+                white-space: pre-wrap;
             }
 
             #sent-message {
@@ -91,11 +92,11 @@
             backdrop-filter: blur(4px);
 
             animation: fadein 800ms forwards ease;
+            z-index: 100;
 
             &:hover {
                 backdrop-filter: blur(8px);
                 background: rgba(255, 255, 255, 0.842);
-
             }
 
             position: fixed;
@@ -159,6 +160,7 @@
 
         .conversation-list {
             overflow-y: scroll;
+
         }
 
         .conversation {

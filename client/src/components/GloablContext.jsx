@@ -3,14 +3,15 @@ import api from "./api";
 export const GlobalContext = createContext();
 
 export const GlobalContextProvider = ({ children }) => {
-  const [authentication, setAuthentication] = useState(!false);
-  const [user, setuser] = useState({ userid: 1, name: "raj" });
+  const [authentication, setAuthentication] = useState(false);
+  const [user, setuser] = useState({ userid: 0, name: "" });
 
   async function Authenticate(username, password) {
     const userdata = await api.authenticate(username, password);
+    console.log(userdata);
     if (userdata) {
-      setAuthentication(true);
       setuser({ userid: userdata, name: username });
+      setTimeout(() => setAuthentication(true));
     } else {
       setAuthentication(false);
     }

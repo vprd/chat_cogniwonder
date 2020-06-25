@@ -23,10 +23,14 @@ class ConversationHandler {
             const conversationNamespace = this.io.of(namespace);
 
             conversationNamespace.on('connection', socket => {
-
-                socket.on('message',async message => {
-                    conversationNamespace.emit('message',message);
-                    (await dbController.insertMessage(message));
+                console.log('connected')
+                socket.on('message', async (message) => {
+                    //console.log(message)
+                    
+                    if (message.message && message.sender_id && message.conversation_id) {
+                        
+                        conversationNamespace.emit('message', await dbController.insertMessage(message));
+                    }
                 });
             });
         }
