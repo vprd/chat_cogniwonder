@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 
 import { ChatContext } from "./ChatContext";
 const MessagingWindow = () => {
-  const { openedconversation } = useContext(ChatContext);
+  const { openedconversation ,user} = useContext(ChatContext);
 
   useEffect(() => {
     if (Object.keys(openedconversation).length) {
@@ -16,11 +16,16 @@ const MessagingWindow = () => {
       <div className="chat-screen">
         <div className="contact-header">
           <img
-            src="https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg?size=626&ext=jpg"
+            src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-5.png"
             alt="profile"
           />
           <div className="about">
-            <h4>{openedconversation.conversation_name.join(",")}</h4>
+            <h4>
+              {"me and " +
+                openedconversation.conversation_name
+                  .filter((name) => name !== user.name)
+                  .join(",")}
+            </h4>
             <img
               src="https://img.icons8.com/android/24/000000/info.png"
               alt=""
@@ -41,9 +46,13 @@ const MessagingWindow = () => {
 };
 
 const Messages = () => {
-  const { getmessages, openedconversation, getSocket, user } = useContext(
-    ChatContext
-  );
+  const {
+    getmessages,
+    openedconversation,
+    getSocket,
+    user,
+    markUndread,
+  } = useContext(ChatContext);
 
   const socket = getSocket(openedconversation.conversation_id)[0].socket;
   const [messages, setmessages] = useState();
@@ -57,21 +66,30 @@ const Messages = () => {
   }, [openedconversation, getmessages]);
 
   useEffect(() => {
+    socket.removeAllListeners("message");
     socket.on("message", async (message) => {
       if (message.conversation_id === openedconversation.conversation_id) {
         setmessages(await getmessages(openedconversation.conversation_id));
         const list = document.querySelector(".chat-screen");
         list.scrollTop = list.scrollHeight;
-        console.log(message);
+        
       }
+      
+        markUndread(message.conversation_id);
     });
+
     return () => {
       socket.removeAllListeners("message");
       socket.on("message", (message) => {
-        console.log(message);
+        console.log(
+          message,
+          openedconversation.conversation_id , message.conversation_id
+        );
+        markUndread(message.conversation_id);
+        
       });
     };
-  }, [getmessages, openedconversation, socket]);
+  }, [getmessages, openedconversation, socket, markUndread]);
 
   let message = "";
 
@@ -87,7 +105,7 @@ const Messages = () => {
       sender: user.name,
       sender_id: user.userid,
       conversation_id: openedconversation.conversation_id,
-      date:new Date()
+      date: new Date(),
     });
     const messageInput = document.querySelector(".message-input textarea");
     setTimeout(() => (messageInput.value = ""));

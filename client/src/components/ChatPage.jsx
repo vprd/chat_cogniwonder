@@ -56,12 +56,24 @@ const ConversationList = () => {
 
 const Conversation = ({ conversation }) => {
   const { user } = useContext(GlobalContext);
-  const { openedconversation, setOpenedconversation } = useContext(ChatContext);
+  const { openedconversation, setOpenedconversation, markRead } = useContext(
+    ChatContext
+  );
+
+  const indicator =
+    conversation.unread &&
+    !(conversation.conversation_id === openedconversation.conversation_id)
+      ? "7px solid rgb(143, 255, 143)"
+      : "";
 
   if (conversation.conversation.length === 2) {
     return (
       <div
-        onClick={() => setOpenedconversation({ ...conversation, group: false })}
+        style={{ borderRight: indicator }}
+        onClick={() => {
+          markRead(conversation.conversation_id);
+          setOpenedconversation({ ...conversation, group: false });
+        }}
         className="conversation"
         id={
           conversation.conversation_id === openedconversation.conversation_id
@@ -90,7 +102,10 @@ const Conversation = ({ conversation }) => {
     conversation_name = conversation.conversation_name.join(", ");
     return (
       <div
-        onClick={() => setOpenedconversation({ ...conversation, group: true })}
+        onClick={() => {
+          markRead(conversation.conversation_id);
+          setOpenedconversation({ ...conversation, group: true });
+        }}
         className="conversation group-conversation"
         id={
           conversation.conversation_id === openedconversation.conversation_id

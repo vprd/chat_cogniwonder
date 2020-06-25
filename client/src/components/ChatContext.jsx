@@ -10,28 +10,7 @@ const socket_endpoint =
   window.location.href === "http://localhost:3000/"
     ? "http://localhost:8000/"
     : window.location.href;
-    console.log(socket_endpoint)
-
-function connectToConversationSockets(conversations) {
-  
-  if (
-    !window.CONVERSATION_SOCKET_CONNECTION &&
-    Array.isArray(conversations) &&
-    conversations.length
-  ) {
-    
-    const conversation_sockets = conversations.map((conversation) => {
-      const socket = io(
-        `${socket_endpoint}conversation-${conversation.conversation_id}`
-      );
-
-      return { id: conversation.conversation_id, socket };
-    });
-
-    window.CONVERSATION_SOCKET_CONNECTION = true;
-    return conversation_sockets;
-  }
-}
+console.log(socket_endpoint);
 
 export const ChatContext = createContext();
 
@@ -42,6 +21,31 @@ export const ChatContextProvider = ({ children }) => {
   const [openedconversation, setOpenedconversation] = useState({});
   const [conversations, setconversations] = useState([]);
   const [conversation_sockets, setconversation_sockets] = useState();
+
+  function connectToConversationSockets(conversations) {
+    if (
+      !window.CONVERSATION_SOCKET_CONNECTION &&
+      Array.isArray(conversations) &&
+      conversations.length
+    ) {
+      const conversation_sockets = conversations.map((conversation) => {
+        const socket = io(
+          `${socket_endpoint}conversation-${conversation.conversation_id}`
+        );
+
+        socket.on("message", (message) => {
+          console.log(message);
+          if (openedconversation.conversation_id !== message.conversation_id)
+            markUndread(message.conversation_id);
+        });
+
+        return { id: conversation.conversation_id, socket };
+      });
+
+      window.CONVERSATION_SOCKET_CONNECTION = true;
+      return conversation_sockets;
+    }
+  }
 
   useEffect(() => {
     const conversation_sockets = connectToConversationSockets(conversations);
@@ -58,15 +62,38 @@ export const ChatContextProvider = ({ children }) => {
   }
 
   async function updateConversations() {
-    
     const convos = await api.getconversations(user.userid);
     setconversations(convos);
+  }
+
+  function markUndread(conversation_id) {
+    /* setconversations(
+      conversations.map((conversation) => {
+        if (
+          conversation_id === conversation.conversation_id &&
+          conversation_id !== openedconversation.conversation_id
+        )
+          conversation.unread = true;
+        return conversation;
+      })
+    ); */
+  }
+  function markRead(conversation_id) {
+    /* setconversations(
+      conversations.map((conversation) => {
+        if (conversation_id === conversation.conversation_id)
+          conversation.unread = false;
+        return conversation;
+      })
+    ); */
   }
 
   return (
     <ChatContext.Provider
       value={{
         getmessages: api.getmessages,
+        markUndread,
+        markRead,
         user,
         getSocket,
         openedconversation,
