@@ -72,7 +72,7 @@ const Messages = () => {
         setmessages(await getmessages(openedconversation.conversation_id));
         const list = document.querySelector(".chat-screen");
         list.scrollTop = list.scrollHeight;
-        
+
       }
       
         markUndread(message.conversation_id);
@@ -98,7 +98,8 @@ const Messages = () => {
   };
 
   const sendmessage = () => {
-    message = message.trim();
+    
+    message = (message.trim());
     console.log(user.name);
     socket.emit("message", {
       message,

@@ -1,5 +1,5 @@
 const dbconnection = require('./db')();
-
+const SqlString = require('sqlstring');
 class Controller {
 
     constructor() {
@@ -196,7 +196,9 @@ class Controller {
             const createdDate = new Date(date) || new Date();
             const extraProps = JSON.stringify(props);
 
-            await this._query(`INSERT INTO messages (sender,sender_id,conversation_id,date,message,props) VALUES ('${sender}',${sender_id},${conversation_id},'${createdDate.toMysqlFormat()}','${message}','${extraProps}')`);
+            message = SqlString.escape(message);
+
+            await this._query(`INSERT INTO messages (sender,sender_id,conversation_id,date,message,props) VALUES ('${sender}',${sender_id},${conversation_id},'${createdDate.toMysqlFormat()}',${message},'${extraProps}')`);
             console.log(sender)
             return {
                 message, sender_id, sender, conversation_id, date: createdDate, props
@@ -237,7 +239,7 @@ const control = new Controller();
     //control._resettotestsdata();
     //console.log(await control.listConversations())
     //control._query(`ALTER TABLE conversations ADD props TEXT`)
-    //control._query(`ALTER TABLE messages CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin`)
+    //control._query(`ALTER TABLE messages CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci`)
 })();
 
 module.exports = control;
