@@ -62,9 +62,11 @@ const Messages = () => {
         setmessages(await getmessages(openedconversation.conversation_id));
         const list = document.querySelector(".chat-screen");
         list.scrollTop = list.scrollHeight;
+        console.log(message);
       }
     });
     return () => {
+      socket.removeAllListeners("message");
       socket.on("message", (message) => {
         console.log(message);
       });
@@ -79,10 +81,13 @@ const Messages = () => {
 
   const sendmessage = () => {
     message = message.trim();
+    console.log(user.name);
     socket.emit("message", {
       message,
+      sender: user.name,
       sender_id: user.userid,
       conversation_id: openedconversation.conversation_id,
+      date:new Date()
     });
     const messageInput = document.querySelector(".message-input textarea");
     setTimeout(() => (messageInput.value = ""));
@@ -93,13 +98,18 @@ const Messages = () => {
     <div className="messages-container">
       <div className="messages-view">
         {messages &&
-          messages.map((message, i) => (
-            <Message
-              key={i}
-              text={message.message}
-              sender_id={message.sender_id}
-            />
-          ))}
+          messages.map((message, i) => {
+            console.log(message.sender);
+            return (
+              <Message
+                key={i}
+                {...message}
+                text={message.message}
+                sender_name={message.sender}
+                group={openedconversation.group}
+              />
+            );
+          })}
       </div>
 
       <div className="message-input">
@@ -126,18 +136,25 @@ const Messages = () => {
 
 const Message = ({
   type = "message",
-  text = "this is a test message too",
+  text,
+  sender_name,
   sender_id,
+  date,
+  group,
 }) => {
   const { user } = useContext(ChatContext);
 
   if (type === "message") {
+    console.log(date);
+
     return (
       <div
-        className="message"
+        className={group ? "message group-message" : "message"}
         id={user.userid === sender_id ? "sent-message" : "message"}
       >
+        <h1 id={group ? "group-sender" : ""}>{sender_name}</h1>
         <span>{text}</span>
+        <span id="date-time">{formatAMPM(new Date(date))}</span>
       </div>
     );
   } else if (type === "badge") {
@@ -149,4 +166,14 @@ const Message = ({
   }
 };
 
+function formatAMPM(date) {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? "pm" : "am";
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  var strTime = hours + ":" + minutes + ampm;
+  return strTime;
+}
 export default MessagingWindow;

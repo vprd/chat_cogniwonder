@@ -23,7 +23,7 @@ const api = {
         const result = await axios.post(point, {
             conversation_id
         });
-
+        console.log(result.data);
         return result.data;
     },
     authenticate: async (username, password) => {

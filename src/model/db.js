@@ -10,7 +10,7 @@ const con = mysql.createConnection({
 // TABLE NAME = conversations
 // Table to store all conversations, conversation is a serialized array of all the conversations on the entire platform
 function createConversationsTable() {
-    query(`CREATE TABLE conversations (conversation_id INT AUTO_INCREMENT PRIMARY KEY, conversation TEXT, conversation_name TEXT)`);
+    query(`CREATE TABLE conversations (conversation_id INT AUTO_INCREMENT PRIMARY KEY, conversation TEXT, conversation_name TEXT, props TEXT)`);
 }
 
 // TABLE NAME = userconversation
@@ -22,7 +22,7 @@ function createConversationsUserRelationTable() {
 // TABLE NAME = messages
 // Contains every message sent on the platform with all its properties
 function createMessagedsTable() {
-    query(`CREATE TABLE messages (message_id INT AUTO_INCREMENT PRIMARY KEY, sender_id INT, conversation_id INT, date DATETIME , message TEXT, props TEXT)`);
+    query(`CREATE TABLE messages (message_id INT AUTO_INCREMENT PRIMARY KEY, sender TEXT, conversation_id INT, date DATETIME , message TEXT, props TEXT)`);
 }
 
 // this is just to make test usesrs

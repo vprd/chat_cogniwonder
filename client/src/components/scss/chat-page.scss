@@ -29,20 +29,75 @@
             }
 
             .message {
-                border-radius: 3px;
+
                 width: fit-content;
-                padding: 10px 12px;
-                background: rgba(226, 151, 255, 0.212);
-                margin: 10px;
-                animation: fadein-left 350ms forwards ease;
+                border-radius: 0 12px 12px 0;
+
+                padding: 10px 16px;
+                margin: 8px 10px;
+
                 white-space: pre-wrap;
+
+                background: rgba(226, 151, 255, 0.212);
+                animation: fadein-left 350ms forwards ease;
+
+                span {
+                    line-height: 1.6rem;
+                    display: block;
+                    max-width: 300px;
+                    word-wrap: break-word;
+                    font-weight: 500;
+                }
+
+                h1 {
+                    display: none;
+                    font-size: 1rem;
+
+                }
+
+                #date-time {
+                    color: rgb(112, 112, 112);
+                    font-size: .8rem;
+                    opacity: 0;
+                    height: 0;
+                    transition: opacity 200ms ease, height 300ms ease;
+                }
+
+                &:hover {
+                    #date-time {
+                        color: rgb(112, 112, 112);
+                        font-size: .8rem;
+                        opacity: 1;
+                        height: 20px;
+                    }
+                }
             }
 
             #sent-message {
                 margin-left: auto;
                 background: white;
                 animation: fadein-right 350ms forwards ease;
+                border-radius: 12px 0 0 12px;
+
+                &>h1 {
+                    display: none;
+                }
             }
+
+            #group-sender {
+                display: block;
+
+            }
+
+            /* .group-message {
+                #group-sender {
+                    display: block;
+                }
+
+                #sent-message>h1{
+                    display: none;
+                }
+            } */
 
             .message-input {
                 padding: 10px;
@@ -271,6 +326,8 @@
     .about {
         overflow: hidden;
     }
+
+
 
 }
 

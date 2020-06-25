@@ -57,12 +57,11 @@ const ConversationList = () => {
 const Conversation = ({ conversation }) => {
   const { user } = useContext(GlobalContext);
   const { openedconversation, setOpenedconversation } = useContext(ChatContext);
-  
 
   if (conversation.conversation.length === 2) {
     return (
       <div
-        onClick={() => setOpenedconversation(conversation)}
+        onClick={() => setOpenedconversation({ ...conversation, group: false })}
         className="conversation"
         id={
           conversation.conversation_id === openedconversation.conversation_id
@@ -91,7 +90,7 @@ const Conversation = ({ conversation }) => {
     conversation_name = conversation.conversation_name.join(", ");
     return (
       <div
-        onClick={() => setOpenedconversation(conversation)}
+        onClick={() => setOpenedconversation({ ...conversation, group: true })}
         className="conversation group-conversation"
         id={
           conversation.conversation_id === openedconversation.conversation_id

@@ -48,13 +48,13 @@ class Controller {
 
         console.log(await this.createConversation([1, 2]));
         console.log(await this.createConversation([2, 3]));
-        console.log(await this.createConversation([ 3, 4]));
-        console.log(await this.createConversation([4,5]));
-        console.log(await this.createConversation([5,6]));
-        console.log(await this.createConversation([6,1]));
-        console.log(await this.createConversation([1,2,3,4,5,6]));
-        console.log(await this.createConversation([1,2,3]));
-        console.log(await this.createConversation([1,3,5]));
+        console.log(await this.createConversation([3, 4]));
+        console.log(await this.createConversation([4, 5]));
+        console.log(await this.createConversation([5, 6]));
+        console.log(await this.createConversation([6, 1]));
+        console.log(await this.createConversation([1, 2, 3, 4, 5, 6]));
+        console.log(await this.createConversation([1, 2, 3]));
+        console.log(await this.createConversation([1, 3, 5]));
     }
 
     authenticate = async ({ username, password }) => {
@@ -163,7 +163,7 @@ class Controller {
             }
         } else {
             let result = await this._query(`SELECT * FROM userconversation`);
-            console.log('nooo',result)
+            console.log('nooo', result)
             return []
         }
 
@@ -190,17 +190,16 @@ class Controller {
 
     // inserts a message in the main messages table
     // props can be any additions properties that may need to be adde in the future
-    insertMessage = async ({ message, sender_id, conversation_id, props = {} }) => {
+    insertMessage = async ({ sender_id, message, sender, conversation_id, date, props = {} }) => {
 
-        if (message && sender_id && conversation_id) {
-
-            const createdDate = new Date();
+        if (message && sender && conversation_id) {
+            const createdDate = new Date(date) || new Date();
             const extraProps = JSON.stringify(props);
 
-            await this._query(`INSERT INTO messages (sender_id,conversation_id,date,message,props) VALUES (${sender_id},${conversation_id},'${createdDate.toMysqlFormat()}','${message}','${extraProps}')`);
-
+            await this._query(`INSERT INTO messages (sender,sender_id,conversation_id,date,message,props) VALUES ('${sender}',${sender_id},${conversation_id},'${createdDate.toMysqlFormat()}','${message}','${extraProps}')`);
+            console.log(sender)
             return {
-                message, sender_id, conversation_id, date: createdDate, props
+                message, sender_id, sender, conversation_id, date: createdDate, props
             }
         }
         else {
@@ -237,6 +236,7 @@ const control = new Controller();
 (async () => {
     //control._resettotestsdata();
     //console.log(await control.listConversations())
+    //control._query(`ALTER TABLE conversations ADD props TEXT`)
 })();
 
 module.exports = control;

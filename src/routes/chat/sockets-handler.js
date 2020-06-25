@@ -25,9 +25,9 @@ class ConversationHandler {
             conversationNamespace.on('connection', socket => {
                 console.log('connected')
                 socket.on('message', async (message) => {
-                    //console.log(message)
+                    console.log(message)
                     
-                    if (message.message && message.sender_id && message.conversation_id) {
+                    if (message.message && message.sender && message.conversation_id) {
                         
                         conversationNamespace.emit('message', await dbController.insertMessage(message));
                     }

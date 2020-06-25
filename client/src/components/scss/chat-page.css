@@ -31,6 +31,15 @@
 .chat-page .chat-screen .messages-container {
   height: 100%;
   padding-top: 70px;
+  /* .group-message {
+                #group-sender {
+                    display: block;
+                }
+
+                #sent-message>h1{
+                    display: none;
+                }
+            } */
 }
 
 .chat-page .chat-screen .messages-container .messages-view {
@@ -38,16 +47,45 @@
 }
 
 .chat-page .chat-screen .messages-container .message {
-  border-radius: 3px;
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
-  padding: 10px 12px;
+  border-radius: 0 12px 12px 0;
+  padding: 10px 16px;
+  margin: 8px 10px;
+  white-space: pre-wrap;
   background: rgba(226, 151, 255, 0.212);
-  margin: 10px;
   -webkit-animation: fadein-left 350ms forwards ease;
           animation: fadein-left 350ms forwards ease;
-  white-space: pre-wrap;
+}
+
+.chat-page .chat-screen .messages-container .message span {
+  line-height: 1.6rem;
+  display: block;
+  max-width: 300px;
+  word-wrap: break-word;
+  font-weight: 500;
+}
+
+.chat-page .chat-screen .messages-container .message h1 {
+  display: none;
+  font-size: 1rem;
+}
+
+.chat-page .chat-screen .messages-container .message #date-time {
+  color: #707070;
+  font-size: .8rem;
+  opacity: 0;
+  height: 0;
+  -webkit-transition: opacity 200ms ease, height 300ms ease;
+  transition: opacity 200ms ease, height 300ms ease;
+}
+
+.chat-page .chat-screen .messages-container .message:hover #date-time {
+  color: #707070;
+  font-size: .8rem;
+  opacity: 1;
+  height: 20px;
 }
 
 .chat-page .chat-screen .messages-container #sent-message {
@@ -55,6 +93,15 @@
   background: white;
   -webkit-animation: fadein-right 350ms forwards ease;
           animation: fadein-right 350ms forwards ease;
+  border-radius: 12px 0 0 12px;
+}
+
+.chat-page .chat-screen .messages-container #sent-message > h1 {
+  display: none;
+}
+
+.chat-page .chat-screen .messages-container #group-sender {
+  display: block;
 }
 
 .chat-page .chat-screen .messages-container .message-input {
