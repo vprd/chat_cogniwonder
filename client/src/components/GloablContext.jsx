@@ -8,7 +8,6 @@ export const GlobalContextProvider = ({ children }) => {
 
   async function Authenticate(username, password) {
     const userdata = await api.authenticate(username, password);
-    console.log(userdata);
     if (userdata) {
       setuser({ userid: userdata, name: username });
       setTimeout(() => setAuthentication(true));

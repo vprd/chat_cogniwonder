@@ -10,7 +10,7 @@ const socket_endpoint =
   window.location.href === "http://localhost:3000/"
     ? "http://localhost:8000/"
     : window.location.href;
-console.log(socket_endpoint);
+
 
 export const ChatContext = createContext();
 
@@ -34,7 +34,6 @@ export const ChatContextProvider = ({ children }) => {
         );
 
         socket.on("message", (message) => {
-          console.log(message);
           if (openedconversation.conversation_id !== message.conversation_id)
             markUndread(message.conversation_id);
         });
@@ -53,10 +52,6 @@ export const ChatContextProvider = ({ children }) => {
                     );
                     if (conversation_sockets) {
                       setconversation_sockets(conversation_sockets);
-                      console.log(
-                        "conversation socket set",
-                        conversation_sockets
-                      );
                     }
                     // eslint-disable-next-line
                   }, [conversations]);

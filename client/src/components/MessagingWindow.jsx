@@ -81,10 +81,7 @@ const Messages = () => {
     return () => {
       socket.removeAllListeners("message");
       socket.on("message", (message) => {
-        console.log(
-          message,
-          openedconversation.conversation_id , message.conversation_id
-        );
+
         markUndread(message.conversation_id);
         
       });
@@ -100,7 +97,6 @@ const Messages = () => {
   const sendmessage = () => {
     
     message = (message.trim());
-    console.log(user.name);
     socket.emit("message", {
       message,
       sender: user.name,
@@ -118,7 +114,7 @@ const Messages = () => {
       <div className="messages-view">
         {messages &&
           messages.map((message, i) => {
-            console.log(message.sender);
+          
             return (
               <Message
                 key={i}
@@ -164,7 +160,6 @@ const Message = ({
   const { user } = useContext(ChatContext);
 
   if (type === "message") {
-    console.log(date);
 
     return (
       <div
