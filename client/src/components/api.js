@@ -1,20 +1,26 @@
 import axios from 'axios';
 
 
+<<<<<<< HEAD
 let endpoint = window.location.protocol + '//' + window.location.hostname + ':' + (window.location.port === '3000' ? '8000' : window.location.port) + '/api';
 if (window.location.hostname === "chatappinprogress.herokuapp.com") {
     endpoint =
         "https://chatappinprogress.herokuapp.com/api";
 }
+=======
+const endpoint = window.location.href === "http://localhost:3000/"
+    ? "http://localhost:8000/api"
+    : window.location.href+'api';
+>>>>>>> parent of 6fba08a... deploying-server-and-client
 
 const api = {
 
-    getconversations: async (id) => {
+    getconversations: async (userid) => {
 
         const point = endpoint + '/conversations';
 
         const result = await axios.post(point, {
-            id
+            userid
         });
 
         return result.data;
@@ -25,20 +31,16 @@ const api = {
         const result = await axios.post(point, {
             conversation_id
         });
-        console.log('this is message',result.data)
+
         return result.data;
     },
-    authenticate: async (username, id,) => {
+    authenticate: async (username, password) => {
 
-        if (!window.AUTHENTICATION) {
-            const result = await axios.post(endpoint + "/authenticate", {
-                username,
-                id,
-            });
-            window.AUTHENTICATION = true;
-            return result.data;
-        } return window.AUTHENTICATION;
-
+        const result = await axios.post(endpoint + "/authenticate", {
+            username,
+            password,
+        });
+        return result.data;
     }
 }
 

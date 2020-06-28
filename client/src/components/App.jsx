@@ -1,12 +1,13 @@
-import React, { useContext, useEffect } from "react";
-// components
+import React, { useContext } from "react";
 
-import axios from "axios";
+// components
+import Login from "./Login";
 
 import ChatPage from "./ChatPage";
 //Global context
-import { GlobalContext, GlobalContextProvider } from "./GloablContext";
+import { GlobalContext } from "./GloablContext";
 const App = () => {
+<<<<<<< HEAD
   const { Authenticate } = useContext(GlobalContext);
   // return authentication ? <ChatPage /> : <Login />;
 
@@ -28,6 +29,10 @@ const App = () => {
   }, []);
 
   return <ChatPage />;
+=======
+  const { authentication } = useContext(GlobalContext);
+  return authentication ? <ChatPage /> : <Login />;
+>>>>>>> parent of 6fba08a... deploying-server-and-client
 };
 
 export default App;
