@@ -4,22 +4,19 @@ export const GlobalContext = createContext();
 
 export const GlobalContextProvider = ({ children }) => {
   const [authentication, setAuthentication] = useState(false);
-  const [user, setuser] = useState({ userid: 0, name: "" });
+  const [user, setuser] = useState({ id: "", username: "" });
 
-  async function Authenticate(username, password) {
-    const userdata = await api.authenticate(username, password);
-    if (userdata) {
-      setuser({ userid: userdata, name: username });
-      setTimeout(() => setAuthentication(true));
-    } else {
-      setAuthentication(false);
-    }
+  async function Authenticate(username, id) {
+    setuser({ id, username });
+
+    setTimeout(() => setAuthentication(true));
 
     return authentication;
   }
   return (
     <GlobalContext.Provider
       value={{
+        setuser,
         authentication,
         Authenticate,
         user,
