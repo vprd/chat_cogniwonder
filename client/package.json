@@ -16,7 +16,7 @@
   "scripts": {
     "start": "react-scripts start",
     "server-start": "cd .. && npm start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && git add .",
     "deploy": "npm run build && cd .. && git add . && git commit -m 'deploying-server-and-client' && git push",
     "server-deploy": "cd .. && git add . && git commit -m 'deploying-server' && git push",
     "client-deploy": "npm run build && cd .. && git add . && git commit -m 'deploying-server-and-client' && git push",
