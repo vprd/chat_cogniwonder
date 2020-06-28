@@ -1,18 +1,16 @@
 import axios from 'axios';
 
 
-const endpoint = window.location.href === "http://localhost:3000/"
-    ? "http://localhost:8000/api"
-    : window.location.href+'api';
+const endpoint = window.location.protocol + '//' + window.location.hostname + ':' + (window.location.port === '3000' ? '8000' : window.location.port) + '/api';
 
 const api = {
 
-    getconversations: async (userid) => {
+    getconversations: async (id) => {
 
         const point = endpoint + '/conversations';
 
         const result = await axios.post(point, {
-            userid
+            id
         });
 
         return result.data;
@@ -23,16 +21,20 @@ const api = {
         const result = await axios.post(point, {
             conversation_id
         });
-
+        console.log('this is message',result.data)
         return result.data;
     },
-    authenticate: async (username, password) => {
+    authenticate: async (username, id,) => {
 
-        const result = await axios.post(endpoint + "/authenticate", {
-            username,
-            password,
-        });
-        return result.data;
+        if (!window.AUTHENTICATION) {
+            const result = await axios.post(endpoint + "/authenticate", {
+                username,
+                id,
+            });
+            window.AUTHENTICATION = true;
+            return result.data;
+        } return window.AUTHENTICATION;
+
     }
 }
 

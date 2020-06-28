@@ -25,13 +25,13 @@ function createConversationsUserRelationTable() {
 // Contains every message sent on the platform with all its properties
 function createMessagedsTable() {
     query(`CREATE TABLE messages (message_id INT AUTO_INCREMENT PRIMARY KEY, sender TEXT, conversation_id INT, date DATETIME , message TEXT, props TEXT)`);
-    
+
     //does not support emojies by default
     //query(`ALTER TABLE messages CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin`)
 }
 
 // this is just to make test usesrs
-async function addUser(username,pwd) {
+async function addUser(username, pwd) {
     const sql = `INSERT INTO users (NAME,PWD) VALUES ('${username}','${pwd}')`;
     await query(sql);
 }
@@ -54,28 +54,24 @@ function setUpTable() {
     createMessagedsTable()
 }
 
+con.connect((err) => {
 
-module.exports = () => {
-    con.connect((err) => {
+    if (err) throw err;
+    console.log("db connection established");
 
-        if (err) throw err;
-        console.log("db connection established");
+});
 
-    });
-    
-    
 
-    return con;
-}
-
-async function Users(){
+async function Users() {
     await query(`TRUNCATE TABLE users`)
     await query(`TRUNCATE TABLE users`)
 
-    addUser('raj','test');
-    addUser('admin','test');
-    addUser('Yash','test');
-    addUser('Jeet','test');
-    addUser('John','test');
-    addUser('Surya','test');
+    addUser('raj', 'test');
+    addUser('admin', 'test');
+    addUser('Yash', 'test');
+    addUser('Jeet', 'test');
+    addUser('John', 'test');
+    addUser('Surya', 'test');
 }
+
+setUpTable()
