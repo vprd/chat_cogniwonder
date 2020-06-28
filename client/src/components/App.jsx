@@ -11,23 +11,19 @@ const App = () => {
   // return authentication ? <ChatPage /> : <Login />;
 
   useEffect(() => {
-      const endpoint = "http://" + window.location.hostname + ":8000";
-      console.log(endpoint);
-      axios
-        .get(endpoint + "/api/authenticate" + window.location.search)
-        .then((d) => {
-          console.log(d.data);
-          // setuser({ id: d.data.id, username: d.data.username });
-          Authenticate(d.data.username, d.data.id);
-        });
-    
+    const endpoint =
+      window.location.protocol + "//" + window.location.hostname + ":8000";
+    console.log(endpoint);
+    axios
+      .get(endpoint + "/api/authenticate" + window.location.search)
+      .then((d) => {
+        console.log(d.data);
+        // setuser({ id: d.data.id, username: d.data.username });
+        Authenticate(d.data.username, d.data.id);
+      });
   }, []);
 
-  return (
-    
-      <ChatPage />
-    
-  );
+  return <ChatPage />;
 };
 
 export default App;
