@@ -20,7 +20,7 @@ class ConversationHandler {
         const allConversations = await controller.geteveryconversations();
 
         for (let conversation of allConversations) {
-            console.log(conversation)
+            console.log('listening on:',conversation);
             const namespace = `/conversation-${conversation._id}`;
 
             const conversationNamespace = this.io.of(namespace);

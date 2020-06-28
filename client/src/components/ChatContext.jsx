@@ -31,15 +31,12 @@ export const ChatContextProvider = ({ children }) => {
       conversations.length
     ) {
       const conversation_sockets = conversations.map((conversation) => {
-          console.log(conversation);
-        const socket = io(
-          `${socket_endpoint}conversation-${conversation._id}`
-        );
+        console.log(conversation);
+        const socket = io(`${socket_endpoint}conversation-${conversation._id}`);
 
-        /* socket.on("message", (message) => {
-
-
-        }); */
+        socket.on("connect", (message) => {
+          console.log("connected");
+        });
 
         return { id: conversation._id, socket };
       });
