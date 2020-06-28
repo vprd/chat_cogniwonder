@@ -99,7 +99,7 @@ const Conversation = ({ conversation }) => {
   } else {
     let conversation_name = "group";
     if (typeof conversation.conversation_name === "string") {
-      conversation_name = conversation.conversation_name.join(",");
+      conversation_name = conversation.conversation.join(",");
     }
     conversation_name = conversation.conversation_name.join(", ");
     return (
