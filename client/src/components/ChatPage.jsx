@@ -2,7 +2,9 @@ import React, { useEffect, useContext } from "react";
 
 import MessagingWindow from "./MessagingWindow";
 //context
+
 import { ChatContext, ChatContextProvider } from "./ChatContext";
+
 // Assets
 import logo from "./assets/img/logo.png";
 
@@ -34,12 +36,13 @@ const Menu = () => {
 };
 
 const ConversationList = () => {
+  const { user } = useContext(GlobalContext);
   const { conversations, updateConversations } = useContext(ChatContext);
-
   useEffect(() => {
-    updateConversations();
+    console.log("this is a req", user);
+    user.id && updateConversations();
     // eslint-disable-next-line
-  }, []);
+  }, [user]);
 
   if (conversations) {
     return (
@@ -56,13 +59,11 @@ const ConversationList = () => {
 
 const Conversation = ({ conversation }) => {
   const { user } = useContext(GlobalContext);
-  const { openedconversation, setOpenedconversation, markRead } = useContext(
-    ChatContext
-  );
-
+  const { openedconversation, setOpenedconversation } = useContext(ChatContext);
+  
   const indicator =
     conversation.unread &&
-    !(conversation.conversation_id === openedconversation.conversation_id)
+    !(conversation._id === openedconversation._id)
       ? "7px solid rgb(143, 255, 143)"
       : "";
 
@@ -71,12 +72,11 @@ const Conversation = ({ conversation }) => {
       <div
         style={{ borderRight: indicator }}
         onClick={() => {
-          markRead(conversation.conversation_id);
           setOpenedconversation({ ...conversation, group: false });
         }}
         className="conversation"
         id={
-          conversation.conversation_id === openedconversation.conversation_id
+          conversation._id === openedconversation._id
             ? "opened-conversation"
             : ""
         }
@@ -87,15 +87,9 @@ const Conversation = ({ conversation }) => {
         />
         <div className="about">
           <h4>
-<<<<<<< HEAD
             {!conversation.conversation_name
               ? conversation.conversation.filter((username) => username!==user.username)
               : conversation.conversation_name}
-=======
-            {conversation.conversation_name.filter(
-              (name) => name !== user.name
-            )}
->>>>>>> parent of 6fba08a... deploying-server-and-client
           </h4>
         </div>
       </div>
@@ -109,12 +103,11 @@ const Conversation = ({ conversation }) => {
     return (
       <div
         onClick={() => {
-          markRead(conversation.conversation_id);
           setOpenedconversation({ ...conversation, group: true });
         }}
         className="conversation group-conversation"
         id={
-          conversation.conversation_id === openedconversation.conversation_id
+          conversation._id === openedconversation._id
             ? "opened-conversation"
             : ""
         }

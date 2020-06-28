@@ -6,7 +6,6 @@ import io from "socket.io-client";
 //global context
 import { GlobalContext } from "./GloablContext";
 
-<<<<<<< HEAD
 let socket_endpoint =
   window.location.protocol +
   "//" +
@@ -14,13 +13,6 @@ let socket_endpoint =
   ":" +
   (window.location.port === "3000" ? "8000" : window.location.port) +
   "/";
-=======
-const socket_endpoint =
-  window.location.href === "http://localhost:3000/"
-    ? "http://localhost:8000/"
-    : window.location.href;
-
->>>>>>> parent of 6fba08a... deploying-server-and-client
 
 socket_endpoint = "http://localhost:8000/";
 export const ChatContext = createContext();
@@ -40,24 +32,14 @@ export const ChatContextProvider = ({ children }) => {
       conversations.length
     ) {
       const conversation_sockets = conversations.map((conversation) => {
-<<<<<<< HEAD
         console.log('connecting to:',conversation);
         const socket = io(`${socket_endpoint}conversation-${conversation._id}`);
 
         socket.on("connect", (message) => {
           console.log("connected");
-=======
-        const socket = io(
-          `${socket_endpoint}conversation-${conversation.conversation_id}`
-        );
-
-        socket.on("message", (message) => {
-          if (openedconversation.conversation_id !== message.conversation_id)
-            markUndread(message.conversation_id);
->>>>>>> parent of 6fba08a... deploying-server-and-client
         });
 
-        return { id: conversation.conversation_id, socket };
+        return { id: conversation._id, socket };
       });
 
       window.CONVERSATION_SOCKET_CONNECTION = true;
@@ -66,14 +48,12 @@ export const ChatContextProvider = ({ children }) => {
   }
 
   useEffect(() => {
-                    const conversation_sockets = connectToConversationSockets(
-                      conversations
-                    );
-                    if (conversation_sockets) {
-                      setconversation_sockets(conversation_sockets);
-                    }
-                    // eslint-disable-next-line
-                  }, [conversations]);
+    const conversation_sockets = connectToConversationSockets(conversations);
+    if (conversation_sockets) {
+      setconversation_sockets(conversation_sockets);
+    }
+    // eslint-disable-next-line
+  }, [conversations]);
 
   function getSocket(conversation_id) {
     return conversation_sockets.filter((conversation_socket) => {
@@ -82,7 +62,10 @@ export const ChatContextProvider = ({ children }) => {
   }
 
   async function updateConversations() {
-    const convos = await api.getconversations(user.userid);
+    console.log("updateConversations -> user.id", user.id);
+
+    const convos = await api.getconversations(user.id);
+    console.log(convos);
     setconversations(convos);
   }
 
@@ -90,8 +73,8 @@ export const ChatContextProvider = ({ children }) => {
     /* setconversations(
       conversations.map((conversation) => {
         if (
-          conversation_id === conversation.conversation_id &&
-          conversation_id !== openedconversation.conversation_id
+          conversation_id === conversation._id &&
+          conversation_id !== openedconversation._id
         )
           conversation.unread = true;
         return conversation;
@@ -101,7 +84,7 @@ export const ChatContextProvider = ({ children }) => {
   function markRead(conversation_id) {
     /* setconversations(
       conversations.map((conversation) => {
-        if (conversation_id === conversation.conversation_id)
+        if (conversation_id === conversation._id)
           conversation.unread = false;
         return conversation;
       })

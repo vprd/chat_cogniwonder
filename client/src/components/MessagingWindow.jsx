@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 
 import { ChatContext } from "./ChatContext";
 const MessagingWindow = () => {
-  const { openedconversation ,user} = useContext(ChatContext);
+  const { openedconversation, user } = useContext(ChatContext);
 
   useEffect(() => {
     if (Object.keys(openedconversation).length) {
@@ -22,8 +22,8 @@ const MessagingWindow = () => {
           <div className="about">
             <h4>
               {"me and " +
-                openedconversation.conversation_name
-                  .filter((name) => name !== user.name)
+                openedconversation.conversation
+                  .filter((name) => name !== user.username)
                   .join(",")}
             </h4>
             <img
@@ -54,42 +54,32 @@ const Messages = () => {
     markUndread,
   } = useContext(ChatContext);
 
-  const socket = getSocket(openedconversation.conversation_id)[0].socket;
+  const socket = getSocket(openedconversation._id)[0].socket;
   const [messages, setmessages] = useState();
 
   useEffect(() => {
     (async () => {
-      setmessages(await getmessages(openedconversation.conversation_id));
+      setmessages(await getmessages(openedconversation._id));
       const list = document.querySelector(".chat-screen");
       list.scrollTop = list.scrollHeight;
     })();
   }, [openedconversation, getmessages]);
 
   useEffect(() => {
-    socket.removeAllListeners("message");
+    
     socket.on("message", async (message) => {
-      if (message.conversation_id === openedconversation.conversation_id) {
-        setmessages(await getmessages(openedconversation.conversation_id));
+      console.log(message);
+      if (message.conversation_id === openedconversation._id) {
+        setmessages(await getmessages(openedconversation._id));
         const list = document.querySelector(".chat-screen");
         list.scrollTop = list.scrollHeight;
-
-<<<<<<< HEAD
-      
-=======
       }
+
       
-        markUndread(message.conversation_id);
->>>>>>> parent of 6fba08a... deploying-server-and-client
     });
 
-    return () => {
-      socket.removeAllListeners("message");
-      socket.on("message", (message) => {
-
-        markUndread(message.conversation_id);
-        
-      });
-    };
+    
+    
   }, [getmessages, openedconversation, socket, markUndread]);
 
   let message = "";
@@ -99,13 +89,12 @@ const Messages = () => {
   };
 
   const sendmessage = () => {
-    
-    message = (message.trim());
+    message = message.trim();
     socket.emit("message", {
       message,
-      sender: user.name,
-      sender_id: user.userid,
-      conversation_id: openedconversation.conversation_id,
+      sender: user.username,
+      sender_id: user.id,
+      conversation_id: openedconversation._id,
       date: new Date(),
     });
     const messageInput = document.querySelector(".message-input textarea");
@@ -117,8 +106,8 @@ const Messages = () => {
     <div className="messages-container">
       <div className="messages-view">
         {messages &&
+          messages.length &&
           messages.map((message, i) => {
-          
             return (
               <Message
                 key={i}
@@ -164,11 +153,10 @@ const Message = ({
   const { user } = useContext(ChatContext);
 
   if (type === "message") {
-
     return (
       <div
         className={group ? "message group-message" : "message"}
-        id={user.userid === sender_id ? "sent-message" : "message"}
+        id={user.username === sender_name ? "sent-message" : "message"}
       >
         <h1 id={group ? "group-sender" : ""}>{sender_name}</h1>
         <span>{text}</span>
