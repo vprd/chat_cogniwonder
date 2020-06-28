@@ -87,11 +87,9 @@ const Conversation = ({ conversation }) => {
         />
         <div className="about">
           <h4>
-            {conversation.conversation_name
-              ? conversation.conversation_name.filter(
-                  (name) => name !== user.name
-                )
-              : conversation.conversation.join(", ")}
+            {!conversation.conversation_name
+              ? conversation.conversation.filter((username) => username!==user.username)
+              : conversation.conversation_name}
           </h4>
         </div>
       </div>
@@ -99,9 +97,9 @@ const Conversation = ({ conversation }) => {
   } else {
     let conversation_name = "group";
     if (typeof conversation.conversation_name === "string") {
-      conversation_name = conversation.conversation.join(",");
+      conversation_name = conversation.conversation.join(", ");
     }
-    conversation_name = conversation.conversation_name.join(", ");
+    conversation_name = conversation.conversation.join(", ");
     return (
       <div
         onClick={() => {
