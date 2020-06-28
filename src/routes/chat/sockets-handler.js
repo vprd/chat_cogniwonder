@@ -31,7 +31,7 @@ class ConversationHandler {
                     console.log(message)
                     conversationNamespace.emit('message', await controller.insertMessage(message));
                 });
-                conversationNamespace.emit('conversation-update','update');
+                //conversationNamespace.emit('conversation-update','update');
 
             });
         }
