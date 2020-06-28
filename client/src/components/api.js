@@ -1,7 +1,11 @@
 import axios from 'axios';
 
 
-const endpoint = window.location.protocol + '//' + window.location.hostname + ':' + (window.location.port === '3000' ? '8000' : window.location.port) + '/api';
+let endpoint = window.location.protocol + '//' + window.location.hostname + ':' + (window.location.port === '3000' ? '8000' : window.location.port) + '/api';
+if (window.location.hostname === "herokuapp") {
+    endpoint =
+        "https://chatappinprogress.herokuapp.com/api";
+}
 
 const api = {
 

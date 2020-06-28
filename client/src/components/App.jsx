@@ -11,8 +11,13 @@ const App = () => {
   // return authentication ? <ChatPage /> : <Login />;
 
   useEffect(() => {
-    const endpoint =
+    let endpoint =
       window.location.protocol + "//" + window.location.hostname + ":8000";
+
+    if (window.location.hostname === "herokuapp") {
+      endpoint =
+        "https://chatappinprogress.herokuapp.com/";
+    }
     console.log(endpoint);
     axios
       .get(endpoint + "/api/authenticate" + window.location.search)
