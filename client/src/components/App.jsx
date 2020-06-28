@@ -14,9 +14,8 @@ const App = () => {
     let endpoint =
       window.location.protocol + "//" + window.location.hostname + ":8000";
 
-    if (window.location.hostname === "herokuapp") {
-      endpoint =
-        "https://chatappinprogress.herokuapp.com/";
+    if (window.location.hostname === "chatappinprogress.herokuapp.com") {
+      endpoint = "https://chatappinprogress.herokuapp.com/";
     }
     console.log(endpoint);
     axios

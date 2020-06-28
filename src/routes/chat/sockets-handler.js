@@ -29,10 +29,10 @@ class ConversationHandler {
                 console.log('connected')
                 socket.on('message', async (message) => {
                     console.log(message)
-
                     conversationNamespace.emit('message', await controller.insertMessage(message));
-                    
                 });
+                conversationNamespace.emit('conversation-update','update');
+
             });
         }
 
