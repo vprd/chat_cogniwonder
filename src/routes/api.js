@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
-//const dbController = require('../model/controller');
-const controller = require('../mongo/controller');
+const dbController = require('../model/controller');
+// const controller = require('../mongo/controller');
 
 const ConversationHandler = require('./chat/sockets-handler');
 
