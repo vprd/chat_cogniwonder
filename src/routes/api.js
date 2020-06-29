@@ -9,7 +9,7 @@ module.exports = (server) => {
 
     router.post('/authenticate', async (req, res) => {
         console.log('authenticate:', req.body);
-        res.send(JSON.stringify(await dbController.authenticate(req.body)));
+        // res.send(JSON.stringify(await dbController.authenticate(req.body)));
         res.send("SSD");
     });
 
