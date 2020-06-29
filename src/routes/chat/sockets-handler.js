@@ -9,8 +9,8 @@ class ConversationHandler {
 
     constructor(server) {
         this.io = socketio(server);
-        /* this.controller = dbController; */
-        this.controller = controller;
+        this.controller = dbController;
+        // this.controller = controller;
     }
 
     conversations = async () => {

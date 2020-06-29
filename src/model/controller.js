@@ -1,5 +1,6 @@
 const dbconnection = require('./db')();
 const SqlString = require('sqlstring');
+const crypto = require('crypto');
 class Controller {
 
     constructor() {
@@ -59,7 +60,9 @@ class Controller {
 
     authenticate = async ({ username, password }) => {
         if ((typeof username === 'string') && (typeof password === 'string')) {
-            const result = (await this._query(`SELECT * FROM users WHERE NAME='${username}'`))[0];
+            const result = (await this._query(`SELECT * FROM users WHERE NAME='${username}' `))[0];
+            const md5 = data => crypto.createHash('md5').update(data).digest("hex")
+            console.log(md5);
             if (password === result.PWD) return result.NAME_ID;
         }
         return false;
