@@ -15,7 +15,7 @@ module.exports = (server) => {
 
     router.get('/authenticate', async (req, res) => {
         console.log(req.query);
-        res.send(JSON.stringify(await controller.joinuser(req.query.username, req.query.id)))
+        // res.send(JSON.stringify(await controller.joinuser(req.query.username, req.query.id)))
     });
 
     router.post('/conversations', async (req, res) => {
