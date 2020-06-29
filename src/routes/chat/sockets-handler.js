@@ -1,8 +1,8 @@
 const socketio = require('socket.io');
 
 // db controller to save the messages
-//const dbController = require('../../model/controller');
-const controller = require('../../mongo/controller');
+const dbController = require('../../model/controller');
+// const controller = require('../../mongo/controller');
 
 // class to handle realtime message and pings when new message arrives
 class ConversationHandler {
