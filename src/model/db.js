@@ -5,7 +5,7 @@ const con = mysql.createConnection({
     host: "localhost",
     user: 'atozbfw7_test',
     password: 'test@112233445566',
-    database: 'atozbfw7_test',
+    database: 'atozbfw7_chat',
 
 });
 //3490442_chatdb
