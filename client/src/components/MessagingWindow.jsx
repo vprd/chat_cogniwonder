@@ -74,17 +74,8 @@ const Messages = () => {
         const list = document.querySelector(".chat-screen");
         list.scrollTop = list.scrollHeight;
       }
-<<<<<<< HEAD
-
-      
+     markUndread(message.conversation_id);
     });
-
-=======
-
-      markUndread(message.conversation_id);
-    });
-
->>>>>>> parent of 75c2948... mongo
     
     
   }, [getmessages, openedconversation, socket, markUndread]);

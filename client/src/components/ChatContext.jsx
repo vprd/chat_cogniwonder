@@ -6,11 +6,7 @@ import io from "socket.io-client";
 //global context
 import { GlobalContext } from "./GloablContext";
 
-<<<<<<< HEAD
-let socket_endpoint =
-=======
 const socket_endpoint =
->>>>>>> parent of 75c2948... mongo
   window.location.protocol +
   "//" +
   window.location.hostname +
@@ -35,11 +31,8 @@ export const ChatContextProvider = ({ children }) => {
       conversations.length
     ) {
       const conversation_sockets = conversations.map((conversation) => {
-<<<<<<< HEAD
+
         console.log('connecting to:',conversation);
-=======
-        console.log(conversation);
->>>>>>> parent of 75c2948... mongo
         const socket = io(`${socket_endpoint}conversation-${conversation._id}`);
 
         socket.on("connect", (message) => {
