@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
-    "server-setup": "npm i && cd client && npm i && npm run build",
+    "server-setup": "npm i && cd client && npm i && cd ..",
     "react-start": "cd client && npm start",
     "deploy": "cd client && npm run build && cd .. && git add . && git commit -m 'deploying-server-and-client' && git push",
     "server-deploy": "git add . && git commit -m 'deploying-server' && git push",
@@ -25,7 +25,6 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "mongoose": "^5.9.20",
     "mysql": "^2.18.1",
     "socket.io": "^2.3.0",
     "sqlstring": "^2.3.2"

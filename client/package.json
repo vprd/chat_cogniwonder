@@ -9,14 +9,13 @@
     "axios": "^0.19.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "socket.io-client": "^2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "server-start": "cd .. && npm start",
-    "build": "react-scripts build && git add .",
+    "build": "react-scripts build",
     "deploy": "npm run build && cd .. && git add . && git commit -m 'deploying-server-and-client' && git push",
     "server-deploy": "cd .. && git add . && git commit -m 'deploying-server' && git push",
     "client-deploy": "npm run build && cd .. && git add . && git commit -m 'deploying-server-and-client' && git push",

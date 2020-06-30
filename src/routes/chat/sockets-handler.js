@@ -1,27 +1,24 @@
 const socketio = require('socket.io');
 
 // db controller to save the messages
-//const dbController = require('../../model/controller');
-const controller = require('../../mongo/controller');
+const dbController = require('../../model/controller');
 
 // class to handle realtime message and pings when new message arrives
 class ConversationHandler {
 
     constructor(server) {
         this.io = socketio(server);
-        /* this.controller = dbController; */
-        this.controller = controller;
+        this.controller = dbController;
+        this._setupNotificationSignaling();
     }
 
     conversations = async () => {
 
         console.log('starting listeners');
-        //const allConversations = await dbController.listConversations();
-        const allConversations = await controller.geteveryconversations();
+        const allConversations = await dbController.listConversations();
 
         for (let conversation of allConversations) {
-            console.log('listening on:',conversation);
-            const namespace = `/conversation-${conversation._id}`;
+            const namespace = `/conversation-${conversation.conversation_id}`;
 
             const conversationNamespace = this.io.of(namespace);
 
@@ -29,10 +26,12 @@ class ConversationHandler {
                 console.log('connected')
                 socket.on('message', async (message) => {
                     console.log(message)
-                    conversationNamespace.emit('message', await controller.insertMessage(message));
+                    
+                    if (message.message && message.sender && message.conversation_id) {
+                        
+                        conversationNamespace.emit('message', await dbController.insertMessage(message));
+                    }
                 });
-                //conversationNamespace.emit('conversation-update','update');
-
             });
         }
 
