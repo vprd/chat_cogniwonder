@@ -2,9 +2,10 @@ const mysql = require('mysql');// mysql(would have still prefered mongodb)
 
 const con = mysql.createConnection({
     host: "localhost",
-    user: 'root',
-    password: '12345678',
-    database: 'chatdb', //! Create this db before running
+    user: 'atozbfw7_test',
+    password: 'test@112233445566',
+    database: 'atozbfw7_chat',
+
 });
 
 // TABLE NAME = conversations
