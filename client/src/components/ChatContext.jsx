@@ -6,6 +6,7 @@ import io from "socket.io-client";
 //global context
 import { GlobalContext } from "./GloablContext";
 
+<<<<<<< HEAD
 let socket_endpoint =
   window.location.protocol +
   "//" +
@@ -15,6 +16,14 @@ let socket_endpoint =
   "/";
 
 socket_endpoint = "http://localhost:8000/";
+=======
+const socket_endpoint =
+  window.location.href === "http://localhost:3000/"
+    ? "http://localhost:8000/"
+    : window.location.href;
+console.log(socket_endpoint);
+
+>>>>>>> parent of b7f84ab... deploying-server-and-client
 export const ChatContext = createContext();
 
 export const ChatContextProvider = ({ children }) => {
@@ -35,8 +44,15 @@ export const ChatContextProvider = ({ children }) => {
         console.log('connecting to:',conversation);
         const socket = io(`${socket_endpoint}conversation-${conversation._id}`);
 
+<<<<<<< HEAD
         socket.on("connect", (message) => {
           console.log("connected");
+=======
+        socket.on("message", (message) => {
+          console.log(message);
+          if (openedconversation.conversation_id !== message.conversation_id)
+            markUndread(message.conversation_id);
+>>>>>>> parent of b7f84ab... deploying-server-and-client
         });
 
         return { id: conversation._id, socket };
@@ -48,12 +64,27 @@ export const ChatContextProvider = ({ children }) => {
   }
 
   useEffect(() => {
+<<<<<<< HEAD
     const conversation_sockets = connectToConversationSockets(conversations);
     if (conversation_sockets) {
       setconversation_sockets(conversation_sockets);
     }
     // eslint-disable-next-line
   }, [conversations]);
+=======
+                    const conversation_sockets = connectToConversationSockets(
+                      conversations
+                    );
+                    if (conversation_sockets) {
+                      setconversation_sockets(conversation_sockets);
+                      console.log(
+                        "conversation socket set",
+                        conversation_sockets
+                      );
+                    }
+                    // eslint-disable-next-line
+                  }, [conversations]);
+>>>>>>> parent of b7f84ab... deploying-server-and-client
 
   function getSocket(conversation_id) {
     return conversation_sockets.filter((conversation_socket) => {

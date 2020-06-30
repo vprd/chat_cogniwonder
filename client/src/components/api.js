@@ -25,7 +25,11 @@ const api = {
         const result = await axios.post(point, {
             conversation_id
         });
+<<<<<<< HEAD
         console.log('this is message',result.data)
+=======
+        console.log(result.data);
+>>>>>>> parent of b7f84ab... deploying-server-and-client
         return result.data;
     },
     authenticate: async (username, id,) => {

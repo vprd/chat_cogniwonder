@@ -78,8 +78,22 @@ const Messages = () => {
       
     });
 
+<<<<<<< HEAD
     
     
+=======
+    return () => {
+      socket.removeAllListeners("message");
+      socket.on("message", (message) => {
+        console.log(
+          message,
+          openedconversation.conversation_id , message.conversation_id
+        );
+        markUndread(message.conversation_id);
+        
+      });
+    };
+>>>>>>> parent of b7f84ab... deploying-server-and-client
   }, [getmessages, openedconversation, socket, markUndread]);
 
   let message = "";
@@ -89,7 +103,13 @@ const Messages = () => {
   };
 
   const sendmessage = () => {
+<<<<<<< HEAD
     message = message.trim();
+=======
+    
+    message = (message.trim());
+    console.log(user.name);
+>>>>>>> parent of b7f84ab... deploying-server-and-client
     socket.emit("message", {
       message,
       sender: user.username,
@@ -108,6 +128,10 @@ const Messages = () => {
         {messages &&
           messages.length &&
           messages.map((message, i) => {
+<<<<<<< HEAD
+=======
+            console.log(message.sender);
+>>>>>>> parent of b7f84ab... deploying-server-and-client
             return (
               <Message
                 key={i}
@@ -153,6 +177,11 @@ const Message = ({
   const { user } = useContext(ChatContext);
 
   if (type === "message") {
+<<<<<<< HEAD
+=======
+    console.log(date);
+
+>>>>>>> parent of b7f84ab... deploying-server-and-client
     return (
       <div
         className={group ? "message group-message" : "message"}
