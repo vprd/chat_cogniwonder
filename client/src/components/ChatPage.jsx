@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from 'react';
 
-import MessagingWindow from "./MessagingWindow";
+import MessagingWindow from './MessagingWindow';
 //context
-import { ChatContext, ChatContextProvider } from "./ChatContext";
+import { ChatContext, ChatContextProvider } from './ChatContext';
 // Assets
-import logo from "./assets/img/logo.png";
+import logo from './assets/img/logo.png';
 
 // style
-import "./scss/chat-page.css";
-import { GlobalContext } from "./GloablContext";
+import './scss/chat-page.css';
+import { GlobalContext } from './GloablContext';
 const ChatPage = () => {
   return (
     <ChatContextProvider>
@@ -36,9 +36,6 @@ const Menu = () => {
 const ConversationList = () => {
   const { conversations, updateConversations } = useContext(ChatContext);
 
-
-
-  
   useEffect(() => {
     updateConversations();
     // eslint-disable-next-line
@@ -66,8 +63,8 @@ const Conversation = ({ conversation }) => {
   const indicator =
     conversation.unread &&
     !(conversation.conversation_id === openedconversation.conversation_id)
-      ? "7px solid rgb(143, 255, 143)"
-      : "";
+      ? '7px solid rgb(143, 255, 143)'
+      : '';
 
   if (conversation.conversation.length === 2) {
     return (
@@ -80,8 +77,8 @@ const Conversation = ({ conversation }) => {
         className="conversation"
         id={
           conversation.conversation_id === openedconversation.conversation_id
-            ? "opened-conversation"
-            : ""
+            ? 'opened-conversation'
+            : ''
         }
       >
         <img
@@ -98,14 +95,11 @@ const Conversation = ({ conversation }) => {
       </div>
     );
   } else {
-    let conversation_name = "group";
-    if (typeof conversation.conversation_name === "string") {
+    let conversation_name = 'group';
+    if (typeof conversation.conversation_name === 'string') {
       conversation_name = conversation.conversation_name;
     }
-    conversation_name = conversation.conversation_name.join(", ");
-
-    
-    
+    conversation_name = conversation.conversation_name.join(', ');
 
     return (
       <div
@@ -116,8 +110,8 @@ const Conversation = ({ conversation }) => {
         className="conversation group-conversation"
         id={
           conversation.conversation_id === openedconversation.conversation_id
-            ? "opened-conversation"
-            : ""
+            ? 'opened-conversation'
+            : ''
         }
       >
         <img

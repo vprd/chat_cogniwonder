@@ -1,33 +1,39 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from 'react';
 
-import { ChatContext } from "./ChatContext";
+import { ChatContext } from './ChatContext';
 const MessagingWindow = () => {
   const { openedconversation, user } = useContext(ChatContext);
   const [changegroupname, setchangegroupname] = useState(false);
 
   useEffect(() => {
     if (Object.keys(openedconversation).length) {
-      const list = document.querySelector(".chat-screen");
+      const list = document.querySelector('.chat-screen');
       list.scrollTop = list.scrollHeight;
     }
   }, [openedconversation]);
 
   if (Object.keys(openedconversation).length) {
     function ChangeName({ groupname, setgroupname, setchangegroupname }) {
-      let newname = "";
+      let newname = '';
 
       const onchange = (e) => {
         newname = e.target.value;
       };
       useEffect(() => {
+        const inputfield = document.querySelector('#group-name-changer');
+        inputfield.focus();
+        inputfield.addEventListener('focusout', () => {
+          setchangegroupname(false);
+        });
+
         const dismiss = (e) => {
           if (e.keyCode === 27) setchangegroupname(false);
         };
 
-        document.addEventListener("keydown", dismiss);
+        document.addEventListener('keydown', dismiss);
 
         return () => {
-          document.removeEventListener("keydown", dismiss);
+          document.removeEventListener('keydown', dismiss);
         };
       });
 
@@ -45,7 +51,7 @@ const MessagingWindow = () => {
 
     const conversation_name = `me and ${openedconversation.conversation_name
       .filter((name) => name !== user.name)
-      .join(",")}`;
+      .join(',')}`;
 
     const setconversation_name = (newname) => {};
 
@@ -100,17 +106,17 @@ const Messages = () => {
   useEffect(() => {
     (async () => {
       setmessages(await getmessages(openedconversation.conversation_id));
-      const list = document.querySelector(".chat-screen");
+      const list = document.querySelector('.chat-screen');
       list.scrollTop = list.scrollHeight;
     })();
   }, [openedconversation, getmessages]);
 
   useEffect(() => {
-    socket.removeAllListeners("message");
-    socket.on("message", async (message) => {
+    socket.removeAllListeners('message');
+    socket.on('message', async (message) => {
       if (message.conversation_id === openedconversation.conversation_id) {
         setmessages(await getmessages(openedconversation.conversation_id));
-        const list = document.querySelector(".chat-screen");
+        const list = document.querySelector('.chat-screen');
         list.scrollTop = list.scrollHeight;
       }
 
@@ -118,14 +124,14 @@ const Messages = () => {
     });
 
     return () => {
-      socket.removeAllListeners("message");
-      socket.on("message", (message) => {
+      socket.removeAllListeners('message');
+      socket.on('message', (message) => {
         markUndread(message.conversation_id);
       });
     };
   }, [getmessages, openedconversation, socket, markUndread]);
 
-  let message = "";
+  let message = '';
 
   const onchange = (e) => {
     message = e.target.value;
@@ -133,15 +139,15 @@ const Messages = () => {
 
   const sendmessage = () => {
     message = message.trim();
-    socket.emit("message", {
+    socket.emit('message', {
       message,
       sender: user.name,
       sender_id: user.userid,
       conversation_id: openedconversation.conversation_id,
       date: new Date(),
     });
-    const messageInput = document.querySelector(".message-input textarea");
-    setTimeout(() => (messageInput.value = ""));
+    const messageInput = document.querySelector('.message-input textarea');
+    setTimeout(() => (messageInput.value = ''));
     messageInput.focus();
   };
 
@@ -166,7 +172,7 @@ const Messages = () => {
         <textarea
           onChange={onchange}
           onKeyDown={(e) => {
-            if (!e.shiftKey && e.keyCode === 13 && message.trim() !== "") {
+            if (!e.shiftKey && e.keyCode === 13 && message.trim() !== '') {
               sendmessage();
             }
           }}
@@ -185,7 +191,7 @@ const Messages = () => {
 };
 
 const Message = ({
-  type = "message",
+  type = 'message',
   text,
   sender_name,
   sender_id,
@@ -194,18 +200,18 @@ const Message = ({
 }) => {
   const { user } = useContext(ChatContext);
 
-  if (type === "message") {
+  if (type === 'message') {
     return (
       <div
-        className={group ? "message group-message" : "message"}
-        id={user.userid === sender_id ? "sent-message" : "message"}
+        className={group ? 'message group-message' : 'message'}
+        id={user.userid === sender_id ? 'sent-message' : 'message'}
       >
-        <h1 id={group ? "group-sender" : ""}>{sender_name}</h1>
+        <h1 id={group ? 'group-sender' : ''}>{sender_name}</h1>
         <span>{text}</span>
         <span id="date-time">{formatAMPM(new Date(date))}</span>
       </div>
     );
-  } else if (type === "badge") {
+  } else if (type === 'badge') {
     return (
       <div className="badge">
         <span>{text}</span>
@@ -217,11 +223,11 @@ const Message = ({
 function formatAMPM(date) {
   var hours = date.getHours();
   var minutes = date.getMinutes();
-  var ampm = hours >= 12 ? "pm" : "am";
+  var ampm = hours >= 12 ? 'pm' : 'am';
   hours = hours % 12;
   hours = hours ? hours : 12; // the hour '0' should be '12'
-  minutes = minutes < 10 ? "0" + minutes : minutes;
-  var strTime = hours + ":" + minutes + ampm;
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  var strTime = hours + ':' + minutes + ampm;
   return strTime;
 }
 export default MessagingWindow;

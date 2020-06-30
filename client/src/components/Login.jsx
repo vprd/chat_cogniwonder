@@ -1,18 +1,18 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect } from 'react';
 
 // contexts
-import { GlobalContext } from "./GloablContext";
+import { GlobalContext } from './GloablContext';
 
 //styles
-import "./scss/Login.css";
+import './scss/Login.css';
 const Login = () => {
   const { Authenticate } = useContext(GlobalContext);
-  let username = "",
-    password = "";
+  let username = '',
+    password = '';
 
   useEffect(() => {
-    const username = localStorage.getItem("username");
-    const password = localStorage.getItem("password");
+    const username = localStorage.getItem('username');
+    const password = localStorage.getItem('password');
 
     if (username && password) {
       Authenticate(username, password);
@@ -20,8 +20,8 @@ const Login = () => {
   });
 
   onchange = (e) => {
-    if (e.target.id === "username") username = e.target.value;
-    if (e.target.id === "password") password = e.target.value;
+    if (e.target.id === 'username') username = e.target.value;
+    if (e.target.id === 'password') password = e.target.value;
   };
 
   onsubmit = async (e) => {
