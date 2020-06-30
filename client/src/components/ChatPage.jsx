@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import MessagingWindow from "./MessagingWindow";
 //context
@@ -36,6 +36,9 @@ const Menu = () => {
 const ConversationList = () => {
   const { conversations, updateConversations } = useContext(ChatContext);
 
+
+
+  
   useEffect(() => {
     updateConversations();
     // eslint-disable-next-line
@@ -97,9 +100,13 @@ const Conversation = ({ conversation }) => {
   } else {
     let conversation_name = "group";
     if (typeof conversation.conversation_name === "string") {
-      conversation_name = conversation.conversation_name.join(",");
+      conversation_name = conversation.conversation_name;
     }
     conversation_name = conversation.conversation_name.join(", ");
+
+    
+    
+
     return (
       <div
         onClick={() => {

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 
 // contexts
 import { GlobalContext } from "./GloablContext";
@@ -10,6 +10,15 @@ const Login = () => {
   let username = "",
     password = "";
 
+  useEffect(() => {
+    const username = localStorage.getItem("username");
+    const password = localStorage.getItem("password");
+
+    if (username && password) {
+      Authenticate(username, password);
+    }
+  });
+
   onchange = (e) => {
     if (e.target.id === "username") username = e.target.value;
     if (e.target.id === "password") password = e.target.value;
@@ -17,7 +26,7 @@ const Login = () => {
 
   onsubmit = async (e) => {
     e.preventDefault();
-    Authenticate(username,password);
+    Authenticate(username, password);
   };
   return (
     <div className="login-page">
@@ -47,7 +56,5 @@ const Login = () => {
     </div>
   );
 };
-
-
 
 export default Login;

@@ -2,7 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 
 import { ChatContext } from "./ChatContext";
 const MessagingWindow = () => {
-  const { openedconversation ,user} = useContext(ChatContext);
+  const { openedconversation, user } = useContext(ChatContext);
+  const [changegroupname, setchangegroupname] = useState(false);
 
   useEffect(() => {
     if (Object.keys(openedconversation).length) {
@@ -12,6 +13,42 @@ const MessagingWindow = () => {
   }, [openedconversation]);
 
   if (Object.keys(openedconversation).length) {
+    function ChangeName({ groupname, setgroupname, setchangegroupname }) {
+      let newname = "";
+
+      const onchange = (e) => {
+        newname = e.target.value;
+      };
+      useEffect(() => {
+        const dismiss = (e) => {
+          if (e.keyCode === 27) setchangegroupname(false);
+        };
+
+        document.addEventListener("keydown", dismiss);
+
+        return () => {
+          document.removeEventListener("keydown", dismiss);
+        };
+      });
+
+      return (
+        <form onSubmit={setgroupname} className="group-name-input">
+          <input
+            onChange={onchange}
+            id="group-name-changer"
+            type="text"
+            value={groupname}
+          />
+        </form>
+      );
+    }
+
+    const conversation_name = `me and ${openedconversation.conversation_name
+      .filter((name) => name !== user.name)
+      .join(",")}`;
+
+    const setconversation_name = (newname) => {};
+
     return (
       <div className="chat-screen">
         <div className="contact-header">
@@ -19,13 +56,16 @@ const MessagingWindow = () => {
             src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-5.png"
             alt="profile"
           />
-          <div className="about">
-            <h4>
-              {"me and " +
-                openedconversation.conversation_name
-                  .filter((name) => name !== user.name)
-                  .join(",")}
-            </h4>
+          <div className="about" onClick={() => setchangegroupname(true)}>
+            {!changegroupname ? (
+              <h4>{conversation_name}</h4>
+            ) : (
+              <ChangeName
+                groupname={conversation_name}
+                setgroupname={setconversation_name}
+                {...{ setchangegroupname }}
+              />
+            )}
             <img
               src="https://img.icons8.com/android/24/000000/info.png"
               alt=""
@@ -72,18 +112,15 @@ const Messages = () => {
         setmessages(await getmessages(openedconversation.conversation_id));
         const list = document.querySelector(".chat-screen");
         list.scrollTop = list.scrollHeight;
-
       }
-      
-        markUndread(message.conversation_id);
+
+      markUndread(message.conversation_id);
     });
 
     return () => {
       socket.removeAllListeners("message");
       socket.on("message", (message) => {
-
         markUndread(message.conversation_id);
-        
       });
     };
   }, [getmessages, openedconversation, socket, markUndread]);
@@ -95,8 +132,7 @@ const Messages = () => {
   };
 
   const sendmessage = () => {
-    
-    message = (message.trim());
+    message = message.trim();
     socket.emit("message", {
       message,
       sender: user.name,
@@ -114,7 +150,6 @@ const Messages = () => {
       <div className="messages-view">
         {messages &&
           messages.map((message, i) => {
-          
             return (
               <Message
                 key={i}
@@ -160,7 +195,6 @@ const Message = ({
   const { user } = useContext(ChatContext);
 
   if (type === "message") {
-
     return (
       <div
         className={group ? "message group-message" : "message"}
