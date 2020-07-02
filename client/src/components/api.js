@@ -1,9 +1,9 @@
 import axios from 'axios';
 
+import getendpoint from '../api-endpoint'
 
-const endpoint = window.location.href === "http://localhost:3000/"
-    ? "http://localhost:8000/api"
-    : window.location.href+'api';
+
+const endpoint = `${getendpoint()}api`;
 
 const api = {
 
@@ -26,14 +26,26 @@ const api = {
 
         return result.data;
     },
-    authenticate: async (username, password) => {
+    authenticate: async (data) => {
+        console.log(endpoint + "/authenticate")
 
         const result = await axios.post(endpoint + "/authenticate", {
-            username,
-            password,
+            [Number(data) ? 'mobile' : 'email']: data
         });
+
         return result.data;
-    }
+    },
+
+    search: async (user) => {
+        const point = endpoint + '/search';
+
+        const result = await axios.post(point, {
+            user
+        });
+
+        return result.data;
+    },
+
 }
 
 export default api;

@@ -20,7 +20,12 @@ module.exports = (server) => {
 
     router.post('/messages', async (req, res) => {
         console.log(await dbController.getMessages(req.body.conversation_id))
-        if(req.body.conversation_id )res.send(JSON.stringify(await dbController.getMessages(req.body.conversation_id)));
+        if (req.body.conversation_id) res.send(JSON.stringify(await dbController.getMessages(req.body.conversation_id)));
+    });
+
+    router.post('/search', async (req, res) => {
+
+        res.send(JSON.stringify(await dbController.searchUsers(req.body)))
     });
 
     //socket io setup

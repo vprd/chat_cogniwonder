@@ -9,6 +9,9 @@ import logo from './assets/img/logo.png';
 // style
 import './scss/chat-page.css';
 import { GlobalContext } from './GloablContext';
+
+import api from './api';
+
 const ChatPage = () => {
   return (
     <ChatContextProvider>
@@ -21,15 +24,18 @@ const ChatPage = () => {
 };
 const Menu = () => {
   return (
-    <div className="menu">
-      <header>
-        <img src={logo} alt="logo" />
-        <h2>Chat</h2>
-      </header>
+    <>
+      <div className="menu">
+        <header>
+          <img src={logo} alt="logo" />
+          <h2>Chat</h2>
+        </header>
 
-      <ConversationList />
-      <Options />
-    </div>
+        <ConversationList />
+        <Options />
+      </div>
+      <AddConversationDialog />
+    </>
   );
 };
 
@@ -128,14 +134,110 @@ const Conversation = ({ conversation }) => {
 
 const Options = () => {
   return (
-    <div className="menu-options">
-      <div className="option">
-        <img
-          src="https://img.icons8.com/cotton/64/000000/add-to-chat.png"
-          alt=""
-        />
-        <span>start chat</span>
+    <>
+      <div className="menu-options">
+        <div className="option">
+          <img
+            src="https://img.icons8.com/cotton/64/000000/add-to-chat.png"
+            alt=""
+          />
+          <span>start chat</span>
+        </div>
       </div>
+    </>
+  );
+};
+
+const AddConversationDialog = () => {
+  const [sugesstions, setsugesstions] = useState();
+  const [participants, setparticipants] = useState();
+
+  useEffect(() => {
+    document.querySelector('#conversation-adder').focus();
+  });
+
+  const onchange = async (e) => {
+    console.log('testttt');
+
+    if (e.target.value !== '') {
+      setsugesstions(await api.search(e.target.value));
+    } else {
+      setsugesstions([]);
+    }
+  };
+
+  const addparticipant = (suggestion) => {
+    console.log(participants);
+    let exists = false;
+    participants &&
+      participants.forEach((participant) => {
+        if (participant.mobile === suggestion.mobile) exists = true;
+      });
+
+    if (!exists) {
+      setparticipants([...(participants || []), suggestion]);
+    }
+  };
+
+  const removeparticipant = (suggestion) => {
+    let newlist =
+      participants &&
+      participants.filter((participant) => {
+        if (participant.mobile === suggestion.mobile) return false;
+        return true;
+      });
+    console.log(newlist);
+    setparticipants(newlist);
+  };
+
+  return (
+    <div className="conversation-add">
+      <form>
+        <div className="users-input">
+          <h2>Create</h2>
+          {participants && participants.length !== 0 && (
+            <div className="participants">
+              {participants.map((participant, i) => (
+                <div key={i} className="participant">
+                  <span>{participant.first_name}</span>
+                  <img
+                    onClick={() => {
+                      removeparticipant(participant);
+                    }}
+                    src="https://img.icons8.com/pastel-glyph/64/000000/cancel.png"
+                    alt="cancel"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+          <input
+            onChange={onchange}
+            id="conversation-adder"
+            type="text"
+            name="email/mobile"
+            placeholder="email/mobile"
+            required
+            autoComplete="off"
+          />
+
+          {sugesstions && sugesstions.length !== 0 && (
+            <div className="suggestions">
+              {sugesstions.map((suggestion, i) => (
+                <div
+                  key={i}
+                  onClick={() => addparticipant(suggestion)}
+                  className="suggestion"
+                >
+                  <h4>{suggestion.first_name}</h4>
+                  <p>{suggestion.mobile}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        <button type="submit">Start</button>
+      </form>
     </div>
   );
 };

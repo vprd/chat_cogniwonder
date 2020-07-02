@@ -4,29 +4,27 @@ import React, { useContext, useEffect } from 'react';
 import { GlobalContext } from './GloablContext';
 
 //styles
+
 import './scss/Login.css';
 const Login = () => {
   const { Authenticate } = useContext(GlobalContext);
-  let username = '',
-    password = '';
+  let username = '';
 
   useEffect(() => {
     const username = localStorage.getItem('username');
-    const password = localStorage.getItem('password');
 
-    if (username && password) {
-      Authenticate(username, password);
+    if (username) {
+      Authenticate(username);
     }
   });
 
   onchange = (e) => {
     if (e.target.id === 'username') username = e.target.value;
-    if (e.target.id === 'password') password = e.target.value;
   };
 
   onsubmit = async (e) => {
     e.preventDefault();
-    Authenticate(username, password);
+    Authenticate(username);
   };
   return (
     <div className="login-page">
@@ -36,12 +34,12 @@ const Login = () => {
             onChange={onchange}
             id="username"
             type="text"
-            name="username"
-            placeholder="username"
+            name="email/mobile"
+            placeholder="email/mobile"
             required
           />
         </div>
-        <div className="password">
+        {/* <div className="password">
           <input
             onChange={onchange}
             type="password"
@@ -50,7 +48,7 @@ const Login = () => {
             placeholder="password"
             required
           />
-        </div>
+        </div> */}
         <button type="submit">Log in</button>
       </form>
     </div>

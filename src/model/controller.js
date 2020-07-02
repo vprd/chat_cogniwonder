@@ -16,8 +16,8 @@ class Controller {
 
     _listUsers = async () => {
 
-        const result = await this._query('SELECT * FROM users');
-
+        const result = await this._query('SELECT * FROM User_SSC');
+        console.log(result)
         return result
     }
 
@@ -57,13 +57,53 @@ class Controller {
         console.log(await this.createConversation([1, 3, 5]));
     }
 
-    authenticate = async ({ username, password }) => {
-        if ((typeof username === 'string') && (typeof password === 'string')) {
-            const result = (await this._query(`SELECT * FROM users WHERE NAME='${username}'`))[0];
-            if (password === result.PWD) return result.NAME_ID;
+    authenticate = async ({ email, mobile }) => {
+        /*  if ((typeof username === 'string') && (typeof password === 'string')) {
+             const result = (await this._query(`SELECT * FROM users WHERE NAME='${username}'`))[0];
+             if (password === result.PWD) return result.NAME_ID;
+         }
+         return false; */
+        if (email) {
+            const result = (await this._query(`SELECT * FROM User_SSC WHERE email='${email}'`))[0];
+            if (result) return true
+        } else if (mobile) {
+            const result = (await this._query(`SELECT * FROM User_SSC WHERE mobile='${mobile}'`))[0];
+            if (result) return true
+        }
+
+        return false
+
+
+    }
+
+    searchUsers = async ({ user }) => {
+
+        if (user) {
+            let result
+            if (Number(user)) {
+                console.log(user);
+                result = await this._query(`SELECT * FROM User_SSC WHERE mobile LIKE '${user}%'`)
+
+            } else {
+                console.log(user);
+                result = await this._query(`SELECT * FROM User_SSC WHERE email LIKE '${user}%'`)
+
+            }
+
+            return result.map(user => {
+                return {
+                    mobile: user.mobile,
+                    email: user.email,
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                }
+            });
+
         }
         return false;
+
     }
+
     // Creates a conversation in the conversation table if it does not already exists
     // also creates the relation needed in the useruserconversation if not already there
     createConversation = async (userids) => {
@@ -234,12 +274,13 @@ Date.prototype.toMysqlFormat = function () {
 // the instance of the controller used elsewhere
 const control = new Controller();
 
-//control._query(`DROP TABLE userconversation`);
 (async () => {
-    //control._resettotestsdata();
+    //control._query(`DROP TABLE userconversation`);
+    //control._delete();
     //console.log(await control.listConversations())
     //control._query(`ALTER TABLE conversations ADD props TEXT`)
     //control._query(`ALTER TABLE messages CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci`)
+
 })();
 
 module.exports = control;
