@@ -6,10 +6,12 @@ import io from 'socket.io-client';
 //global context
 import { GlobalContext } from './GloablContext';
 
-const socket_endpoint =
-  window.location.href === 'http://localhost:3000/'
-    ? 'http://localhost:8000/'
-    : window.location.href;
+import getendpoint from '../api-endpoint';
+
+const endpoint = `${getendpoint()}`;
+
+const socket_endpoint = endpoint;
+console.log('socket endpoint:', socket_endpoint);
 
 export const ChatContext = createContext();
 
