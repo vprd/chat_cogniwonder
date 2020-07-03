@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 //app.listen will not work when using in socket.io
-const server = require('http').Server(app);
+const server = require('http').createServer(app);
 
 // express middlewares
 const bodyParser = require('body-parser');
