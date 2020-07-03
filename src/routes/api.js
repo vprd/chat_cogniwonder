@@ -5,6 +5,7 @@ const ConversationHandler = require('./chat/sockets-handler');
 module.exports = (server) => {
 
     const socketListener = new ConversationHandler(server);
+    socketListener.conversations();
 
     router.post('/authenticate', async (req, res) => {
         res.send(JSON.stringify(await dbController.authenticate(req.body)));
@@ -46,11 +47,7 @@ module.exports = (server) => {
 
     });
 
-
-
     //socket io setup
-
-    socketListener.conversations();
 
     return router;
 }

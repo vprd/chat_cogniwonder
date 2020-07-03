@@ -1,7 +1,9 @@
 const express = require('express');
 const app = express();
+
 //app.listen will not work when using in socket.io
-const server = require('http').createServer(app);
+
+const http = require('http').createServer(app);
 
 // express middlewares
 const bodyParser = require('body-parser');
@@ -10,7 +12,7 @@ const cors = require('cors');
 
 process.env.ENVIRONMENT === 'local' && app.use(cors());
 // api and other routes
-const api = require('./src/routes/api')(server);//the http server instnace is passed to api for socket.io
+const api = require('./src/routes/api')(http);//the http server instnace is passed to api for socket.io
 
 const PORT = process.env.PORT || 8000;
 
@@ -29,5 +31,5 @@ app.get('/*', (req, res) => {
 });
 
 setTimeout(()=>{
-    server.listen(PORT, () => console.log('server started on:' + PORT));
+    http.listen(PORT, () => console.log('server started on:' + PORT));
 })
