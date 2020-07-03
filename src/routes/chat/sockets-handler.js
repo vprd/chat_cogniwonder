@@ -18,7 +18,7 @@ class ConversationHandler {
         const allConversations = await dbController.listConversations();
 
         for (let conversation of allConversations) {
-            const namespace = `/conversation-${conversation.conversation_id}`;
+            const namespace = `/conversation${conversation.conversation_id}`;
 
             const conversationNamespace = this.io.of(namespace);
 

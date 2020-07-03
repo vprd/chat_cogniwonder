@@ -31,10 +31,10 @@ export const ChatContextProvider = ({ children }) => {
     ) {
       const conversation_sockets = conversations.map((conversation) => {
         console.log(
-          `${socket_endpoint}conversation-${conversation.conversation_id}`
+          `${socket_endpoint}conversation${conversation.conversation_id}`
         );
         const socket = io(
-          `${socket_endpoint}conversation-${conversation.conversation_id}`,
+          `${socket_endpoint}conversation${conversation.conversation_id}`,
           // { transports: ['websocket'] }
         );
 
