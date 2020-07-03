@@ -7,13 +7,12 @@ const server = require('http').createServer(app);
 const bodyParser = require('body-parser');
 const path = require('path');
 const cors = require('cors');
-app.use(cors());
 
+process.env.ENVIRONMENT === 'local' && app.use(cors());
 // api and other routes
 const api = require('./src/routes/api')(server);//the http server instnace is passed to api for socket.io
 
-const hostname = '127.0.0.1';
-const PORT = 3000;
+const PORT = process.env.PORT || 8000;
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -29,4 +28,4 @@ app.get('/*', (req, res) => {
     res.sendFile(path.resolve(__dirname + '/client/build/index.html'));
 });
 
-server.listen(PORT, hostname, () => console.log('server started on:' + PORT));
+server.listen(PORT, () => console.log('server started on:' + PORT));
