@@ -23,6 +23,8 @@ const ChatPage = () => {
   );
 };
 const Menu = () => {
+  const [addconversationview, setaddconversationview] = useState(false);
+
   return (
     <>
       <div className="menu">
@@ -32,9 +34,29 @@ const Menu = () => {
         </header>
 
         <ConversationList />
-        <Options />
+        <Options setaddconversationview={setaddconversationview} />
       </div>
-      <AddConversationDialog />
+      {addconversationview && (
+        <AddConversationDialog
+          setaddconversationview={setaddconversationview}
+        />
+      )}
+    </>
+  );
+};
+
+const Options = ({ setaddconversationview }) => {
+  return (
+    <>
+      <div className="menu-options">
+        <div className="option" onClick={() => setaddconversationview(true)}>
+          <img
+            src="https://img.icons8.com/cotton/64/000000/add-to-chat.png"
+            alt=""
+          />
+          <span>start chat</span>
+        </div>
+      </div>
     </>
   );
 };
@@ -132,50 +154,58 @@ const Conversation = ({ conversation }) => {
   }
 };
 
-const Options = () => {
-  return (
-    <>
-      <div className="menu-options">
-        <div className="option">
-          <img
-            src="https://img.icons8.com/cotton/64/000000/add-to-chat.png"
-            alt=""
-          />
-          <span>start chat</span>
-        </div>
-      </div>
-    </>
-  );
-};
-
-const AddConversationDialog = () => {
+const AddConversationDialog = ({ setaddconversationview }) => {
   const [sugesstions, setsugesstions] = useState();
   const [participants, setparticipants] = useState();
-
-  useEffect(() => {
-    document.querySelector('#conversation-adder').focus();
-  });
-
-  const onchange = async (e) => {
-    console.log('testttt');
-
-    if (e.target.value !== '') {
-      setsugesstions(await api.search(e.target.value));
-    } else {
-      setsugesstions([]);
-    }
-  };
+  const { user } = useContext(GlobalContext);
 
   const addparticipant = (suggestion) => {
-    console.log(participants);
     let exists = false;
     participants &&
       participants.forEach((participant) => {
-        if (participant.mobile === suggestion.mobile) exists = true;
+        if (participant) {
+          console.log(participant, participant);
+          if (participant.mobile === suggestion.mobile) exists = true;
+        }
       });
 
     if (!exists) {
       setparticipants([...(participants || []), suggestion]);
+    }
+  };
+
+  useEffect(() => {
+    const input = document.querySelector('#conversation-adder');
+    const conversationadd = document; //|| document.querySelector('.conversation-add');
+    input.focus();
+    const enteradd = (e) => {
+      if (e.key === 'Enter' && sugesstions) {
+        addparticipant(sugesstions[0]);
+        e.preventDefault();
+      }
+    };
+    const dismiss = (e) => {
+      if (e.keyCode === 27) setaddconversationview(false);
+    };
+
+    input.addEventListener('keydown', enteradd);
+    conversationadd.addEventListener('keydown', dismiss);
+
+    return () => {
+      conversationadd.removeEventListener('keydown', dismiss);
+      input.removeEventListener('keydown', enteradd);
+    };
+  });
+
+  const onchange = async (e) => {
+    e.preventDefault();
+
+    if (e.target.value !== '') {
+      const s = await api.search(e.target.value);
+
+      setsugesstions(s.filter((u) => u.mobile !== user.mobile));
+    } else {
+      setsugesstions([]);
     }
   };
 
@@ -190,9 +220,16 @@ const AddConversationDialog = () => {
     setparticipants(newlist);
   };
 
+  const start = async () => {
+    if (participants && participants.length) {
+      const ids = [...participants, user].map((parti) => parti.id);
+      console.log(await api.startconversation(ids));
+    }
+  };
+
   return (
     <div className="conversation-add">
-      <form>
+      <form onSubmit={(e) => e.preventDefault()}>
         <div className="users-input">
           <h2>Create</h2>
           {participants && participants.length !== 0 && (
@@ -213,6 +250,7 @@ const AddConversationDialog = () => {
           )}
           <input
             onChange={onchange}
+            onSubmit={(e) => e.preventDefault()}
             id="conversation-adder"
             type="text"
             name="email/mobile"
@@ -236,7 +274,14 @@ const AddConversationDialog = () => {
             </div>
           )}
         </div>
-        <button type="submit">Start</button>
+        <button
+          className={
+            participants && participants.length ? '' : 'disabled-button'
+          }
+          onClick={start}
+        >
+          Start
+        </button>
       </form>
     </div>
   );

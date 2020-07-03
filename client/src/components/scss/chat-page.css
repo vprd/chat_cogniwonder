@@ -387,7 +387,7 @@
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  z-index: 100;
+  z-index: 110;
   -webkit-backdrop-filter: blur(12px) brightness(0.8);
           backdrop-filter: blur(12px) brightness(0.8);
 }
@@ -396,16 +396,17 @@
   background: white;
   border-radius: 4px;
   margin-top: 8px;
-  padding: 10px;
-  max-width: 300px;
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-columns: (minmax(80px, auto))[auto-fit];
-      grid-template-columns: repeat(auto-fit, minmax(80px, auto));
-  grid-gap: 8px;
+  padding: 5px;
+  max-width: 250px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
 }
 
 .chat-page .conversation-add .participants .participant {
+  margin: 5px;
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;

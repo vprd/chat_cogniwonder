@@ -64,11 +64,23 @@ class Controller {
          }
          return false; */
         if (email) {
-            const result = (await this._query(`SELECT * FROM User_SSC WHERE email='${email}'`))[0];
-            if (result) return true
+            const user = (await this._query(`SELECT * FROM User_SSC WHERE email='${email}'`))[0];
+            if (user) return {
+                mobile: user.mobile,
+                email: user.email,
+                first_name: user.first_name,
+                last_name: user.last_name,
+                id: user.id
+            }
         } else if (mobile) {
-            const result = (await this._query(`SELECT * FROM User_SSC WHERE mobile='${mobile}'`))[0];
-            if (result) return true
+            const user = (await this._query(`SELECT * FROM User_SSC WHERE mobile='${mobile}'`))[0];
+            if (user) return {
+                mobile: user.mobile,
+                email: user.email,
+                first_name: user.first_name,
+                last_name: user.last_name,
+                id: user.id
+            }
         }
 
         return false
@@ -96,6 +108,7 @@ class Controller {
                     email: user.email,
                     first_name: user.first_name,
                     last_name: user.last_name,
+                    id: user.id
                 }
             });
 
@@ -108,7 +121,7 @@ class Controller {
     // also creates the relation needed in the useruserconversation if not already there
     createConversation = async (userids) => {
         if (Array.isArray(userids)) {
-
+            userids = userids.sort();
             const existing = await this.listConversations(userids)
 
             if (existing.length === 0) {
@@ -149,10 +162,10 @@ class Controller {
     getUsernames = async (userids) => {
         if (Array.isArray(userids)) {
             const users = await Promise.all(userids.map(id => {
-                return this._query(`SELECT * FROM users WHERE NAME_ID=${id}`);
+                return this._query(`SELECT * FROM User_SSC WHERE id=${id}`);
             }));
             console.log(users);
-            return users.map(user => user[0].NAME);
+            return users.map(user => user[0].first_name);
         }
     }
     // returns all the conversations in TABLE=conversations
@@ -280,7 +293,7 @@ const control = new Controller();
     //console.log(await control.listConversations())
     //control._query(`ALTER TABLE conversations ADD props TEXT`)
     //control._query(`ALTER TABLE messages CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci`)
-
+    //control.createConversation([1,2])
 })();
 
 module.exports = control;

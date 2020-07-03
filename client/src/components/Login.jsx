@@ -11,7 +11,7 @@ const Login = () => {
   let username = '';
 
   useEffect(() => {
-    const username = localStorage.getItem('username');
+    const username = localStorage.getItem('email_pwd');
 
     if (username) {
       Authenticate(username);

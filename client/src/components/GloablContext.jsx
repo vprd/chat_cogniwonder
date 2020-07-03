@@ -6,12 +6,19 @@ export const GlobalContextProvider = ({ children }) => {
   const [authentication, setAuthentication] = useState(false);
   const [user, setuser] = useState({ userid: 0, name: '' });
 
-  async function Authenticate(username, password) {
-    const userdata = await api.authenticate(username, password);
-    if (userdata) {
-      localStorage.setItem('username', username);
-      localStorage.setItem('password', password);
-      setuser({ userid: userdata, name: username });
+  async function Authenticate(email_pwd) {
+    
+    const user = await api.authenticate(email_pwd);
+    if (user) {
+      localStorage.setItem('email_pwd', email_pwd);
+
+      setuser({
+        mobile: user.mobile,
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        id: user.id,
+      });
       setTimeout(() => setAuthentication(true));
     } else {
       setAuthentication(false);

@@ -14,7 +14,8 @@ module.exports = (server) => {
             console.log(conversations)
             res.send(JSON.stringify(conversations));
         } else {
-            res.send('INVALID USERID');
+            console.log(req.body)
+            res.send('[]');
         }
     });
 
@@ -27,6 +28,21 @@ module.exports = (server) => {
 
         res.send(JSON.stringify(await dbController.searchUsers(req.body)))
     });
+
+    router.post('/startconversation', async (req, res) => {
+
+        /* console.log(req.body.ids)
+        res.send('OK'); */
+
+        if (req.body.ids) {
+            res.send(JSON.stringify(await dbController.createConversation(req.body.ids)))
+        }else{
+            res.sendStatus(400);
+        }
+        
+    });
+
+
 
     //socket io setup
     const socketListener = new ConversationHandler(server);

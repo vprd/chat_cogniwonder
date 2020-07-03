@@ -1,16 +1,15 @@
-import React, { useEffect, createContext, useContext, useState } from "react";
+import React, { useEffect, createContext, useContext, useState } from 'react';
 
-import api from "./api";
-import io from "socket.io-client";
+import api from './api';
+import io from 'socket.io-client';
 
 //global context
-import { GlobalContext } from "./GloablContext";
+import { GlobalContext } from './GloablContext';
 
 const socket_endpoint =
-  window.location.href === "http://localhost:3000/"
-    ? "http://localhost:8000/"
+  window.location.href === 'http://localhost:3000/'
+    ? 'http://localhost:8000/'
     : window.location.href;
-
 
 export const ChatContext = createContext();
 
@@ -33,7 +32,7 @@ export const ChatContextProvider = ({ children }) => {
           `${socket_endpoint}conversation-${conversation.conversation_id}`
         );
 
-        socket.on("message", (message) => {
+        socket.on('message', (message) => {
           if (openedconversation.conversation_id !== message.conversation_id)
             markUndread(message.conversation_id);
         });
@@ -47,14 +46,12 @@ export const ChatContextProvider = ({ children }) => {
   }
 
   useEffect(() => {
-                    const conversation_sockets = connectToConversationSockets(
-                      conversations
-                    );
-                    if (conversation_sockets) {
-                      setconversation_sockets(conversation_sockets);
-                    }
-                    // eslint-disable-next-line
-                  }, [conversations]);
+    const conversation_sockets = connectToConversationSockets(conversations);
+    if (conversation_sockets) {
+      setconversation_sockets(conversation_sockets);
+    }
+    // eslint-disable-next-line
+  }, [conversations]);
 
   function getSocket(conversation_id) {
     return conversation_sockets.filter((conversation_socket) => {
@@ -63,7 +60,7 @@ export const ChatContextProvider = ({ children }) => {
   }
 
   async function updateConversations() {
-    const convos = await api.getconversations(user.userid);
+    const convos = await api.getconversations(user.id);
     setconversations(convos);
   }
 

@@ -45,6 +45,15 @@ const api = {
 
         return result.data;
     },
+    startconversation: async (ids) => {
+        const point = endpoint + '/startconversation';
+
+        const result = await axios.post(point, {
+            ids
+        });
+
+        return result.data;
+    },
 
 }
 
