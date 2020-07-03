@@ -26,9 +26,9 @@ class ConversationHandler {
                 console.log('connected')
                 socket.on('message', async (message) => {
                     console.log(message)
-                    
+
                     if (message.message && message.sender && message.conversation_id) {
-                        
+
                         conversationNamespace.emit('message', await dbController.insertMessage(message));
                     }
                 });
@@ -36,7 +36,23 @@ class ConversationHandler {
         }
 
     }
+    addconversation = async (conversation) => {
+        const namespace = `/conversation-${conversation.conversation_id}`;
 
+        const conversationNamespace = this.io.of(namespace);
+
+        conversationNamespace.on('connection', socket => {
+            console.log('connected')
+            socket.on('message', async (message) => {
+                console.log(message)
+
+                if (message.message && message.sender && message.conversation_id) {
+
+                    conversationNamespace.emit('message', await dbController.insertMessage(message));
+                }
+            });
+        });
+    }
     _setupNotificationSignaling = () => {
 
         // !DO NOT ADD A LISTENER ON io

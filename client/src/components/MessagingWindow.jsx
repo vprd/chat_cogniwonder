@@ -100,7 +100,12 @@ const Messages = () => {
     markUndread,
   } = useContext(ChatContext);
 
-  const socket = getSocket(openedconversation.conversation_id)[0].socket;
+  let socket;
+  try {
+    socket = getSocket(openedconversation.conversation_id)[0].socket;
+  } catch {
+    window.location.reload();
+  }
   const [messages, setmessages] = useState();
 
   useEffect(() => {
@@ -141,8 +146,8 @@ const Messages = () => {
     message = message.trim();
     socket.emit('message', {
       message,
-      sender: user.name,
-      sender_id: user.userid,
+      sender: `${user.first_name} ${user.last_name}`,
+      sender_id: user.id,
       conversation_id: openedconversation.conversation_id,
       date: new Date(),
     });
@@ -204,7 +209,7 @@ const Message = ({
     return (
       <div
         className={group ? 'message group-message' : 'message'}
-        id={user.userid === sender_id ? 'sent-message' : 'message'}
+        id={user.id === sender_id ? 'sent-message' : 'message'}
       >
         <h1 id={group ? 'group-sender' : ''}>{sender_name}</h1>
         <span>{text}</span>

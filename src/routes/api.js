@@ -4,6 +4,8 @@ const dbController = require('../model/controller');
 const ConversationHandler = require('./chat/sockets-handler');
 module.exports = (server) => {
 
+    const socketListener = new ConversationHandler(server);
+
     router.post('/authenticate', async (req, res) => {
         res.send(JSON.stringify(await dbController.authenticate(req.body)));
     });
@@ -35,17 +37,19 @@ module.exports = (server) => {
         res.send('OK'); */
 
         if (req.body.ids) {
-            res.send(JSON.stringify(await dbController.createConversation(req.body.ids)))
-        }else{
+            const conversation = await dbController.createConversation(req.body.ids)
+            socketListener.addconversation(conversation);
+            res.send(JSON.stringify(conversation))
+        } else {
             res.sendStatus(400);
         }
-        
+
     });
 
 
 
     //socket io setup
-    const socketListener = new ConversationHandler(server);
+
     socketListener.conversations();
 
     return router;
