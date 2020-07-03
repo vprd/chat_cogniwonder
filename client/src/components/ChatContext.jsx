@@ -30,6 +30,9 @@ export const ChatContextProvider = ({ children }) => {
       conversations.length
     ) {
       const conversation_sockets = conversations.map((conversation) => {
+        console.log(
+          `${socket_endpoint}conversation-${conversation.conversation_id}`
+        );
         const socket = io(
           `${socket_endpoint}conversation-${conversation.conversation_id}`
         );
