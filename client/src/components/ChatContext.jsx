@@ -8,7 +8,7 @@ import { GlobalContext } from './GloablContext';
 
 import getendpoint from '../api-endpoint';
 
-const endpoint = `${getendpoint()}`.replace('http','ws');
+const endpoint = `${getendpoint()}`;
 
 const socket_endpoint = endpoint;
 console.log('socket endpoint:', socket_endpoint);
@@ -35,7 +35,7 @@ export const ChatContextProvider = ({ children }) => {
         );
         const socket = io(
           `${socket_endpoint}conversation-${conversation.conversation_id}`,
-          { transports: ['websocket'] }
+          // { transports: ['websocket'] }
         );
 
         socket.on('message', (message) => {
