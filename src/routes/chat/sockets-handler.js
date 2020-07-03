@@ -7,7 +7,7 @@ const dbController = require('../../model/controller');
 class ConversationHandler {
 
     constructor(server) {
-        this.io = socketio(server);
+        this.io = socketio.listen(server);
         this.controller = dbController;
         this._setupNotificationSignaling();
     }
