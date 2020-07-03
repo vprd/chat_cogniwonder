@@ -8,7 +8,7 @@ import { GlobalContext } from './GloablContext';
 
 import getendpoint from '../api-endpoint';
 
-const endpoint = `${getendpoint()}`;
+const endpoint = `${getendpoint()}`.replace('http','ws');
 
 const socket_endpoint = endpoint;
 console.log('socket endpoint:', socket_endpoint);
