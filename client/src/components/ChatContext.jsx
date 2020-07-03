@@ -35,7 +35,7 @@ export const ChatContextProvider = ({ children }) => {
         );
         const socket = io(
           `${socket_endpoint}conversation${conversation.conversation_id}`,
-          // { transports: ['websocket'] }
+          { secure: true }
         );
 
         socket.on('message', (message) => {

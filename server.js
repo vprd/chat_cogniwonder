@@ -28,4 +28,6 @@ app.get('/*', (req, res) => {
     res.sendFile(path.resolve(__dirname + '/client/build/index.html'));
 });
 
-server.listen(PORT, () => console.log('server started on:' + PORT));
+setTimeout(()=>{
+    server.listen(PORT, () => console.log('server started on:' + PORT));
+})
