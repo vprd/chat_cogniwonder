@@ -7,12 +7,14 @@ const dbController = require('../../model/controller');
 class ConversationHandler {
 
     constructor(server) {
+        this.conversations.bind(this)
+        this.addconversation.bind(this)
         this.io = socketio.listen(server);
         this.controller = dbController;
         this._setupNotificationSignaling();
     }
 
-    conversations = async () => {
+    async conversations() {
 
         console.log('starting listeners');
         const allConversations = await dbController.listConversations();
@@ -36,7 +38,7 @@ class ConversationHandler {
         }
 
     }
-    addconversation = async (conversation) => {
+    async addconversation(conversation) {
         const namespace = `/conversation-${conversation.conversation_id}`;
 
         const conversationNamespace = this.io.of(namespace);
