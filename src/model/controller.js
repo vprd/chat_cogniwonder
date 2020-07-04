@@ -1,10 +1,9 @@
 const dbconnection = require('./db')();
 const SqlString = require('sqlstring');
-class Controller {
 
-    constructor() {
-        this.dbconnection = dbconnection;
-    }
+const control = {
+
+    dbconnection,
 
     /* _testing = async () => {
 
@@ -14,15 +13,15 @@ class Controller {
         return result
     } */
 
-    _listUsers = async () => {
+    _listUsers: async function () {
 
         const result = await this._query('SELECT * FROM User_SSC');
         console.log(result)
         return result
-    }
+    },
 
     // Async wrapper for sql queries
-    _query = (sql) => {
+    _query: function (sql) {
         const con = this.dbconnection;
         return new Promise((resolve, reject) => {
 
@@ -31,18 +30,18 @@ class Controller {
                 resolve(result);
             });
         });
-    }
+    },
 
     // Reset the testing DB tables 
-    _delete = async () => {
+    _delete: async function () {
 
         control._query(`TRUNCATE TABLE conversations`);
         control._query(`TRUNCATE TABLE userconversation`);
         control._query(`TRUNCATE TABLE messages`);
 
         console.log('reset');
-    }
-    _resettotestsdata = async () => {
+    },
+    _resettotestsdata: async function () {
 
         this._delete();
 
@@ -55,9 +54,9 @@ class Controller {
         console.log(await this.createConversation([1, 2, 3, 4, 5, 6]));
         console.log(await this.createConversation([1, 2, 3]));
         console.log(await this.createConversation([1, 3, 5]));
-    }
+    },
 
-    authenticate = async ({ email, mobile }) => {
+    authenticate: async function ({ email, mobile }) {
         /*  if ((typeof username === 'string') && (typeof password === 'string')) {
              const result = (await this._query(`SELECT * FROM users WHERE NAME='${username}'`))[0];
              if (password === result.PWD) return result.NAME_ID;
@@ -86,9 +85,9 @@ class Controller {
         return false
 
 
-    }
+    },
 
-    searchUsers = async ({ user }) => {
+    searchUsers: async function ({ user }) {
 
         if (user) {
             let result
@@ -115,11 +114,11 @@ class Controller {
         }
         return false;
 
-    }
+    },
 
     // Creates a conversation in the conversation table if it does not already exists
     // also creates the relation needed in the useruserconversation if not already there
-    createConversation = async (userids) => {
+    createConversation: async function (userids) {
         if (Array.isArray(userids)) {
             userids = userids.sort();
             const existing = await this.listConversations(userids)
@@ -158,8 +157,8 @@ class Controller {
         }
 
 
-    }
-    getUsernames = async (userids) => {
+    },
+    getUsernames: async function (userids) {
         if (Array.isArray(userids)) {
             const users = await Promise.all(userids.map(id => {
                 return this._query(`SELECT * FROM User_SSC WHERE id=${id}`);
@@ -167,10 +166,10 @@ class Controller {
             console.log(users);
             return users.map(user => user[0].first_name);
         }
-    }
+    },
     // returns all the conversations in TABLE=conversations
     // or can return the conversation with the specified userids
-    listConversations = async (userids) => {
+    listConversations: async function (userids) {
 
         if (userids) {
             userids = JSON.stringify(userids);
@@ -199,11 +198,11 @@ class Controller {
         }
 
 
-    }
+    },
 
     // similar to listConversations but returns all
     // the conversation ids of a specified user id has made
-    listUserConversations = async (userid) => {
+    listUserConversations: async function (userid) {
 
         if (userid) {
 
@@ -220,8 +219,8 @@ class Controller {
             return []
         }
 
-    }
-    getConversations = async (userid) => {
+    },
+    getConversations: async function (userid) {
 
         const convoids = await this.listUserConversations(userid);
         console.log(convoids);
@@ -234,16 +233,16 @@ class Controller {
         });
 
         return conversations;
-    }
+    },
 
-    setConversationName = async (conversation_id, conversation_name) => {
+    setConversationName: async function (conversation_id, conversation_name) {
         const result = await this._query(`UPDATE conversations SET conversation_name='${conversation_name}' WHERE conversation_id=${conversation_id}`);
         return result;
-    }
+    },
 
     // inserts a message in the main messages table
     // props can be any additions properties that may need to be adde in the future
-    insertMessage = async ({ sender_id, message, sender, conversation_id, date, props = {} }) => {
+    insertMessage: async function ({ sender_id, message, sender, conversation_id, date, props = {} }) {
 
         if (message && sender && conversation_id) {
             const createdDate = new Date(date) || new Date();
@@ -260,10 +259,10 @@ class Controller {
         else {
             throw new Error(`message, sender and reciever must be defined`);
         }
-    }
+    },
 
     // returns all the messages in a conversation specified by a conversationID
-    getMessages = async (conversationID) => {
+    getMessages: async function (conversationID) {
         const result = (await this._query(`SELECT * FROM messages WHERE conversation_id=${conversationID}`));
         return result;
     }
@@ -285,7 +284,7 @@ Date.prototype.toMysqlFormat = function () {
 };
 
 // the instance of the controller used elsewhere
-const control = new Controller();
+//const control = new Controller();
 
 (async () => {
     //control._query(`DROP TABLE userconversation`);
