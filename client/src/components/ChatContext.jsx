@@ -59,21 +59,20 @@ export const ChatContextProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    if (conversation_sockets && conversation_sockets.length) {
+    /* if (conversation_sockets && conversation_sockets.length) {
       conversation_sockets.forEach(e=>{
         e.socket.removeAllListeners();
         e.socket.disconnect();
       });
-    }
+    } */
 
     const newconversation_sockets = connectToConversationSockets(conversations);
     if (newconversation_sockets) {
       setconversation_sockets(newconversation_sockets);
     }
-    // eslint-disable-next-line
   }, [conversations]);
 
-  useEffect(() => {
+  /* useEffect(() => {
     const socket = io(`${socket_endpoint}notification${user.id}`);
 
     socket.on('connect', () =>
@@ -90,7 +89,7 @@ export const ChatContextProvider = ({ children }) => {
       socket.removeAllListeners();
       socket.disconnect();
     };
-  }, [user, updateConversations]);
+  }, [user, updateConversations]); */
 
   function getSocket(conversation_id) {
     return conversation_sockets.filter((conversation_socket) => {
