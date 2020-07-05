@@ -6,10 +6,10 @@ const dbController = require('../../model/controller');
 // class to handle realtime message and pings when new message arrives
 class ConversationHandler {
 
-    constructor(server) {
+    constructor(io) {
         this.conversations.bind(this)
         this.addconversation.bind(this)
-        this.io = socketio.listen(server);
+        this.io = io;
         this.controller = dbController;
         this._setupNotificationSignaling();
     }
