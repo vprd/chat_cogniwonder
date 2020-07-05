@@ -16,7 +16,6 @@ class ConversationHandler {
 
     async conversations() {
 
-        console.log('starting listeners');
         const allConversations = await dbController.listConversations();
 
         for (let conversation of allConversations) {
@@ -27,7 +26,8 @@ class ConversationHandler {
             conversationNamespace.on('connection', socket => {
                 console.log('connected')
                 socket.on('message', async (message) => {
-                    console.log(message)
+                    console.log('message recieved:',message)
+                    this.io.emit('debug','message recieved:'+message)
 
                     if (message.message && message.sender && message.conversation_id) {
 
