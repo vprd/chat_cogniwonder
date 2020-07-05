@@ -16,7 +16,7 @@ console.log('socket endpoint:', socket_endpoint);
 const mainsocket = io(socket_endpoint);
 
 mainsocket.on('debug', (message) => {
-  console.log(message);
+  console.log('debugger:',message);
 });
 
 export const ChatContext = createContext();

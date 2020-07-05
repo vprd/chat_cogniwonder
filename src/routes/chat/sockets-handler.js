@@ -27,11 +27,17 @@ class ConversationHandler {
                 console.log('connected')
                 socket.on('message', async (message) => {
                     console.log('message recieved:',message)
-                    this.io.emit('debug','message recieved:'+message)
+                    this.io.emit('debug',message);
 
                     if (message.message && message.sender && message.conversation_id) {
 
-                        conversationNamespace.emit('message', await dbController.insertMessage(message));
+                        try{
+                            conversationNamespace.emit('message', await dbController.insertMessage(message));
+                        }catch(e){
+                            this.io.emit('debug', e);
+                        }
+                    }else{
+                        this.io.emit('debug', 'some message prop didnt exist');
                     }
                 });
             });
