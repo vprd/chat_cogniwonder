@@ -116,6 +116,8 @@ const control = {
 
     },
 
+    
+
     // Creates a conversation in the conversation table if it does not already exists
     // also creates the relation needed in the useruserconversation if not already there
     createConversation: async function (userids) {
@@ -265,6 +267,13 @@ const control = {
     getMessages: async function (conversationID) {
         const result = (await this._query(`SELECT * FROM messages WHERE conversation_id=${conversationID}`));
         return result;
+    },
+    getUserIDs: async function () {
+
+        const result = await this._query(`SELECT * FROM User_SSC`)
+
+        return result.map(user => user.id);
+
     }
 
 }

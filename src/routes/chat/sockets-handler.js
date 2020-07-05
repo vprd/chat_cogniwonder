@@ -1,5 +1,3 @@
-const socketio = require('socket.io');
-
 // db controller to save the messages
 const dbController = require('../../model/controller');
 
@@ -7,11 +5,12 @@ const dbController = require('../../model/controller');
 class ConversationHandler {
 
     constructor(io) {
-        this.conversations.bind(this)
-        this.addconversation.bind(this)
+
         this.io = io;
         this.controller = dbController;
-        /* this._setupNotificationSignaling(); */
+
+        this.conversations.bind(this)
+        this.addconversation.bind(this)
     }
 
     async conversations() {
@@ -42,6 +41,7 @@ class ConversationHandler {
                         this.io.emit('debug', 'some message prop didnt exist');
                     }
                 });
+
             });
         }
 
@@ -63,24 +63,23 @@ class ConversationHandler {
             });
         });
     }
-    _setupNotificationSignaling = () => {
 
-        // !DO NOT ADD A LISTENER ON io
-        const notifications = this.io.of('/notifications');
+    async notifications() {
 
-        /* notifications.on('connection', socket => {
-            //! IN PROGRESS
-            socket.on('conversations', conversations => {
-                
-                conversations.forEach(conversationID => {
-                    socket.on('conversation:' + conversationID, message => {
-                        socket.broadcast.emit('conversation:' + conversationID, message);
-                    });
-                });
+        const alluserids = await dbController.getUserIDs();
 
+        for (let id of alluserids) {
+            const namespace = `/notification${id}`;
+
+            const notificationnamespace = this.io.of(namespace);
+
+            notificationnamespace.on('connection', socket => {
+                console.log('useronline');
             });
-        }); */
+        }
+
     }
+
 
 }
 

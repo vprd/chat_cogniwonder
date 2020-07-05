@@ -154,7 +154,7 @@ const Conversation = ({ conversation }) => {
 const AddConversationDialog = ({ setaddconversationview }) => {
   const [sugesstions, setsugesstions] = useState();
   const [participants, setparticipants] = useState();
-  const { user } = useContext(GlobalContext);
+  const { user, startconversation } = useContext(ChatContext);
 
   const addparticipant = (suggestion) => {
     let exists = false;
@@ -218,10 +218,7 @@ const AddConversationDialog = ({ setaddconversationview }) => {
   };
 
   const start = async () => {
-    if (participants && participants.length) {
-      const ids = [...participants, user].map((parti) => parti.id);
-      await api.startconversation(ids);
-    }
+    startconversation(participants);
   };
   const dismiss = (e) => {
     if(e.target.className==='conversation-add'){

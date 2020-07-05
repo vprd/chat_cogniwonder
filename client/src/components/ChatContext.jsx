@@ -29,18 +29,15 @@ export const ChatContextProvider = ({ children }) => {
   const [conversation_sockets, setconversation_sockets] = useState();
 
   function connectToConversationSockets(conversations) {
+    console.log('starting listeners');
     if (Array.isArray(conversations) && conversations.length) {
       const conversation_sockets = conversations.map((conversation) => {
-        
         const socket = io(
-          `${socket_endpoint}conversation${conversation.conversation_id}`,
-          {
-            secure: true,
-          }
+          `${socket_endpoint}conversation${conversation.conversation_id}`
         );
-        socket.on('connect', () => {
-          
-        });
+        /* socket.on('connect', () => {
+
+        }); */
 
         socket.on('message', (message) => {
           if (openedconversation.conversation_id !== message.conversation_id)
@@ -51,6 +48,16 @@ export const ChatContextProvider = ({ children }) => {
       });
 
       return conversation_sockets;
+    }
+  }
+
+  
+
+  async function startconversation(participants) {
+    if (participants && participants.length) {
+      const ids = [...participants, user].map((parti) => parti.id);
+      (await api.startconversation(ids));
+      window.location.reload();
     }
   }
 
@@ -100,6 +107,7 @@ export const ChatContextProvider = ({ children }) => {
       value={{
         getmessages: api.getmessages,
         markUndread,
+        startconversation,
         markRead,
         user,
         getSocket,
