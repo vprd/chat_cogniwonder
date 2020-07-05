@@ -1,4 +1,9 @@
-import React, { useEffect, createContext, useContext, useState } from 'react';
+import React, {
+  useEffect,
+  createContext,
+  useContext,
+  useState,
+} from 'react';
 
 import api from './api';
 import io from 'socket.io-client';
@@ -24,30 +29,16 @@ export const ChatContextProvider = ({ children }) => {
 
   const [openedconversation, setOpenedconversation] = useState({});
   const [conversations, setconversations] = useState([]);
+
   const [conversation_sockets, setconversation_sockets] = useState();
 
-  function connectToConversationSockets(conversations) {
-    if (Array.isArray(conversations) && conversations.length) {
-      console.log('starting listeners');
-      const conversation_sockets = conversations.map((conversation) => {
-        const socket = io(
-          `${socket_endpoint}conversation${conversation.conversation_id}`
-        );
-        /* socket.on('connect', () => {
+  useEffect(() => {
 
-        }); */
+    setconversation_sockets(
+      connectToConversationSockets(conversations)
+    );
 
-        socket.on('message', (message) => {
-          if (openedconversation.conversation_id !== message.conversation_id)
-            markUndread(message.conversation_id);
-        });
-
-        return { id: conversation.conversation_id, socket };
-      });
-
-      return conversation_sockets;
-    }
-  }
+  }, [conversations]);
 
   async function startconversation(participants) {
     if (participants && participants.length) {
@@ -59,20 +50,6 @@ export const ChatContextProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    /* if (conversation_sockets && conversation_sockets.length) {
-      conversation_sockets.forEach(e=>{
-        e.socket.removeAllListeners();
-        e.socket.disconnect();
-      });
-    } */
-
-    const newconversation_sockets = connectToConversationSockets(conversations);
-    if (newconversation_sockets) {
-      setconversation_sockets(newconversation_sockets);
-    }
-  }, [conversations]);
-
-  /* useEffect(() => {
     const socket = io(`${socket_endpoint}notification${user.id}`);
 
     socket.on('connect', () =>
@@ -89,7 +66,7 @@ export const ChatContextProvider = ({ children }) => {
       socket.removeAllListeners();
       socket.disconnect();
     };
-  }, [user, updateConversations]); */
+  }, []);
 
   function getSocket(conversation_id) {
     return conversation_sockets.filter((conversation_socket) => {
@@ -143,3 +120,24 @@ export const ChatContextProvider = ({ children }) => {
     </ChatContext.Provider>
   );
 };
+
+function connectToConversationSockets(conversations) {
+  if (Array.isArray(conversations) && conversations.length) {
+    console.log('starting listeners');
+    const conversation_sockets = conversations.map((conversation) => {
+      const socket = io(
+        `${socket_endpoint}conversation${conversation.conversation_id}`
+      );
+
+      socket.on('connect', () => {
+        console.log('socket.io connected');
+      });
+
+      socket.on('message', (message) => {});
+
+      return { id: conversation.conversation_id, socket };
+    });
+
+    return conversation_sockets.sort();
+  }
+}

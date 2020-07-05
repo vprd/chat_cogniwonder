@@ -1,6 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
 
 import { ChatContext } from './ChatContext';
+
+import getendpoint from '../api-endpoint';
+import io from 'socket.io-client';
+
+const endpoint = `${getendpoint()}`;
+const socket_endpoint = endpoint;
+
+
 const MessagingWindow = () => {
   const { openedconversation, user } = useContext(ChatContext);
   const [changegroupname, setchangegroupname] = useState(false);
@@ -100,14 +108,13 @@ const Messages = () => {
     openedconversation,
     getSocket,
     user,
-    markUndread,
   } = useContext(ChatContext);
 
-  let socket;
+  let socket=[];
   try {
     socket = getSocket(openedconversation.conversation_id)[0].socket;
   } catch {
-    window.location.reload();
+    
   }
   const [messages, setmessages] = useState([]);
 
@@ -120,7 +127,10 @@ const Messages = () => {
   }, [openedconversation, getmessages]);
 
   useEffect(() => {
-    socket.removeAllListeners('message');
+    const socket = io(
+      `${socket_endpoint}conversation${openedconversation.conversation_id}`,
+      { transport: ['websocket'] }
+    );
     socket.on('message', async (message) => {
       if (message.conversation_id === openedconversation.conversation_id) {
         setmessages(await getmessages(openedconversation.conversation_id));
@@ -128,16 +138,16 @@ const Messages = () => {
         list.scrollTop = list.scrollHeight;
       }
 
-      markUndread(message.conversation_id);
+      
     });
 
     return () => {
       socket.removeAllListeners('message');
-      socket.on('message', (message) => {
-        markUndread(message.conversation_id);
-      });
+      /* socket.on('message', (message) => {
+        
+      }); */
     };
-  }, [getmessages, openedconversation, socket, markUndread]);
+  }, [getmessages, openedconversation,]);
 
   useEffect(() => {
     document.querySelector('.messages-view').style.opacity = 1;
