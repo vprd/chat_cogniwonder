@@ -4,7 +4,7 @@ const mysql = require('mysql');// mysql(would have still prefered mongodb)
 
 const con = mysql.createConnection({
     host: "localhost",
-    user: process.env.USERNAME,
+    user: process.env.USER_NAME,
     password: process.env.PASSWORD,
     database: process.env.DATABASE, //! Create this db before running
 });
@@ -56,6 +56,7 @@ function setUpTable() {
 
 
 module.exports = () => {
+    console.log(process.env['USER_NAME']);
     con.connect((err) => {
 
         if (err) throw err;
