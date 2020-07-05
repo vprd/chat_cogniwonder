@@ -44,11 +44,11 @@ const Menu = () => {
     </>
   );
 };
-
 const Options = ({ setaddconversationview }) => {
   return (
     <>
       <div className="menu-options">
+      
         <div className="option" onClick={() => setaddconversationview(true)}>
           <img
             src="https://img.icons8.com/cotton/64/000000/add-to-chat.png"
