@@ -9,7 +9,8 @@ module.exports = async (io) => {
 
 
     const socketListener = new ConversationHandler(io);
-    await Promise.all([socketListener.conversations(), /* socketListener.notifications() */])
+    await socketListener.conversations();
+    await socketListener.notifications();
 
     router.post('/authenticate', async (req, res) => {
         res.send(JSON.stringify(await dbController.authenticate(req.body)));
@@ -18,10 +19,10 @@ module.exports = async (io) => {
     router.post('/conversations', async (req, res) => {
         if (req.body.userid) {
             const conversations = await dbController.getConversations(req.body.userid);
-            
+
             res.send(JSON.stringify(conversations));
         } else {
-            
+
             res.send('[]');
         }
     });
