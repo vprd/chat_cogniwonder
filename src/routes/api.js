@@ -13,6 +13,7 @@ module.exports = async (io) => {
     await socketListener.notifications();
 
     router.post('/authenticate', async (req, res) => {
+        console.log(req.body)
         res.send(JSON.stringify(await dbController.authenticate(req.body)));
     });
 
