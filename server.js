@@ -10,7 +10,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const cors = require('cors');
 
-process.env.ENVIRONMENT === 'local' && app.use(cors());
+app.use(cors());
 // api and other routes
 
 const PORT = process.env.PORT || 8000;

@@ -11,7 +11,7 @@ class ConversationHandler {
         this.addconversation.bind(this)
         this.io = io;
         this.controller = dbController;
-        this._setupNotificationSignaling();
+        /* this._setupNotificationSignaling(); */
     }
 
     async conversations() {
@@ -21,7 +21,7 @@ class ConversationHandler {
 
         for (let conversation of allConversations) {
             const namespace = `/conversation${conversation.conversation_id}`;
-
+            
             const conversationNamespace = this.io.of(namespace);
 
             conversationNamespace.on('connection', socket => {

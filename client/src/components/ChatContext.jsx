@@ -37,7 +37,7 @@ export const ChatContextProvider = ({ children }) => {
           `${socket_endpoint}conversation${conversation.conversation_id}`
         );
         const socket = io(
-          `${socket_endpoint}conversation${conversation.conversation_id}`,
+          `/conversation${conversation.conversation_id}`,
           { secure: true }
         );
 
