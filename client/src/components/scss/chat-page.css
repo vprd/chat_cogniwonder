@@ -44,6 +44,8 @@
 
 .chat-page .chat-screen .messages-container .messages-view {
   padding-bottom: 70px;
+  -webkit-transition: all 600ms ease;
+  transition: all 600ms ease;
 }
 
 .chat-page .chat-screen .messages-container .message {

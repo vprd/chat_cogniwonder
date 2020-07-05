@@ -50,12 +50,11 @@ const MessagingWindow = () => {
     }
 
     let conversation_name = openedconversation.conversation_name;
-    
 
     if (Array.isArray(conversation_name)) {
-      conversation_name = conversation_name.filter(
-        (name) => name !== user.first_name
-      ).join(', ');
+      conversation_name = conversation_name
+        .filter((name) => name !== user.first_name)
+        .join(', ');
     }
 
     const setconversation_name = (newname) => {};
@@ -110,7 +109,7 @@ const Messages = () => {
   } catch {
     window.location.reload();
   }
-  const [messages, setmessages] = useState();
+  const [messages, setmessages] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -139,6 +138,10 @@ const Messages = () => {
       });
     };
   }, [getmessages, openedconversation, socket, markUndread]);
+
+  useEffect(() => {
+    document.querySelector('.messages-view').style.opacity = 1;
+  });
 
   let message = '';
 

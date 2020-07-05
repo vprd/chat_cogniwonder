@@ -297,7 +297,7 @@ Date.prototype.toMysqlFormat = function () {
 
 (async () => {
     //control._query(`DROP TABLE userconversation`);
-    //control._delete();
+    // control._delete();
     //console.log(await control.listConversations())
     //control._query(`ALTER TABLE conversations ADD props TEXT`)
     //control._query(`ALTER TABLE messages CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci`)

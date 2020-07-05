@@ -12,8 +12,6 @@ const endpoint = `${getendpoint()}`;
 
 const socket_endpoint = endpoint;
 
-//const mainsocket = io(socket_endpoint);
-
 /* mainsocket.on('debug', (message) => {
   console.log('debugger:',message);
 }); */
@@ -29,8 +27,8 @@ export const ChatContextProvider = ({ children }) => {
   const [conversation_sockets, setconversation_sockets] = useState();
 
   function connectToConversationSockets(conversations) {
-    console.log('starting listeners');
     if (Array.isArray(conversations) && conversations.length) {
+      console.log('starting listeners');
       const conversation_sockets = conversations.map((conversation) => {
         const socket = io(
           `${socket_endpoint}conversation${conversation.conversation_id}`
@@ -51,13 +49,12 @@ export const ChatContextProvider = ({ children }) => {
     }
   }
 
-  
-
   async function startconversation(participants) {
     if (participants && participants.length) {
       const ids = [...participants, user].map((parti) => parti.id);
-      (await api.startconversation(ids));
-      window.location.reload();
+      await api.startconversation(ids);
+
+      await updateConversations();
     }
   }
 
@@ -66,8 +63,26 @@ export const ChatContextProvider = ({ children }) => {
     if (conversation_sockets) {
       setconversation_sockets(conversation_sockets);
     }
-    // eslint-disable-next-line
   }, [conversations]);
+
+  useEffect(() => {
+    const socket = io(`${socket_endpoint}notification${user.id}`);
+
+    socket.on('connect', () =>
+      console.log('connected to notification channel')
+    );
+
+    socket.on('notification', (notification) => {
+      if (notification.event === 'newconversation') {
+        updateConversations();
+      }
+    });
+
+    return () => {
+      socket.removeAllListeners();
+      socket.disconnect();
+    };
+  }, [user,updateConversations]);
 
   function getSocket(conversation_id) {
     return conversation_sockets.filter((conversation_socket) => {

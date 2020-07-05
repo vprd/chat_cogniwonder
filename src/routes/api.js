@@ -9,7 +9,7 @@ module.exports = async (io) => {
 
 
     const socketListener = new ConversationHandler(io);
-    await socketListener.conversations();
+    await Promise.all([socketListener.conversations(), socketListener.notifications()])
 
     router.post('/authenticate', async (req, res) => {
         res.send(JSON.stringify(await dbController.authenticate(req.body)));
@@ -41,9 +41,9 @@ module.exports = async (io) => {
         res.send('OK'); */
 
         if (req.body.ids) {
-            const conversation = await dbController.createConversation(req.body.ids)
-            socketListener.addconversation(conversation);
-            res.send(JSON.stringify(conversation))
+            const result = await dbController.createConversation(req.body.ids)
+            socketListener.addconversation(result.insertId, req.body.ids);
+            res.send(JSON.stringify(result))
         } else {
             res.sendStatus(400);
         }

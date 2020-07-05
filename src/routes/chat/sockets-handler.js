@@ -11,6 +11,8 @@ class ConversationHandler {
 
         this.conversations.bind(this)
         this.addconversation.bind(this)
+        this.notifications.bind(this)
+        this.notify.bind(this)
     }
 
     async conversations() {
@@ -46,9 +48,9 @@ class ConversationHandler {
         }
 
     }
-    addconversation(conversation) {
-        const namespace = `/conversation${conversation.conversation_id}`;
-
+    addconversation(id, ids) {
+        const namespace = `/conversation${id}`;
+        console.log('created:', namespace);
         const conversationNamespace = this.io.of(namespace);
 
         conversationNamespace.on('connection', socket => {
@@ -62,6 +64,18 @@ class ConversationHandler {
                 }
             });
         });
+
+        this.notify(ids, { event: 'newconversation' });
+    }
+
+    notify(ids, notification) {
+        for (let id of ids) {
+            const namespace = `/notification${id}`;
+
+            const notificationnamespace = this.io.of(namespace);
+            console.log(namespace, notification);
+            notificationnamespace.emit('notification', notification);
+        }
     }
 
     async notifications() {

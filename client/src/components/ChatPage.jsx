@@ -24,7 +24,7 @@ const ChatPage = () => {
 };
 const Menu = () => {
   const [addconversationview, setaddconversationview] = useState(false);
-const { user } = useContext(GlobalContext);
+  const { user } = useContext(GlobalContext);
   return (
     <>
       <div className="menu">
@@ -94,7 +94,6 @@ const Conversation = ({ conversation }) => {
       ? '7px solid rgb(143, 255, 143)'
       : '';
   let conversation_name = conversation.conversation_name;
-  
 
   if (Array.isArray(conversation_name)) {
     conversation_name = conversation_name
@@ -107,6 +106,10 @@ const Conversation = ({ conversation }) => {
         style={{ borderRight: indicator }}
         onClick={() => {
           markRead(conversation.conversation_id);
+          
+          if (document.querySelector('.messages-view'))
+            document.querySelector('.messages-view').style.opacity = 0;
+          
           setOpenedconversation({ ...conversation, group: false });
         }}
         className="conversation"
@@ -161,7 +164,6 @@ const AddConversationDialog = ({ setaddconversationview }) => {
     participants &&
       participants.forEach((participant) => {
         if (participant) {
-          
           if (participant.mobile === suggestion.mobile) exists = true;
         }
       });
@@ -213,7 +215,7 @@ const AddConversationDialog = ({ setaddconversationview }) => {
         if (participant.mobile === suggestion.mobile) return false;
         return true;
       });
-    
+
     setparticipants(newlist);
   };
 
@@ -221,7 +223,7 @@ const AddConversationDialog = ({ setaddconversationview }) => {
     startconversation(participants);
   };
   const dismiss = (e) => {
-    if(e.target.className==='conversation-add'){
+    if (e.target.className === 'conversation-add') {
       setaddconversationview(false);
     }
   };
