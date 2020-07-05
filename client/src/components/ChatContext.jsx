@@ -65,7 +65,7 @@ export const ChatContextProvider = ({ children }) => {
     }
   }, [conversations]);
 
-  useEffect(() => {
+  /* useEffect(() => {
     const socket = io(`${socket_endpoint}notification${user.id}`);
 
     socket.on('connect', () =>
@@ -82,7 +82,7 @@ export const ChatContextProvider = ({ children }) => {
       socket.removeAllListeners();
       socket.disconnect();
     };
-  }, [user,updateConversations]);
+  }, [user,updateConversations]); */
 
   function getSocket(conversation_id) {
     return conversation_sockets.filter((conversation_socket) => {
