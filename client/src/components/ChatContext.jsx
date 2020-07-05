@@ -15,10 +15,9 @@ console.log('socket endpoint:', socket_endpoint);
 
 const mainsocket = io(socket_endpoint);
 
-mainsocket.on('hey',message=>{
+mainsocket.on('hey', (message) => {
   alert(message);
-})
-
+});
 
 export const ChatContext = createContext();
 
@@ -36,10 +35,15 @@ export const ChatContextProvider = ({ children }) => {
         console.log(
           `${socket_endpoint}conversation${conversation.conversation_id}`
         );
-        const socket = io(
-          `/conversation${conversation.conversation_id}`,
-          { secure: true }
-        );
+        const socket = io(`/conversation${conversation.conversation_id}`, {
+          secure: true,
+        });
+        socket.on('connect', () => {
+          console.log(
+            'connected to:',
+            `${socket_endpoint}conversation${conversation.conversation_id}`
+          );
+        });
 
         socket.on('message', (message) => {
           if (openedconversation.conversation_id !== message.conversation_id)
