@@ -7,10 +7,14 @@ import { GlobalContext } from './GloablContext';
 
 import './scss/Login.css';
 const Login = () => {
+
+
   const { Authenticate } = useContext(GlobalContext);
   let username = '';
 
   useEffect(() => {
+
+    
     const username = localStorage.getItem('email_pwd');
 
     if (username) {

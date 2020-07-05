@@ -32,9 +32,12 @@ export const ChatContextProvider = ({ children }) => {
     if (Array.isArray(conversations) && conversations.length) {
       const conversation_sockets = conversations.map((conversation) => {
         
-        const socket = io(`/conversation${conversation.conversation_id}`, {
-          secure: true,
-        });
+        const socket = io(
+          `${socket_endpoint}conversation${conversation.conversation_id}`,
+          {
+            secure: true,
+          }
+        );
         socket.on('connect', () => {
           
         });

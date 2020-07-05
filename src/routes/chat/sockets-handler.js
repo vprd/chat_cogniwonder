@@ -32,7 +32,10 @@ class ConversationHandler {
                     if (message.message && message.sender && message.conversation_id) {
 
 
-                        dbController.insertMessage(message).catch(e => conversationNamespace.emit('message', { ...message, error: e }))
+                        dbController.insertMessage(message).catch(e => {
+                            conversationNamespace.emit('message', { ...message, error: e })
+                            console.log(e);
+                        })
                         conversationNamespace.emit('message', message);
 
                     } else {
