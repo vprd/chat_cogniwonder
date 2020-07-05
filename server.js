@@ -16,26 +16,23 @@ app.use(cors());
 const PORT = process.env.PORT || 8000;
 
 io.on('connection', socket => {
-    
+    console.log('a connection made');
+    socket.emit('hey', 'hey');
 });
 
-require('./src/routes/api')(io).then(api => {
+const api = require('./src/routes/api')(io);
 
-    app.use(bodyParser.urlencoded({ extended: false }));
-    app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-    // api route
-    app.use('/api', api);
+// api route
+app.use('/api', api);
 
-    // serve static files for react client
-    app.use(express.static(path.resolve(__dirname + '/client/build')));
+// serve static files for react client
+app.use(express.static(path.resolve(__dirname + '/client/build')));
 
-    app.get('/*', (req, res) => {
-        res.sendFile(path.resolve(__dirname + '/client/build/index.html'));
-    });
-
-    http.listen(PORT, () => console.log('server started on:' + PORT));
-
+app.get('/', (req, res) => {
+    res.sendFile(path.resolve(__dirname + '/client/build/index.html'));
 });
 
-
+http.listen(PORT, () => console.log('server started on:' + PORT));

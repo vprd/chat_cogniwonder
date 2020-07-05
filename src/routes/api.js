@@ -4,13 +4,13 @@ const dbController = require('../model/controller');
 const ConversationHandler = require('./chat/sockets-handler');
 
 
-module.exports = async (io) => {
+module.exports =  (io) => {
 
 
 
     const socketListener = new ConversationHandler(io);
-    await socketListener.conversations();
-    await socketListener.notifications();
+     socketListener.conversations();
+     socketListener.notifications();
 
     router.post('/authenticate', async (req, res) => {
         console.log(req.body)
