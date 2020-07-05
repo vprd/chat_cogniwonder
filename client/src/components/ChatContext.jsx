@@ -11,13 +11,12 @@ import getendpoint from '../api-endpoint';
 const endpoint = `${getendpoint()}`;
 
 const socket_endpoint = endpoint;
-console.log('socket endpoint:', socket_endpoint);
 
-const mainsocket = io(socket_endpoint);
+//const mainsocket = io(socket_endpoint);
 
-mainsocket.on('debug', (message) => {
+/* mainsocket.on('debug', (message) => {
   console.log('debugger:',message);
-});
+}); */
 
 export const ChatContext = createContext();
 
@@ -32,17 +31,12 @@ export const ChatContextProvider = ({ children }) => {
   function connectToConversationSockets(conversations) {
     if (Array.isArray(conversations) && conversations.length) {
       const conversation_sockets = conversations.map((conversation) => {
-        console.log(
-          `${socket_endpoint}conversation${conversation.conversation_id}`
-        );
+        
         const socket = io(`/conversation${conversation.conversation_id}`, {
           secure: true,
         });
         socket.on('connect', () => {
-          console.log(
-            'connected to:',
-            `${socket_endpoint}conversation${conversation.conversation_id}`
-          );
+          
         });
 
         socket.on('message', (message) => {
