@@ -24,13 +24,13 @@ const ChatPage = () => {
 };
 const Menu = () => {
   const [addconversationview, setaddconversationview] = useState(false);
-
+const { user } = useContext(GlobalContext);
   return (
     <>
       <div className="menu">
         <header>
           <img src={logo} alt="logo" />
-          <h2>Chat</h2>
+          <h2>{user.first_name}</h2>
         </header>
 
         <ConversationList />
@@ -94,7 +94,7 @@ const Conversation = ({ conversation }) => {
       ? '7px solid rgb(143, 255, 143)'
       : '';
   let conversation_name = conversation.conversation_name;
-  console.log(conversation_name);
+  
 
   if (Array.isArray(conversation_name)) {
     conversation_name = conversation_name
@@ -161,7 +161,7 @@ const AddConversationDialog = ({ setaddconversationview }) => {
     participants &&
       participants.forEach((participant) => {
         if (participant) {
-          console.log(participant, participant);
+          
           if (participant.mobile === suggestion.mobile) exists = true;
         }
       });
@@ -213,14 +213,14 @@ const AddConversationDialog = ({ setaddconversationview }) => {
         if (participant.mobile === suggestion.mobile) return false;
         return true;
       });
-    console.log(newlist);
+    
     setparticipants(newlist);
   };
 
   const start = async () => {
     if (participants && participants.length) {
       const ids = [...participants, user].map((parti) => parti.id);
-      console.log(await api.startconversation(ids));
+      await api.startconversation(ids);
     }
   };
   const dismiss = (e) => {

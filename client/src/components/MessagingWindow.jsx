@@ -50,7 +50,7 @@ const MessagingWindow = () => {
     }
 
     let conversation_name = openedconversation.conversation_name;
-    console.log(conversation_name);
+    
 
     if (Array.isArray(conversation_name)) {
       conversation_name = conversation_name.filter(
