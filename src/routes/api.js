@@ -9,7 +9,7 @@ module.exports = async (io) => {
 
 
     const socketListener = new ConversationHandler(io);
-    await Promise.all([socketListener.conversations(), socketListener.notifications()])
+    await Promise.all([socketListener.conversations(), /* socketListener.notifications() */])
 
     router.post('/authenticate', async (req, res) => {
         res.send(JSON.stringify(await dbController.authenticate(req.body)));
