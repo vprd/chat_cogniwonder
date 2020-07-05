@@ -340,6 +340,8 @@
         align-items: center;
         justify-content: center;
 
+        animation: fadein 150ms forwards ease;
+
         z-index: 110;
 
         backdrop-filter: blur(12px) brightness(.8);
@@ -362,7 +364,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                
+
 
                 img {
                     cursor: pointer;

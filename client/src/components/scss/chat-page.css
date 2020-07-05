@@ -387,6 +387,8 @@
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  -webkit-animation: fadein 150ms forwards ease;
+          animation: fadein 150ms forwards ease;
   z-index: 110;
   -webkit-backdrop-filter: blur(12px) brightness(0.8);
           backdrop-filter: blur(12px) brightness(0.8);

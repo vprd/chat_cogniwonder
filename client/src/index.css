@@ -48,10 +48,10 @@ button {
   font-size: 1.2rem;
   padding: 6px 12px 10px 12px;
   border-radius: 2px;
-  -webkit-transition: -webkit-box-shadow 100ms ease,-webkit-filter 200ms ease;
-  transition: -webkit-box-shadow 100ms ease,-webkit-filter 200ms ease;
-  transition: box-shadow 100ms ease,filter 200ms ease;
-  transition: box-shadow 100ms ease,filter 200ms ease,-webkit-box-shadow 100ms ease,-webkit-filter 200ms ease;
+  -webkit-transition: -webkit-box-shadow 100ms ease, -webkit-filter 200ms ease;
+  transition: -webkit-box-shadow 100ms ease, -webkit-filter 200ms ease;
+  transition: box-shadow 100ms ease, filter 200ms ease;
+  transition: box-shadow 100ms ease, filter 200ms ease, -webkit-box-shadow 100ms ease, -webkit-filter 200ms ease;
   cursor: pointer;
 }
 
@@ -135,4 +135,16 @@ button:hover {
             transform: translateX(0);
   }
 }
+
+/* @keyframes blur-in {
+    0% {
+        //backdrop-filter: blur(0px) brightness(1);
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+        //backdrop-filter: blur(12px) brightness(.8);
+    }
+} */
 /*# sourceMappingURL=index.css.map */

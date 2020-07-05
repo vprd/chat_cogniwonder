@@ -93,14 +93,14 @@ const Conversation = ({ conversation }) => {
     !(conversation.conversation_id === openedconversation.conversation_id)
       ? '7px solid rgb(143, 255, 143)'
       : '';
-let conversation_name = conversation.conversation_name;
-console.log(conversation_name);
+  let conversation_name = conversation.conversation_name;
+  console.log(conversation_name);
 
-if (Array.isArray(conversation_name)) {
-  conversation_name = conversation_name
-    .filter((name) => name !== user.first_name)
-    .join(', ');
-}
+  if (Array.isArray(conversation_name)) {
+    conversation_name = conversation_name
+      .filter((name) => name !== user.first_name)
+      .join(', ');
+  }
   if (conversation.conversation.length === 2) {
     return (
       <div
@@ -121,14 +121,11 @@ if (Array.isArray(conversation_name)) {
           alt="profile"
         />
         <div className="about">
-          <h4>
-            {conversation_name}
-          </h4>
+          <h4>{conversation_name}</h4>
         </div>
       </div>
     );
   } else {
-    
     return (
       <div
         onClick={() => {
@@ -226,9 +223,13 @@ const AddConversationDialog = ({ setaddconversationview }) => {
       console.log(await api.startconversation(ids));
     }
   };
-
+  const dismiss = (e) => {
+    if(e.target.className==='conversation-add'){
+      setaddconversationview(false);
+    }
+  };
   return (
-    <div className="conversation-add">
+    <div className="conversation-add" onClick={dismiss}>
       <form onSubmit={(e) => e.preventDefault()}>
         <div className="users-input">
           <h2>Create</h2>
