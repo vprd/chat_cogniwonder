@@ -49,12 +49,16 @@ const MessagingWindow = () => {
       );
     }
 
-    const conversation_name = `me and ${openedconversation.conversation_name
-      .filter((name) => name !== user.name)
-      .join(',')}`;
+    let conversation_name = openedconversation.conversation_name;
+    console.log(conversation_name);
+
+    if (Array.isArray(conversation_name)) {
+      conversation_name = conversation_name.filter(
+        (name) => name !== user.first_name
+      ).join(', ');
+    }
 
     const setconversation_name = (newname) => {};
-
     return (
       <div className="chat-screen">
         <div className="contact-header">

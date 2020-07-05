@@ -93,7 +93,14 @@ const Conversation = ({ conversation }) => {
     !(conversation.conversation_id === openedconversation.conversation_id)
       ? '7px solid rgb(143, 255, 143)'
       : '';
+let conversation_name = conversation.conversation_name;
+console.log(conversation_name);
 
+if (Array.isArray(conversation_name)) {
+  conversation_name = conversation_name
+    .filter((name) => name !== user.first_name)
+    .join(', ');
+}
   if (conversation.conversation.length === 2) {
     return (
       <div
@@ -115,20 +122,13 @@ const Conversation = ({ conversation }) => {
         />
         <div className="about">
           <h4>
-            {conversation.conversation_name.filter(
-              (name) => name !== user.name
-            )}
+            {conversation_name}
           </h4>
         </div>
       </div>
     );
   } else {
-    let conversation_name = 'group';
-    if (typeof conversation.conversation_name === 'string') {
-      conversation_name = conversation.conversation_name;
-    }
-    conversation_name = conversation.conversation_name.join(', ');
-
+    
     return (
       <div
         onClick={() => {
