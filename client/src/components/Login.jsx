@@ -7,20 +7,23 @@ import { GlobalContext } from './GloablContext';
 
 import './scss/Login.css';
 const Login = () => {
-
-
   const { Authenticate } = useContext(GlobalContext);
   let username = '';
 
   useEffect(() => {
+    if (window.location.search) {
+      try {
+        let username = window.location.search.split('?')[1];
+        Authenticate(username);
+      } catch {}
+    }
 
-    
-    const username = localStorage.getItem('email_pwd');
-
+    /* const username = localStorage.getItem('email_pwd');
     if (username) {
       Authenticate(username);
-    }
-  });
+    } */
+    // eslint-disable-next-line
+  }, []);
 
   onchange = (e) => {
     if (e.target.id === 'username') username = e.target.value;
