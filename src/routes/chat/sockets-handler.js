@@ -21,9 +21,9 @@ class ConversationHandler {
 
         for (let conversation of allConversations) {
             const namespace = `/conversation${conversation.conversation_id}`;
-            
-            const conversationNamespace = this.io.of(namespace);
 
+            const conversationNamespace = this.io.of(namespace);
+            console.log('created namespace: ', namespace);
             conversationNamespace.on('connection', socket => {
                 console.log('connected')
                 socket.on('message', async (message) => {
@@ -38,8 +38,8 @@ class ConversationHandler {
         }
 
     }
-    async addconversation(conversation) {
-        const namespace = `/conversation-${conversation.conversation_id}`;
+    addconversation(conversation) {
+        const namespace = `/conversation${conversation.conversation_id}`;
 
         const conversationNamespace = this.io.of(namespace);
 

@@ -1,0 +1,6 @@
+root
+starting listeners
+server started on:8000
+db connection established
+created namespace:  /conversation1
+created namespace:  /conversation2
