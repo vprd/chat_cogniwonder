@@ -18,16 +18,15 @@ module.exports = async (io) => {
     router.post('/conversations', async (req, res) => {
         if (req.body.userid) {
             const conversations = await dbController.getConversations(req.body.userid);
-            console.log(conversations)
+            
             res.send(JSON.stringify(conversations));
         } else {
-            console.log(req.body)
+            
             res.send('[]');
         }
     });
 
     router.post('/messages', async (req, res) => {
-        console.log(await dbController.getMessages(req.body.conversation_id))
         if (req.body.conversation_id) res.send(JSON.stringify(await dbController.getMessages(req.body.conversation_id)));
     });
 

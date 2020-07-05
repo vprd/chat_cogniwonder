@@ -92,11 +92,11 @@ const control = {
         if (user) {
             let result
             if (Number(user)) {
-                console.log(user);
+            
                 result = await this._query(`SELECT * FROM User_SSC WHERE mobile LIKE '${user}%'`)
 
             } else {
-                console.log(user);
+                
                 result = await this._query(`SELECT * FROM User_SSC WHERE email LIKE '${user}%'`)
 
             }
@@ -163,7 +163,7 @@ const control = {
             const users = await Promise.all(userids.map(id => {
                 return this._query(`SELECT * FROM User_SSC WHERE id=${id}`);
             }));
-            console.log(users);
+            
             return users.map(user => user[0].first_name);
         }
     },
@@ -207,7 +207,7 @@ const control = {
         if (userid) {
 
             let result = await this._query(`SELECT * FROM userconversation WHERE user_id = ${userid}`);
-            console.log(userid, result)
+            
             if (result.length === 1) {
                 return JSON.parse(result[0].conversationids);
             } else {
@@ -215,7 +215,7 @@ const control = {
             }
         } else {
             let result = await this._query(`SELECT * FROM userconversation`);
-            console.log('nooo', result)
+            
             return []
         }
 
@@ -223,7 +223,7 @@ const control = {
     getConversations: async function (userid) {
 
         const convoids = await this.listUserConversations(userid);
-        console.log(convoids);
+        
         const conversations = (await Promise.all(convoids.map(id => {
             return this._query(`SELECT * FROM conversations WHERE conversation_id=${id}`);
         }))).map(c => {
@@ -251,7 +251,7 @@ const control = {
             message = SqlString.escape(message);
 
             await this._query(`INSERT INTO messages (sender,sender_id,conversation_id,date,message,props) VALUES ('${sender}',${sender_id},${conversation_id},'${createdDate.toMysqlFormat()}',${message},'${extraProps}')`);
-            console.log(sender)
+            
             return {
                 message, sender_id, sender, conversation_id, date: createdDate, props
             }

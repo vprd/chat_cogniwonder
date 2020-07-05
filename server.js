@@ -16,8 +16,7 @@ app.use(cors());
 const PORT = process.env.PORT || 8000;
 
 io.on('connection', socket => {
-    console.log('a connection made');
-    socket.emit('hey', 'hey');
+    
 });
 
 require('./src/routes/api')(io).then(api => {
