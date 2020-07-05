@@ -13,6 +13,13 @@ const endpoint = `${getendpoint()}`;
 const socket_endpoint = endpoint;
 console.log('socket endpoint:', socket_endpoint);
 
+const mainsocket = io(socket_endpoint);
+
+mainsocket.on('hey',message=>{
+  alert(message);
+})
+
+
 export const ChatContext = createContext();
 
 export const ChatContextProvider = ({ children }) => {
@@ -24,11 +31,7 @@ export const ChatContextProvider = ({ children }) => {
   const [conversation_sockets, setconversation_sockets] = useState();
 
   function connectToConversationSockets(conversations) {
-    if (
-      !window.CONVERSATION_SOCKET_CONNECTION &&
-      Array.isArray(conversations) &&
-      conversations.length
-    ) {
+    if (Array.isArray(conversations) && conversations.length) {
       const conversation_sockets = conversations.map((conversation) => {
         console.log(
           `${socket_endpoint}conversation${conversation.conversation_id}`
@@ -46,7 +49,6 @@ export const ChatContextProvider = ({ children }) => {
         return { id: conversation.conversation_id, socket };
       });
 
-      window.CONVERSATION_SOCKET_CONNECTION = true;
       return conversation_sockets;
     }
   }

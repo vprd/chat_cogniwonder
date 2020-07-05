@@ -6,9 +6,7 @@ const ConversationHandler = require('./chat/sockets-handler');
 
 module.exports =  (io) => {
 
-    io.on('connection',socket=>{
-        console.log('a connection made');
-    })
+    
 
     const socketListener = new ConversationHandler(io);
     socketListener.conversations();
