@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 
 import { ChatContext } from './ChatContext';
 
@@ -7,7 +7,6 @@ import io from 'socket.io-client';
 
 const endpoint = `${getendpoint()}`;
 const socket_endpoint = endpoint;
-
 
 const MessagingWindow = () => {
   const { openedconversation, user } = useContext(ChatContext);
@@ -103,19 +102,15 @@ const MessagingWindow = () => {
 };
 
 const Messages = () => {
-  const {
-    getmessages,
-    openedconversation,
-    getSocket,
-    user,
-  } = useContext(ChatContext);
+  const { getmessages, openedconversation, user } = useContext(ChatContext);
 
-  let socket=[];
-  try {
-    socket = getSocket(openedconversation.conversation_id)[0].socket;
-  } catch {
-    
-  }
+  let socketRef = useRef(
+    io(`${socket_endpoint}conversation${openedconversation.conversation_id}`, {
+      transport: ['websocket'],
+    })
+  );
+  const socket = socketRef.current;
+
   const [messages, setmessages] = useState([]);
 
   useEffect(() => {
@@ -127,18 +122,16 @@ const Messages = () => {
   }, [openedconversation, getmessages]);
 
   useEffect(() => {
-    const socket = io(
+    /* const socket = io(
       `${socket_endpoint}conversation${openedconversation.conversation_id}`,
       { transport: ['websocket'] }
-    );
+    ); */
     socket.on('message', async (message) => {
       if (message.conversation_id === openedconversation.conversation_id) {
         setmessages(await getmessages(openedconversation.conversation_id));
         const list = document.querySelector('.chat-screen');
         list.scrollTop = list.scrollHeight;
       }
-
-      
     });
 
     return () => {
@@ -147,7 +140,7 @@ const Messages = () => {
         
       }); */
     };
-  }, [getmessages, openedconversation,]);
+  }, [getmessages, openedconversation]);
 
   useEffect(() => {
     document.querySelector('.messages-view').style.opacity = 1;

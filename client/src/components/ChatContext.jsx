@@ -1,4 +1,5 @@
 import React, {
+  useRef,
   useEffect,
   createContext,
   useContext,
@@ -30,14 +31,16 @@ export const ChatContextProvider = ({ children }) => {
   const [openedconversation, setOpenedconversation] = useState({});
   const [conversations, setconversations] = useState([]);
 
-  const [conversation_sockets, setconversation_sockets] = useState();
+  const conversation_sockets = useRef([]);
+
+  const socketConnection = useRef(false);
 
   useEffect(() => {
-
-    setconversation_sockets(
-      connectToConversationSockets(conversations)
+    connectToConversationSockets(
+      conversations,
+      socketConnection,
+      conversation_sockets
     );
-
   }, [conversations]);
 
   async function startconversation(participants) {
@@ -50,28 +53,32 @@ export const ChatContextProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    const socket = io(`${socket_endpoint}notification${user.id}`);
+    if (user.id) {
+      const socket = io(`${socket_endpoint}notification${user.id}`);
 
-    socket.on('connect', () =>
-      console.log('connected to notification channel')
-    );
+      socket.on('connect', () =>
+        console.log('connected to notification channel')
+      );
 
-    socket.on('notification', (notification) => {
-      if (notification.event === 'newconversation') {
-        updateConversations();
-      }
-    });
+      socket.on('notification', async (notification) => {
+        if (notification.event === 'newconversation') {
+          await updateConversations();
+        }
+      });
 
-    return () => {
-      socket.removeAllListeners();
-      socket.disconnect();
-    };
-  }, []);
+      return () => {
+        socket.removeAllListeners();
+        socket.disconnect();
+      };
+    }
+  }, [user]);
 
   function getSocket(conversation_id) {
-    return conversation_sockets.filter((conversation_socket) => {
+    const result= conversation_sockets.filter((conversation_socket) => {
       return conversation_socket.id === conversation_id;
     });
+    console.log(result);
+    return result
   }
 
   async function updateConversations() {
@@ -121,23 +128,30 @@ export const ChatContextProvider = ({ children }) => {
   );
 };
 
-function connectToConversationSockets(conversations) {
-  if (Array.isArray(conversations) && conversations.length) {
-    console.log('starting listeners');
-    const conversation_sockets = conversations.map((conversation) => {
-      const socket = io(
-        `${socket_endpoint}conversation${conversation.conversation_id}`
-      );
+function connectToConversationSockets(
+  conversations,
+  { current },
+  conversation_sockets
+) {
+  
+    if (Array.isArray(conversations) && conversations.length) {
+      console.log('starting listeners');
+      const newconversation_sockets = conversations.map((conversation) => {
+        const socket = io(
+          `${socket_endpoint}conversation${conversation.conversation_id}`
+        );
 
-      socket.on('connect', () => {
-        console.log('socket.io connected');
+        socket.on('connect', () => {
+          console.log('socket.io connected');
+        });
+
+        socket.on('message', (message) => {});
+
+        return { id: conversation.conversation_id, socket };
       });
-
-      socket.on('message', (message) => {});
-
-      return { id: conversation.conversation_id, socket };
-    });
-
-    return conversation_sockets.sort();
-  }
+      current = true;
+      conversation_sockets.current = newconversation_sockets.sort();
+    }
+  
+  
 }
