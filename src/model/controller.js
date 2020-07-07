@@ -1,3 +1,5 @@
+const log = console.log;
+
 const dbconnection = require('./db')();
 const SqlString = require('sqlstring');
 
@@ -8,7 +10,7 @@ const control = {
     /* _testing = async () => {
 
         const result = await this._query('UPDATE conversations SET PWD = "test" WHERE PWD IS NULL');
-        console.log(result);
+        log(result);
 
         return result
     } */
@@ -16,7 +18,7 @@ const control = {
     _listUsers: async function () {
 
         const result = await this._query('SELECT * FROM User_SSC');
-        console.log(result)
+        log(result)
         return result
     },
 
@@ -39,21 +41,21 @@ const control = {
         control._query(`TRUNCATE TABLE userconversation`);
         control._query(`TRUNCATE TABLE messages`);
 
-        console.log('reset');
+        log('reset');
     },
     _resettotestsdata: async function () {
 
         this._delete();
 
-        console.log(await this.createConversation([1, 2]));
-        console.log(await this.createConversation([2, 3]));
-        console.log(await this.createConversation([3, 4]));
-        console.log(await this.createConversation([4, 5]));
-        console.log(await this.createConversation([5, 6]));
-        console.log(await this.createConversation([6, 1]));
-        console.log(await this.createConversation([1, 2, 3, 4, 5, 6]));
-        console.log(await this.createConversation([1, 2, 3]));
-        console.log(await this.createConversation([1, 3, 5]));
+        log(await this.createConversation([1, 2]));
+        log(await this.createConversation([2, 3]));
+        log(await this.createConversation([3, 4]));
+        log(await this.createConversation([4, 5]));
+        log(await this.createConversation([5, 6]));
+        log(await this.createConversation([6, 1]));
+        log(await this.createConversation([1, 2, 3, 4, 5, 6]));
+        log(await this.createConversation([1, 2, 3]));
+        log(await this.createConversation([1, 3, 5]));
     },
 
     authenticate: async function ({ email, mobile }) {
@@ -310,10 +312,11 @@ Date.prototype.toMysqlFormat = function () {
 // the instance of the controller used elsewhere
 //const control = new Controller();
 
+
 (async () => {
     //control._query(`DROP TABLE userconversation`);
     // control._delete();
-    //console.log(await control.listConversations())
+    //log(await control.listConversations())
     //control._query(`ALTER TABLE conversations ADD props TEXT`)
     //control._query(`ALTER TABLE messages CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci`)
     //control.createConversation([1,2])

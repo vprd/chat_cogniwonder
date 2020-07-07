@@ -1,4 +1,33 @@
 root
+Server {
+  maxHeaderSize: undefined,
+  insecureHTTPParser: undefined,
+  _events: [Object: null prototype] {
+    connection: [Function: connectionListener],
+    close: [Function: bound ],
+    listening: [Function: bound ],
+    upgrade: [Function (anonymous)],
+    request: [Function (anonymous)]
+  },
+  _eventsCount: 5,
+  _maxListeners: undefined,
+  _connections: 0,
+  _handle: null,
+  _usingWorkers: false,
+  _workers: [],
+  _unref: false,
+  allowHalfOpen: true,
+  pauseOnConnect: false,
+  httpAllowHalfOpen: false,
+  timeout: 0,
+  keepAliveTimeout: 5000,
+  maxHeadersCount: null,
+  headersTimeout: 60000,
+  [Symbol(IncomingMessage)]: [Function: IncomingMessage],
+  [Symbol(ServerResponse)]: [Function: ServerResponse],
+  [Symbol(kCapture)]: false,
+  [Symbol(async_id_symbol)]: -1
+}
 server started on:8000
 db connection established
 created namespace:  /conversation1

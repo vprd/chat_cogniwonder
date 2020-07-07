@@ -1,5 +1,7 @@
+const log = console.log;
 // db controller to save the messages
 const dbController = require('../../model/controller');
+
 
 // class to handle realtime message and pings when new message arrives
 class ConversationHandler {
@@ -8,7 +10,6 @@ class ConversationHandler {
 
         this.io = io;
         this.controller = dbController;
-
         this.conversations.bind(this)
         this.addconversation.bind(this)
         this.notifications.bind(this)
@@ -23,11 +24,11 @@ class ConversationHandler {
             const namespace = `/conversation${conversation.conversation_id}`;
 
             const conversationNamespace = this.io.of(namespace);
-            console.log('created namespace: ', namespace);
+            log('created namespace: ', namespace);
             conversationNamespace.on('connection', socket => {
-                console.log('connected')
+                log('connected')
                 socket.on('message', async (message) => {
-                    console.log('message recieved:', message)
+                    log('message recieved:', message)
 
 
                     if (message.message && message.sender && message.conversation_id) {
@@ -35,7 +36,7 @@ class ConversationHandler {
 
                         dbController.insertMessage(message).catch(e => {
                             conversationNamespace.emit('message', { ...message, error: e })
-                            console.log(e);
+                            log(e);
                         })
                         conversationNamespace.emit('message', message);
 
@@ -50,13 +51,13 @@ class ConversationHandler {
     }
     addconversation(id, ids) {
         const namespace = `/conversation${id}`;
-        console.log('created:', namespace);
+        log('created:', namespace);
         const conversationNamespace = this.io.of(namespace);
 
         conversationNamespace.on('connection', socket => {
-            console.log('connected')
+            log('connected')
             socket.on('message', async (message) => {
-                console.log(message)
+                log(message)
 
                 if (message.message && message.sender && message.conversation_id) {
 
@@ -73,7 +74,7 @@ class ConversationHandler {
             const namespace = `/notification${id}`;
 
             const notificationnamespace = this.io.of(namespace);
-            console.log(namespace, notification);
+            log(namespace, notification);
             notificationnamespace.emit('notification', notification);
         }
     }
@@ -88,7 +89,7 @@ class ConversationHandler {
             const notificationnamespace = this.io.of(namespace);
 
             notificationnamespace.on('connection', socket => {
-                console.log('useronline');
+                log('useronline');
             });
         }
 
