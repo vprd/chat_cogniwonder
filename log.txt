@@ -1,6 +1,8 @@
 root
-starting listeners
 server started on:8000
 db connection established
 created namespace:  /conversation1
 created namespace:  /conversation2
+created namespace:  /conversation3
+created namespace:  /conversation4
+created namespace:  /conversation5

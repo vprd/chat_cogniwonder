@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const compression = require('compression');
 
 //app.listen will not work when using in socket.io
 
@@ -10,6 +11,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const cors = require('cors');
 
+app.use(compression());
 app.use(cors());
 // api and other routes
 
@@ -24,10 +26,11 @@ app.use(bodyParser.json());
 app.use('/api', api);
 
 // serve static files for react client
-app.use(express.static(path.resolve(__dirname + '/client/build')));
+app.use(express.static(path.resolve(__dirname + '/client/build'),{ maxAge: 31557600 }));
 
-app.get('/', (req, res) => {
+app.get('/*', (req, res) => {
+    res.setHeader('Cache-Control', 'public, max-age=86400');
     res.sendFile(path.resolve(__dirname + '/client/build/index.html'));
 });
-
+console.log(http)
 http.listen(PORT, () => console.log('server started on:' + PORT));

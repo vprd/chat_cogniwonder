@@ -92,11 +92,11 @@ const control = {
         if (user) {
             let result
             if (Number(user)) {
-            
+
                 result = await this._query(`SELECT * FROM User_SSC WHERE mobile LIKE '${user}%'`)
 
             } else {
-                
+
                 result = await this._query(`SELECT * FROM User_SSC WHERE email LIKE '${user}%'`)
 
             }
@@ -116,7 +116,7 @@ const control = {
 
     },
 
-    
+
 
     // Creates a conversation in the conversation table if it does not already exists
     // also creates the relation needed in the useruserconversation if not already there
@@ -165,7 +165,7 @@ const control = {
             const users = await Promise.all(userids.map(id => {
                 return this._query(`SELECT * FROM User_SSC WHERE id=${id}`);
             }));
-            
+
             return users.map(user => user[0].first_name);
         }
     },
@@ -209,7 +209,7 @@ const control = {
         if (userid) {
 
             let result = await this._query(`SELECT * FROM userconversation WHERE user_id = ${userid}`);
-            
+
             if (result.length === 1) {
                 return JSON.parse(result[0].conversationids);
             } else {
@@ -217,7 +217,7 @@ const control = {
             }
         } else {
             let result = await this._query(`SELECT * FROM userconversation`);
-            
+
             return []
         }
 
@@ -225,7 +225,7 @@ const control = {
     getConversations: async function (userid) {
 
         const convoids = await this.listUserConversations(userid);
-        
+
         const conversations = (await Promise.all(convoids.map(id => {
             return this._query(`SELECT * FROM conversations WHERE conversation_id=${id}`);
         }))).map(c => {
@@ -253,7 +253,7 @@ const control = {
             message = SqlString.escape(message);
 
             await this._query(`INSERT INTO messages (sender,sender_id,conversation_id,date,message,props) VALUES ('${sender}',${sender_id},${conversation_id},'${createdDate.toMysqlFormat()}',${message},'${extraProps}')`);
-            
+
             return {
                 message, sender_id, sender, conversation_id, date: createdDate, props
             }
@@ -274,6 +274,21 @@ const control = {
 
         return result.map(user => user.id);
 
+    },
+    sequentialget: async function()  {
+        const one = await this._query(`SELECT * FROM User_SSC`);
+        const two = await this._query(`SELECT * FROM messages`);
+        const three = await this._query(`SELECT * FROM conversations`);
+        const four = await this._query(`SELECT * FROM userconversation`);
+        return [one, two, three, four]
+    },
+    parallelget: async function()  {
+        const one = this._query(`SELECT * FROM User_SSC`);
+        const two = this._query(`SELECT * FROM messages`);
+        const three = this._query(`SELECT * FROM conversations`);
+        const four = this._query(`SELECT * FROM userconversation`);
+
+        return await Promise.all([one, two, three, four]);
     }
 
 }
