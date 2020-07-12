@@ -169,6 +169,7 @@ const Messages = () => {
   return (
     <div className="messages-container">
       <div className="messages-view">
+      
         {messages &&
           messages.map((message, i) => {
             return (

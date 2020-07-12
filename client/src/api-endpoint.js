@@ -11,5 +11,5 @@ export default function endpoint() {
 
         window.API_ENDPOINT = 'https://cogniwonder.herokuapp.com/';
         return window.API_ENDPOINT;
-
+        
 }

@@ -1,4 +1,5 @@
-const log = console.log;
+// const log = console.log;
+const log = () => { };
 // db controller to save the messages
 const dbController = require('../../model/controller');
 

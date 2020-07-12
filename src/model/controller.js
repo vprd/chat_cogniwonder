@@ -1,4 +1,4 @@
-const log = console.log;
+const log = () => { }; //console.log;
 
 const dbconnection = require('./db')();
 const SqlString = require('sqlstring');
@@ -277,14 +277,14 @@ const control = {
         return result.map(user => user.id);
 
     },
-    sequentialget: async function()  {
+    sequentialget: async function () {
         const one = await this._query(`SELECT * FROM User_SSC`);
         const two = await this._query(`SELECT * FROM messages`);
         const three = await this._query(`SELECT * FROM conversations`);
         const four = await this._query(`SELECT * FROM userconversation`);
         return [one, two, three, four]
     },
-    parallelget: async function()  {
+    parallelget: async function () {
         const one = this._query(`SELECT * FROM User_SSC`);
         const two = this._query(`SELECT * FROM messages`);
         const three = this._query(`SELECT * FROM conversations`);
