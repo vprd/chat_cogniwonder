@@ -30,9 +30,9 @@
     "express": "^4.17.1",
     "mysql": "^2.18.1",
     "socket.io": "^2.3.0",
+    "dotenv": "^8.2.0",
     "sqlstring": "^2.3.2"
   },
   "devDependencies": {
-    "dotenv": "^8.2.0"
   }
 }
