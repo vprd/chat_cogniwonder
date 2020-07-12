@@ -3,10 +3,12 @@ const mysql = require('mysql');// mysql(would have still prefered mongodb)
 
 
 const con = mysql.createConnection({
-    host: "localhost",
+    host: process.env.HOST || "localhost",
+    port: 25060,
+    ssl: true,
     user: process.env.USER_NAME,
     password: process.env.PASSWORD,
-    database: process.env.DATABASE, //! Create this db before running
+    database: process.env.DATABASE,
 });
 
 // TABLE NAME = conversations

@@ -1,13 +1,12 @@
-root
+doadmin
 Server {
-  maxHeaderSize: undefined,
   insecureHTTPParser: undefined,
   _events: [Object: null prototype] {
     connection: [Function: connectionListener],
     close: [Function: bound ],
     listening: [Function: bound ],
-    upgrade: [Function (anonymous)],
-    request: [Function (anonymous)]
+    upgrade: [Function],
+    request: [Function]
   },
   _eventsCount: 5,
   _maxListeners: undefined,
@@ -19,19 +18,13 @@ Server {
   allowHalfOpen: true,
   pauseOnConnect: false,
   httpAllowHalfOpen: false,
-  timeout: 0,
+  timeout: 120000,
   keepAliveTimeout: 5000,
   maxHeadersCount: null,
   headersTimeout: 60000,
   [Symbol(IncomingMessage)]: [Function: IncomingMessage],
   [Symbol(ServerResponse)]: [Function: ServerResponse],
   [Symbol(kCapture)]: false,
-  [Symbol(async_id_symbol)]: -1
+  [Symbol(asyncId)]: -1
 }
 server started on:8000
-db connection established
-created namespace:  /conversation1
-created namespace:  /conversation2
-created namespace:  /conversation3
-created namespace:  /conversation4
-created namespace:  /conversation5

@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js > log.txt",
+    "start": "node server.js",
     "dev": "nodemon server.js",
     "react-build": "cd client && npm i && npm run build",
     "server-setup": "npm i && cd client && npm i && cd ..",
