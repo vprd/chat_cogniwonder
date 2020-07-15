@@ -24,7 +24,9 @@ const MessagingWindow = () => {
       let newname = '';
 
       const onchange = (e) => {
+        e.preventDefault();
         newname = e.target.value;
+        console.log(newname);
       };
       useEffect(() => {
         const inputfield = document.querySelector('#group-name-changer');
@@ -118,14 +120,14 @@ const Messages = () => {
       setmessages(await getmessages(openedconversation.conversation_id));
       const list = document.querySelector('.chat-screen');
       list.scrollTop = list.scrollHeight;
+
+      return () => {
+        setmessages([]);
+      };
     })();
   }, [openedconversation, getmessages]);
 
   useEffect(() => {
-    /* const socket = io(
-      `${socket_endpoint}conversation${openedconversation.conversation_id}`,
-      { transport: ['websocket'] }
-    ); */
     socket.on('message', async (message) => {
       if (message.conversation_id === openedconversation.conversation_id) {
         setmessages(await getmessages(openedconversation.conversation_id));
@@ -136,15 +138,20 @@ const Messages = () => {
 
     return () => {
       socket.removeAllListeners('message');
+
       /* socket.on('message', (message) => {
-        
+      
       }); */
     };
-  }, [getmessages, openedconversation]);
+  }, [getmessages, openedconversation, socket]);
 
   useEffect(() => {
-    document.querySelector('.messages-view').style.opacity = 1;
-  });
+    document.querySelector('.messages-view').style.display = '';
+
+    return () => {
+      document.querySelector('.messages-view').style.display = 'none';
+    };
+  }, [messages]);
 
   let message = '';
 
@@ -169,8 +176,7 @@ const Messages = () => {
   return (
     <div className="messages-container">
       <div className="messages-view">
-      
-        {messages &&
+        {messages ? (
           messages.map((message, i) => {
             return (
               <Message
@@ -181,7 +187,10 @@ const Messages = () => {
                 group={openedconversation.group}
               />
             );
-          })}
+          })
+        ) : (
+          <></>
+        )}
       </div>
 
       <div className="message-input">

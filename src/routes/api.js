@@ -6,8 +6,6 @@ const ConversationHandler = require('./chat/sockets-handler');
 
 module.exports = (io) => {
 
-
-
     const socketListener = new ConversationHandler(io);
     socketListener.conversations().then(() => socketListener.notifications());
 

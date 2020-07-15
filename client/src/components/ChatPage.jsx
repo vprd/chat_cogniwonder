@@ -48,7 +48,6 @@ const Options = ({ setaddconversationview }) => {
   return (
     <>
       <div className="menu-options">
-      
         <div className="option" onClick={() => setaddconversationview(true)}>
           <img
             src="https://img.icons8.com/cotton/64/000000/add-to-chat.png"
@@ -62,12 +61,12 @@ const Options = ({ setaddconversationview }) => {
 };
 
 const ConversationList = () => {
-  const { conversations, updateConversations } = useContext(ChatContext);
+  const { conversations } = useContext(ChatContext);
 
-  useEffect(() => {
+  /* useEffect(() => {
     updateConversations();
     // eslint-disable-next-line
-  }, []);
+  }, []); */
 
   if (conversations) {
     return (
@@ -105,11 +104,11 @@ const Conversation = ({ conversation }) => {
       <div
         style={{ borderRight: indicator }}
         onClick={() => {
-          markRead(conversation.conversation_id);
-          
-          if (document.querySelector('.messages-view'))
-            document.querySelector('.messages-view').style.opacity = 0;
-          
+          // markRead(conversation.conversation_id);
+          setTimeout(() => {
+            document.querySelector('.messages-view').style.display = 'none';
+          });
+
           setOpenedconversation({ ...conversation, group: false });
         }}
         className="conversation"
