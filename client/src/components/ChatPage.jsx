@@ -25,6 +25,10 @@ const ChatPage = () => {
 const Menu = () => {
   const [addconversationview, setaddconversationview] = useState(false);
   const { user } = useContext(GlobalContext);
+
+  useEffect(() => {
+    document.querySelector('.menu header').scrollIntoView();
+  }, []);
   return (
     <>
       <div className="menu">

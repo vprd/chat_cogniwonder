@@ -14,8 +14,12 @@ const MessagingWindow = () => {
 
   useEffect(() => {
     if (Object.keys(openedconversation).length) {
+      
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
       const list = document.querySelector('.chat-screen');
       list.scrollTop = list.scrollHeight;
+
     }
   }, [openedconversation]);
 
