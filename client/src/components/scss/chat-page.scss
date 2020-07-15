@@ -87,6 +87,7 @@
                 animation: fadein-right 350ms forwards ease;
                 border-radius: 12px 0 0 12px;
                 transition: background 500ms ease;
+
                 &>h1 {
                     display: none;
                 }
@@ -97,7 +98,7 @@
 
             }
 
-            
+
 
             /* .group-message {
                 #group-sender {
@@ -231,7 +232,6 @@
             overflow-y: scroll;
             padding-right: 10px;
             padding-bottom: 60px;
-
         }
 
         .conversation {
@@ -455,4 +455,54 @@
 #opened-conversation {
     background: var(--accent-color);
     color: white;
+}
+
+
+
+
+@media only screen and (max-width: 600px) {
+    .chat-page {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 100vh auto;
+    }
+
+    .menu {
+        grid-row: 2/3;
+        height: auto;
+        overflow: visible !important;
+        /* position: absolute;
+        bottom: 0; */
+        // display: none;
+    }
+
+    .conversation-list {
+        height: auto !important;
+        overflow: visible !important;
+        padding-bottom: 0 !important;
+        //   margin-bottom: 60px !important;
+    }
+
+    .menu-options {
+        position: relative !important;
+        padding-bottom: 80px !important;
+    }
+
+    .messages-container {
+        position: relative;
+    }
+
+    .message-input {
+        width: 100vw !important;
+        position: absolute;
+
+        textarea {
+            width: 100%;
+
+        }
+    }
+
+    .contact-header {
+        width: 100vw !important;
+    }
 }

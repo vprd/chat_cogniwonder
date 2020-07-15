@@ -508,4 +508,46 @@
   background: var(--accent-color);
   color: white;
 }
+
+@media only screen and (max-width: 600px) {
+  .chat-page {
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-columns: 1fr;
+        grid-template-columns: 1fr;
+    -ms-grid-rows: 100vh auto;
+        grid-template-rows: 100vh auto;
+  }
+  .menu {
+    -ms-grid-row: 2;
+    -ms-grid-row-span: 1;
+    grid-row: 2/3;
+    height: auto;
+    overflow: visible !important;
+    /* position: absolute;
+        bottom: 0; */
+  }
+  .conversation-list {
+    height: auto !important;
+    overflow: visible !important;
+    padding-bottom: 0 !important;
+  }
+  .menu-options {
+    position: relative !important;
+    padding-bottom: 80px !important;
+  }
+  .messages-container {
+    position: relative;
+  }
+  .message-input {
+    width: 100vw !important;
+    position: absolute;
+  }
+  .message-input textarea {
+    width: 100%;
+  }
+  .contact-header {
+    width: 100vw !important;
+  }
+}
 /*# sourceMappingURL=chat-page.css.map */
