@@ -86,7 +86,7 @@
                 background: white;
                 animation: fadein-right 350ms forwards ease;
                 border-radius: 12px 0 0 12px;
-
+                transition: background 500ms ease;
                 &>h1 {
                     display: none;
                 }
@@ -96,6 +96,8 @@
                 display: block;
 
             }
+
+            
 
             /* .group-message {
                 #group-sender {

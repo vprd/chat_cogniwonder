@@ -161,18 +161,26 @@ const Messages = () => {
 
   const sendmessage = () => {
     message = message.trim();
-    socket.emit('message', {
+    const messageObject = {
       message,
       sender: `${user.first_name} ${user.last_name}`,
       sender_id: user.id,
       conversation_id: openedconversation.conversation_id,
       date: new Date(),
-    });
+      delivering: true,
+    };
+    setmessages([...messages, messageObject]);
+    // messageObject.delivering = undefined;
+    socket.emit('message', messageObject);
     const messageInput = document.querySelector('.message-input textarea');
-    setTimeout(() => (messageInput.value = ''));
+    setTimeout(() => {
+      const list = document.querySelector('.chat-screen');
+      list.scrollTop = list.scrollHeight;
+      messageInput.value = '';
+    });
     messageInput.focus();
   };
-
+  console.log(messages.filter((message) => message.delevering));
   return (
     <div className="messages-container">
       <div className="messages-view">
@@ -185,6 +193,7 @@ const Messages = () => {
                 text={message.message}
                 sender_name={message.sender}
                 group={openedconversation.group}
+                delevering={message.delevering}
               />
             );
           })
@@ -222,13 +231,20 @@ const Message = ({
   sender_id,
   date,
   group,
+  delivering,
 }) => {
   const { user } = useContext(ChatContext);
 
   if (type === 'message') {
+    let message_classname = group ? 'message group-message' : 'message';
+
     return (
       <div
-        className={group ? 'message group-message' : 'message'}
+        style={{
+          background: delivering ? 'rgb(255, 133, 133)' : '',
+          opacity: delivering ? '.5' : '',
+        }}
+        className={message_classname}
         id={user.id === sender_id ? 'sent-message' : 'message'}
       >
         <h1 id={group ? 'group-sender' : ''}>{sender_name}</h1>
