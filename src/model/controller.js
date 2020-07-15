@@ -1,6 +1,8 @@
-const log = () => { }; //console.log;
+const log = console.log;
 
-const dbconnection = require('./db')();
+const { con2 } = require('./db')()
+const dbconnection = con2;
+// const dbconnection = con;
 const SqlString = require('sqlstring');
 
 const control = {
@@ -23,15 +25,26 @@ const control = {
     },
 
     // Async wrapper for sql queries
-    _query: function (sql) {
-        const con = this.dbconnection;
-        return new Promise((resolve, reject) => {
+    _query: function (sql, version) {
+        if (!version) {
+            const con = this.dbconnection;
+            return new Promise((resolve, reject) => {
 
-            con.query(sql, function (err, result) {
-                if (err) reject(err);
-                resolve(result);
+                con.query(sql, function (err, result) {
+                    if (err) reject(err);
+                    resolve(result);
+                });
             });
-        });
+        } /* else {
+            const con = this.dbconnection2;
+            return new Promise((resolve, reject) => {
+
+                con.query(sql, function (err, result) {
+                    if (err) reject(err);
+                    resolve(result);
+                });
+            });
+        } */
     },
 
     // Reset the testing DB tables 
@@ -282,7 +295,7 @@ const control = {
         const two = await this._query(`SELECT * FROM messages`);
         const three = await this._query(`SELECT * FROM conversations`);
         const four = await this._query(`SELECT * FROM userconversation`);
-        return [one, two, three, four]
+        return [one, two, three, four].flat()
     },
     parallelget: async function () {
         const one = this._query(`SELECT * FROM User_SSC`);
@@ -290,7 +303,7 @@ const control = {
         const three = this._query(`SELECT * FROM conversations`);
         const four = this._query(`SELECT * FROM userconversation`);
 
-        return await Promise.all([one, two, three, four]);
+        return (await Promise.all([one, two, three, four])).flat();
     }
 
 }
@@ -314,10 +327,13 @@ Date.prototype.toMysqlFormat = function () {
 
 
 (async () => {
-    //control._query(`DROP TABLE userconversation`);
+    // control._query(`ALTER conversations`);
     // control._delete();
     //log(await control.listConversations())
-    //control._query(`ALTER TABLE conversations ADD props TEXT`)
+    console.time()
+    await control._query(`SELECT * FROM conversations`);
+    console.timeEnd()
+    // console.log(await control._query(`SELECT * FROM conversations`,2))
     //control._query(`ALTER TABLE messages CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci`)
     //control.createConversation([1,2])
 })();

@@ -12,10 +12,14 @@ module.exports = (io) => {
     socketListener.conversations().then(() => socketListener.notifications());
 
     router.get('/benchmarkserial', async (req, res) => {
+        // console.time('serial')
         res.send(JSON.stringify(await dbController.sequentialget()))
+        // console.timeEnd('serial')
     })
     router.get('/benchmarkparallel', async (req, res) => {
+        // console.time('parellel')
         res.send(JSON.stringify(await dbController.parallelget()))
+        // console.timeEnd('parellel')
     })
 
     router.post('/authenticate', async (req, res) => {

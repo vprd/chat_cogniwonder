@@ -1,11 +1,21 @@
 require('dotenv').config();
-const mysql = require('mysql');// mysql(would have still prefered mongodb)
+// const mysql = require('mysql')
+const mysql2 = require('mysql2');
 
 
-const con = mysql.createConnection({
+/* const con = mysql.createConnection({
     host: process.env.HOST || "localhost",
     port: 25060,
     ssl: true,
+    user: process.env.USER_NAME,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE,
+}); */
+
+const con2 = mysql2.createConnection({
+    host: process.env.HOST || "localhost",
+    port: 25060,
+    /* ssl: true, */
     user: process.env.USER_NAME,
     password: process.env.PASSWORD,
     database: process.env.DATABASE,
@@ -59,15 +69,22 @@ function setUpTable() {
 
 module.exports = () => {
     console.log(process.env['USER_NAME']);
-    con.connect((err) => {
+    /* con.connect((err) => {
 
         if (err) throw err;
         console.log("db connection established");
 
+    }); */
+
+    con2.connect((err) => {
+
+        if (err) throw err;
+        console.log("2nd db connection established");
+
     });
 
 
-    return con;
+    return { con2 };
 }
 
 function localUserDb() {
