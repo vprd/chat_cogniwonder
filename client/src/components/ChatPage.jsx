@@ -107,6 +107,10 @@ const Conversation = ({ conversation }) => {
           // markRead(conversation.conversation_id);
           setTimeout(() => {
             document.querySelector('.messages-view').style.display = 'none';
+            const messageInput = document.querySelector(
+              '.message-input textarea'
+            );
+            messageInput.focus();
           });
 
           setOpenedconversation({ ...conversation, group: false });

@@ -114,7 +114,10 @@ const Messages = () => {
   const socket = socketRef.current;
 
   const [messages, setmessages] = useState([]);
-
+  useEffect(() => {
+    const messageInput = document.querySelector('.message-input textarea');
+    messageInput.focus();
+  });
   useEffect(() => {
     (async () => {
       setmessages(await getmessages(openedconversation.conversation_id));
@@ -173,12 +176,12 @@ const Messages = () => {
     // messageObject.delivering = undefined;
     socket.emit('message', messageObject);
     const messageInput = document.querySelector('.message-input textarea');
+    messageInput.focus();
     setTimeout(() => {
       const list = document.querySelector('.chat-screen');
       list.scrollTop = list.scrollHeight;
       messageInput.value = '';
-    });
-    messageInput.focus();
+    }, 100);
   };
   console.log(messages.filter((message) => message.delevering));
   return (

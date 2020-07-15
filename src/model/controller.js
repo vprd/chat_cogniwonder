@@ -330,9 +330,9 @@ Date.prototype.toMysqlFormat = function () {
     // control._query(`ALTER conversations`);
     // control._delete();
     //log(await control.listConversations())
-    console.time()
+    /* console.time()
     await control._query(`SELECT * FROM conversations`);
-    console.timeEnd()
+    console.timeEnd() */
     // console.log(await control._query(`SELECT * FROM conversations`,2))
     //control._query(`ALTER TABLE messages CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci`)
     //control.createConversation([1,2])
