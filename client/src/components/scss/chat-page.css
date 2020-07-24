@@ -10,7 +10,7 @@
   position: relative;
   background: whitesmoke;
   height: 100vh;
-  overflow-y: scroll;
+  overflow-y: hidden;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -31,6 +31,7 @@
 .chat-page .chat-screen .messages-container {
   height: 100%;
   padding-top: 70px;
+  overflow-y: scroll;
   /* .group-message {
                 #group-sender {
                     display: block;
@@ -159,6 +160,7 @@
 
 .chat-page .chat-screen .contact-header {
   width: 70vw;
+  height: auto;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

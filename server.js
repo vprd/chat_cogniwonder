@@ -32,5 +32,5 @@ app.get('/*', (req, res) => {
     res.setHeader('Cache-Control', 'public, max-age=86400');
     res.sendFile(path.resolve(__dirname + '/client/build/index.html'));
 });
-console.log(http)
+
 http.listen(PORT, () => console.log('server started on:' + PORT));
