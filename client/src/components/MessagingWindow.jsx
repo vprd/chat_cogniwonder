@@ -14,30 +14,24 @@ const MessagingWindow = () => {
 
   useEffect(() => {
     if (Object.keys(openedconversation).length) {
-      
-      document.body.scrollTop = 0;
-      document.documentElement.scrollTop = 0;
       const list = document.querySelector('.chat-screen');
-      list.scrollTop = list.scrollHeight;
-
+      // list.scrollTop = list.scrollHeight;
     }
   }, [openedconversation]);
 
   if (Object.keys(openedconversation).length) {
     function ChangeName({ groupname, setgroupname, setchangegroupname }) {
       let newname = '';
-
-      const onchange = (e) => {
-        e.preventDefault();
-        newname = e.target.value;
+      const inputRef = useRef();
+      const onchange = () => {
+        newname = inputRef.current.value;
         console.log(newname);
       };
       useEffect(() => {
-        const inputfield = document.querySelector('#group-name-changer');
+        // const inputfield = document.querySelector('#group-name-changer');
+        const inputfield = inputRef.current;
+        inputfield.value = groupname;
         inputfield.focus();
-        inputfield.addEventListener('focusout', () => {
-          setchangegroupname(false);
-        });
 
         const dismiss = (e) => {
           if (e.keyCode === 27) setchangegroupname(false);
@@ -53,10 +47,10 @@ const MessagingWindow = () => {
       return (
         <form onSubmit={setgroupname} className="group-name-input">
           <input
+            ref={inputRef}
             onChange={onchange}
             id="group-name-changer"
             type="text"
-            value={groupname}
           />
         </form>
       );
@@ -118,15 +112,30 @@ const Messages = () => {
   const socket = socketRef.current;
 
   const [messages, setmessages] = useState([]);
+  const [page, setPage] = useState(0);
+  const [count, setCount] = useState(0);
+
+  function scrollToBottom() {
+    const main_message_container = document.querySelector(
+      '.messages-container'
+    );
+    main_message_container.scrollTop = main_message_container.scrollHeight;
+  }
   useEffect(() => {
     const messageInput = document.querySelector('.message-input textarea');
     messageInput.focus();
   });
+
+  useEffect(() => {
+    setPage(0);
+  }, []);
   useEffect(() => {
     (async () => {
-      setmessages(await getmessages(openedconversation.conversation_id));
-      const list = document.querySelector('.chat-screen');
-      list.scrollTop = list.scrollHeight;
+      const messagesobj = await getmessages(openedconversation.conversation_id);
+      setmessages(messagesobj.messages);
+      setPage(messagesobj.page);
+      setCount(messagesobj.count);
+      scrollToBottom();
 
       return () => {
         setmessages([]);
@@ -137,28 +146,64 @@ const Messages = () => {
   useEffect(() => {
     socket.on('message', async (message) => {
       if (message.conversation_id === openedconversation.conversation_id) {
-        setmessages(await getmessages(openedconversation.conversation_id));
-        const list = document.querySelector('.chat-screen');
-        list.scrollTop = list.scrollHeight;
+        setmessages(
+          (await getmessages(openedconversation.conversation_id)).messages
+        );
+        scrollToBottom();
       }
     });
 
     return () => {
       socket.removeAllListeners('message');
-
-      /* socket.on('message', (message) => {
-      
-      }); */
     };
   }, [getmessages, openedconversation, socket]);
 
   useEffect(() => {
-    document.querySelector('.messages-view').style.display = '';
+    const message_container = document.querySelector('.messages-view');
+
+    message_container.style.display = '';
 
     return () => {
-      document.querySelector('.messages-view').style.display = 'none';
+      message_container.style.display = 'none';
     };
   }, [messages]);
+
+  const [loading_messages, setLoading_messages] = useState(false);
+  useEffect(() => {
+    const main_message_container = document.querySelector(
+      '.messages-container'
+    );
+
+    const onscroll = async (e) => {
+      if (!e.target.scrollTop && !loading_messages && messages.length < count) {
+        console.log('top', page + 1);
+        setLoading_messages(true);
+        const messagesobj = await getmessages(
+          openedconversation.conversation_id,
+          page
+        );
+        console.log(messagesobj.page);
+        setmessages(messagesobj.messages);
+        setPage(messagesobj.page);
+        setLoading_messages(false);
+        // setCount(messagesobj.count);
+      } else {
+      }
+    };
+
+    main_message_container.addEventListener('scroll', onscroll);
+
+    return () => {
+      main_message_container.removeEventListener('scroll', onscroll);
+    };
+  }, [
+    page,
+    count,
+    loading_messages,
+    openedconversation,
+    getmessages,
+    messages,
+  ]);
 
   let message = '';
 
@@ -177,20 +222,30 @@ const Messages = () => {
       delivering: true,
     };
     setmessages([...messages, messageObject]);
+    scrollToBottom();
     // messageObject.delivering = undefined;
     socket.emit('message', messageObject);
     const messageInput = document.querySelector('.message-input textarea');
     messageInput.focus();
     setTimeout(() => {
       const list = document.querySelector('.chat-screen');
-      list.scrollTop = list.scrollHeight;
+      // list.scrollTop = list.scrollHeight;
       messageInput.value = '';
     }, 100);
   };
-  console.log(messages.filter((message) => message.delevering));
+
   return (
     <div className="messages-container">
       <div className="messages-view">
+        {loading_messages ? (
+          <div className="loader">
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        ) : (
+          <></>
+        )}
         {messages ? (
           messages.map((message, i) => {
             return (

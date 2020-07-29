@@ -37,7 +37,10 @@ module.exports = (io) => {
     });
 
     router.post('/messages', async (req, res) => {
-        if (req.body.conversation_id) res.send(JSON.stringify(await dbController.getMessages(req.body.conversation_id)));
+
+        if (req.body.conversation_id && req.body.page >= 0) res.send(JSON.stringify(await dbController.getMessages(req.body.conversation_id, req.body.page)));
+
+        else if (req.body.conversation_id) res.send(JSON.stringify(await dbController.getMessages(req.body.conversation_id)));
     });
 
     router.post('/search', async (req, res) => {
@@ -47,11 +50,8 @@ module.exports = (io) => {
 
     router.post('/startconversation', async (req, res) => {
 
-        /* console.log(req.body.ids)
-        res.send('OK'); */
-
-        if (req.body.ids) {
-            const result = await dbController.createConversation(req.body.ids)
+        if (req.body.ids && req.body.creator) {
+            const result = await dbController.createConversation(req.body.ids, req.body.creator)
             socketListener.addconversation(result.insertId, req.body.ids);
             res.send(JSON.stringify(result))
         } else {

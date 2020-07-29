@@ -68,12 +68,18 @@ export const ChatContextProvider = ({ children }) => {
   async function startconversation(participants) {
     if (participants && participants.length) {
       const ids = [...participants, user].map((parti) => parti.id);
-      await api.startconversation(ids);
+      await api.startconversation(ids, user.id);
 
       // await updateConversations();
     }
   }
-
+  const updateConversations = useCallback(
+    async function updateConversations() {
+      const convos = await api.getconversations(user.id);
+      setconversations(convos);
+    },
+    [user.id]
+  );
   useEffect(() => {
     if (user.id) {
       const socket = io(`${socket_endpoint}notification${user.id}`);
@@ -84,7 +90,8 @@ export const ChatContextProvider = ({ children }) => {
 
       socket.on('notification', async (notification) => {
         if (notification.event === 'newconversation') {
-          // await updateConversations();
+          console.log('added to new convo');
+          await updateConversations();
         }
       });
 
@@ -93,7 +100,7 @@ export const ChatContextProvider = ({ children }) => {
         socket.disconnect();
       };
     }
-  }, [user]);
+  }, [user, updateConversations]);
 
   /* function getSocket(conversation_id) {
     const result = conversation_sockets.filter((conversation_socket) => {
@@ -103,13 +110,6 @@ export const ChatContextProvider = ({ children }) => {
     return result;
   } */
 
-  const updateConversations = useCallback(
-    async function updateConversations() {
-      const convos = await api.getconversations(user.id);
-      setconversations(convos);
-    },
-    [user.id]
-  );
   useEffect(() => {
     updateConversations();
   }, [updateConversations]);
@@ -155,10 +155,3 @@ export const ChatContextProvider = ({ children }) => {
     </ChatContext.Provider>
   );
 };
-
-if (window.TEST) {
-  console.log(window.TEST++);
-} else {
-  window.TEST = 0;
-  console.log(window.TEST++);
-}

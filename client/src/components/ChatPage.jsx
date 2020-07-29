@@ -72,7 +72,7 @@ const ConversationList = () => {
     // eslint-disable-next-line
   }, []); */
 
-  if (conversations) {
+  if (conversations.length) {
     return (
       <div className="conversation-list">
         {conversations.map((conversation, i) => (
@@ -91,6 +91,43 @@ const Conversation = ({ conversation }) => {
     ChatContext
   );
 
+  const onclick = (e, group) => {
+    // markRead(conversation.conversation_id);
+    setTimeout(() => {
+      document.querySelector('.messages-view').style.display = 'none';
+      const messageInput = document.querySelector('.message-input textarea');
+      messageInput.focus();
+    });
+    const conversation_opened = { ...conversation, group };
+
+    window.localStorage.setItem(
+      'openedconversation',
+      JSON.stringify(conversation_opened)
+    );
+
+    setOpenedconversation(conversation_opened);
+  };
+
+  useEffect(() => {
+    const opened_conversation = JSON.parse(
+      window.localStorage.getItem('openedconversation')
+    );
+    if (
+      opened_conversation &&
+      conversation.conversation_id === opened_conversation.conversation_id
+    ) {
+      setTimeout(() => {
+        document.querySelector('.messages-view').style.display = 'none';
+        const messageInput = document.querySelector('.message-input textarea');
+        messageInput.focus();
+      });
+      const conversation_opened = { ...conversation, group: false };
+
+      setOpenedconversation(conversation_opened);
+    }
+
+    console.log(opened_conversation);
+  }, [conversation, setOpenedconversation]);
   const indicator =
     conversation.unread &&
     !(conversation.conversation_id === openedconversation.conversation_id)
@@ -107,18 +144,7 @@ const Conversation = ({ conversation }) => {
     return (
       <div
         style={{ borderRight: indicator }}
-        onClick={() => {
-          // markRead(conversation.conversation_id);
-          setTimeout(() => {
-            document.querySelector('.messages-view').style.display = 'none';
-            const messageInput = document.querySelector(
-              '.message-input textarea'
-            );
-            messageInput.focus();
-          });
-
-          setOpenedconversation({ ...conversation, group: false });
-        }}
+        onClick={onclick}
         className="conversation"
         id={
           conversation.conversation_id === openedconversation.conversation_id
@@ -140,7 +166,8 @@ const Conversation = ({ conversation }) => {
       <div
         onClick={() => {
           markRead(conversation.conversation_id);
-          setOpenedconversation({ ...conversation, group: true });
+          onclick(null, true);
+          // setOpenedconversation({ ...conversation, group: true });
         }}
         className="conversation group-conversation"
         id={

@@ -135,7 +135,7 @@ const control = {
 
     // Creates a conversation in the conversation table if it does not already exists
     // also creates the relation needed in the useruserconversation if not already there
-    createConversation: async function (userids) {
+    createConversation: async function (userids, creator) {
         if (Array.isArray(userids)) {
             userids = userids.sort();
             const existing = await this.listConversations(userids)
@@ -146,12 +146,11 @@ const control = {
 
                         const serializeduserids = JSON.stringify(userids);
                         const conversation_name = JSON.stringify(await this.getUsernames(userids));
-                        let result = await this._query(`INSERT INTO conversations (conversation,conversation_name) VALUES ('${serializeduserids}','${conversation_name}')`)
+                        let result = await this._query(`INSERT INTO conversations (conversation,conversation_name,creator) VALUES ('${serializeduserids}','${conversation_name}','${creator}')`);
                         //insertId
                         for (let id of userids) {
 
                             const d = await this.listUserConversations(id);
-
 
                             if ((d.length === 0)) {
                                 await this._query(`INSERT INTO userconversation (user_id,conversationids) VALUES (${id},'${JSON.stringify([result.insertId])}')`);
@@ -242,7 +241,7 @@ const control = {
         const convoids = await this.listUserConversations(userid);
 
         const conversations = (await Promise.all(convoids.map(id => {
-            return this._query(`SELECT * FROM conversations WHERE conversation_id=${id}`);
+            return this._query(`SELECT * FROM conversations WHERE conversation_id=${id} ORDER BY recent_activity asc`);
         }))).map(c => {
             c[0].conversation = JSON.parse(c[0].conversation);
             c[0].conversation_name = JSON.parse(c[0].conversation_name);
@@ -279,9 +278,12 @@ const control = {
     },
 
     // returns all the messages in a conversation specified by a conversationID
-    getMessages: async function (conversationID) {
-        const result = (await this._query(`SELECT * FROM messages WHERE conversation_id=${conversationID}`));
-        return result;
+    getMessages: async function (conversationID, page = 0) {
+        const page_size = 10;
+        const result = await this._query(`SELECT * FROM messages WHERE conversation_id=${conversationID} ORDER BY date desc LIMIT ${page},${(page * page_size) + page_size}`);
+        const total = await this._query(`SELECT COUNT(conversation_id) FROM messages WHERE conversation_id=${conversationID}`);
+        if (result.length < total[0]['COUNT(conversation_id)']) page += 1;
+        return { count: total[0]['COUNT(conversation_id)'], page, messages: result.reverse() };
     },
     getUserIDs: async function () {
 
@@ -333,7 +335,7 @@ Date.prototype.toMysqlFormat = function () {
     /* console.time()
     await control._query(`SELECT * FROM conversations`);
     console.timeEnd() */
-    // console.log(await control._query(`SELECT * FROM conversations`,2))
+    // console.log(await control._query(`ALTER TABLE conversations ADD creator INT`))
     //control._query(`ALTER TABLE messages CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci`)
     //control.createConversation([1,2])
 })();

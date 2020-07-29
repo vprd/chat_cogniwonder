@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 app.use('/api', api);
 
 // serve static files for react client
-app.use(express.static(path.resolve(__dirname + '/client/build'),{ maxAge: 31557600 }));
+app.use(express.static(path.resolve(__dirname + '/client/build'), { maxAge: 31557600 }));
 
 app.get('/*', (req, res) => {
     res.setHeader('Cache-Control', 'public, max-age=86400');

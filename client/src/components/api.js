@@ -18,10 +18,10 @@ const api = {
         return result.data;
     },
 
-    getmessages: async (conversation_id) => {
+    getmessages: async (conversation_id, page) => {
         const point = endpoint + '/messages';
         const result = await axios.post(point, {
-            conversation_id
+            conversation_id, page
         });
 
         return result.data;
@@ -45,11 +45,11 @@ const api = {
 
         return result.data;
     },
-    startconversation: async (ids) => {
+    startconversation: async (ids, creator) => {
         const point = endpoint + '/startconversation';
 
         const result = await axios.post(point, {
-            ids
+            ids, creator
         });
 
         return result.data;

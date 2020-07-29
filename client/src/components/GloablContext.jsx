@@ -5,9 +5,8 @@ export const GlobalContext = createContext();
 export const GlobalContextProvider = ({ children }) => {
   const [authentication, setAuthentication] = useState(false);
   const [user, setuser] = useState({ userid: 0, name: '' });
-
+  
   async function Authenticate(email_pwd) {
-    
     const user = await api.authenticate(email_pwd);
     if (user) {
       localStorage.setItem('email_pwd', email_pwd);
