@@ -228,8 +228,7 @@ const Messages = () => {
     const messageInput = document.querySelector('.message-input textarea');
     messageInput.focus();
     setTimeout(() => {
-      const list = document.querySelector('.chat-screen');
-      // list.scrollTop = list.scrollHeight;
+      scrollToBottom();
       messageInput.value = '';
     }, 100);
   };
