@@ -222,6 +222,7 @@ const Messages = () => {
       delivering: true,
     };
     setmessages([...messages, messageObject]);
+    setCount(count + 1);
     scrollToBottom();
     // messageObject.delivering = undefined;
     socket.emit('message', messageObject);
