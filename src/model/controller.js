@@ -279,11 +279,17 @@ const control = {
 
     // returns all the messages in a conversation specified by a conversationID
     getMessages: async function (conversationID, page = 0) {
-        const page_size = 10;
-        const result = await this._query(`SELECT * FROM messages WHERE conversation_id=${conversationID} ORDER BY date desc LIMIT ${page},${(page * page_size) + page_size}`);
-        const total = await this._query(`SELECT COUNT(conversation_id) FROM messages WHERE conversation_id=${conversationID}`);
-        if (result.length < total[0]['COUNT(conversation_id)']) page += 1;
-        return { count: total[0]['COUNT(conversation_id)'], page, messages: result.reverse() };
+        const count = await this._query(`SELECT COUNT(conversation_id) FROM messages WHERE conversation_id=${conversationID}`);
+        const total = count[0]['COUNT(conversation_id)']
+        if (total > 10) {
+            const page_size = 10;
+            const result = await this._query(`SELECT * FROM messages WHERE conversation_id=${conversationID} ORDER BY date desc LIMIT ${page},${(page * page_size) + page_size}`);
+            if (result.length < total) page += 1;
+            return { count: total, page, messages: result.reverse() };
+        } else {
+            const result = await this._query(`SELECT * FROM messages WHERE conversation_id=${conversationID} ORDER BY date desc`);
+            return { count: total, page: 0, messages: result.reverse() };
+        }
     },
     getUserIDs: async function () {
 
