@@ -176,16 +176,26 @@ const Messages = () => {
 
     const onscroll = async (e) => {
       if (!e.target.scrollTop && !loading_messages && messages.length < count) {
-        console.log('top', page + 1);
+        const lastMessage = document
+          .querySelector('.messages-view')
+          .firstChild.getAttribute('data-message-id');
+        console.log(lastMessage);
         setLoading_messages(true);
         const messagesobj = await getmessages(
           openedconversation.conversation_id,
           page
         );
-        console.log(messagesobj.page);
+
         setmessages(messagesobj.messages);
         setPage(messagesobj.page);
         setLoading_messages(false);
+        setTimeout(() => {
+          document
+            .querySelector(`div[data-message-id="${lastMessage}"]`)
+            .scrollIntoView(true);
+          // lastMessage.scrollIntoView(true);
+          // lastMessage.scrollTop = 10;
+        }, 0);
         // setCount(messagesobj.count);
       } else {
       }
@@ -294,6 +304,7 @@ const Message = ({
   date,
   group,
   delivering,
+  message_id,
 }) => {
   const { user } = useContext(ChatContext);
 
@@ -306,6 +317,7 @@ const Message = ({
           background: delivering ? 'rgb(255, 133, 133)' : '',
           opacity: delivering ? '.5' : '',
         }}
+        data-message-id={message_id}
         className={message_classname}
         id={user.id === sender_id ? 'sent-message' : 'message'}
       >
