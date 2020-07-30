@@ -47,7 +47,7 @@
                 white-space: pre-wrap;
 
                 background: rgba(226, 151, 255, 0.212);
-                animation: fadein-left 350ms forwards ease;
+                animation: fadein 600ms forwards ease;
 
                 span {
                     line-height: 1.6rem;
@@ -84,7 +84,7 @@
             #sent-message {
                 margin-left: auto;
                 background: white;
-                animation: fadein-right 350ms forwards ease;
+                animation: fadein 600ms forwards ease;
                 border-radius: 12px 0 0 12px;
                 transition: background 500ms ease;
 
