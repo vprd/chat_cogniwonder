@@ -160,9 +160,11 @@ const Messages = () => {
 
   useEffect(() => {
     const message_container = document.querySelector('.messages-view');
+    const chat_container = document.querySelector('.chat-screen');
 
     message_container.style.display = '';
-
+    // chat_container.scrollTop = 0;
+    chat_container.scrollIntoView(true);
     return () => {
       message_container.style.display = 'none';
     };
