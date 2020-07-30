@@ -25,6 +25,10 @@ const App = () => {
         setTimeout(() => {
           const cover = document.querySelector('.intro-sequence');
           cover.style.opacity = 0;
+
+          setTimeout(() => {
+            cover.style.display = 'none';
+          }, 600);
         }, 600);
       }, 1000);
     }
