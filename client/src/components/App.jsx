@@ -30,7 +30,7 @@ const App = () => {
             cover.style.display = 'none';
           }, 600);
         }, 600);
-      }, 1000);
+      }, 2000);
     }
   }, [authentication]);
 
