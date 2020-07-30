@@ -283,7 +283,7 @@ const control = {
         const total = count[0]['COUNT(conversation_id)']
         if (total > 10) {
 
-            const result = await this._query(`SELECT * FROM messages WHERE conversation_id=${conversationID} ORDER BY date desc LIMIT ${page},${(page * page_size) + page_size}`);
+            const result = await this._query(`SELECT * FROM messages WHERE conversation_id=${conversationID} ORDER BY date desc LIMIT ${0},${(page * page_size) + page_size}`);
             if (result.length < total) page += 1;
             return { count: total, page, messages: result.reverse() };
         } else {
