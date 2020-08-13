@@ -5,19 +5,24 @@ import { ChatContext } from './ChatContext';
 import getendpoint from '../api-endpoint';
 import io from 'socket.io-client';
 
+import MenuIcon from '@material-ui/icons/Menu';
+import IconButton from '@material-ui/core/IconButton';
+/* import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+ */
 const endpoint = `${getendpoint()}`;
 const socket_endpoint = endpoint;
 
-const MessagingWindow = () => {
+const MessagingWindow = ({ drawer }) => {
   const { openedconversation, user } = useContext(ChatContext);
   const [changegroupname, setchangegroupname] = useState(false);
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (Object.keys(openedconversation).length) {
       const list = document.querySelector('.chat-screen');
       // list.scrollTop = list.scrollHeight;
     }
-  }, [openedconversation]);
+  }, [openedconversation]); */
 
   if (Object.keys(openedconversation).length) {
     function ChangeName({ groupname, setgroupname, setchangegroupname }) {
@@ -65,9 +70,20 @@ const MessagingWindow = () => {
     }
 
     const setconversation_name = (newname) => {};
+
     return (
       <div className="chat-screen">
         <div className="contact-header">
+          {!drawer.state ? (
+            <IconButton
+              style={{ marginRight: 10 }}
+              onClick={() => drawer.set(!drawer.state)}
+            >
+              <MenuIcon />
+            </IconButton>
+          ) : (
+            <></>
+          )}
           <img
             src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-5.png"
             alt="profile"
@@ -192,11 +208,11 @@ const Messages = () => {
         setPage(messagesobj.page);
         setLoading_messages(false);
         setTimeout(() => {
-          document
-            .querySelector(`div[data-message-id="${lastMessage}"]`)
-            .scrollIntoView(true);
-          // lastMessage.scrollIntoView(true);
-          // lastMessage.scrollTop = 10;
+          try {
+            document
+              .querySelector(`div[data-message-id="${lastMessage}"]`)
+              .scrollIntoView(true);
+          } catch (error) {}
         }, 0);
         // setCount(messagesobj.count);
       } else {
@@ -247,35 +263,36 @@ const Messages = () => {
   };
 
   return (
-    <div className="messages-container">
-      <div className="messages-view">
-        {loading_messages ? (
-          <div className="loader">
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
-        ) : (
-          <></>
-        )}
-        {messages ? (
-          messages.map((message, i) => {
-            return (
-              <Message
-                key={i}
-                {...message}
-                text={message.message}
-                sender_name={message.sender}
-                group={openedconversation.group}
-                delevering={message.delevering}
-              />
-            );
-          })
-        ) : (
-          <></>
-        )}
+    <>
+      <div className="messages-container">
+        <div className="messages-view">
+          {loading_messages ? (
+            <div className="loader">
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          ) : (
+            <></>
+          )}
+          {messages ? (
+            messages.map((message, i) => {
+              return (
+                <Message
+                  key={i}
+                  {...message}
+                  text={message.message}
+                  sender_name={message.sender}
+                  group={openedconversation.group}
+                  delevering={message.delevering}
+                />
+              );
+            })
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
-
       <div className="message-input">
         <textarea
           onChange={onchange}
@@ -294,7 +311,7 @@ const Messages = () => {
           />
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -1,8 +1,7 @@
 .chat-page {
     height: 100vh;
+    // display: flex;
 
-    display: grid;
-    grid-template-columns: 30vw 1fr;
 
     .chat-screen {
         position: relative;
@@ -12,21 +11,31 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-
+        // align-items: center;
+        // max-width: 600px;
 
         .message-view {
             height: 100%;
             margin-top: auto;
+            margin: auto;
         }
 
         .messages-container {
             height: 100%;
             padding-top: 70px;
             overflow-y: scroll;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
 
             .messages-view {
                 padding-bottom: 70px;
                 transition: all 600ms ease;
+                min-width: 600px;
+
+                @media only screen and (max-width: 850px) {
+                    width: 100%;
+                }
             }
 
             .message {
@@ -110,46 +119,48 @@
                 }
             } */
 
-            .message-input {
+
+        }
+
+        .message-input {
+            padding: 10px;
+
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.596);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            animation: fadein 600ms forwards ease;
+
+            textarea {
                 padding: 10px;
+                font-size: 1.2rem;
+                line-height: 100%;
+                border: none;
+                outline: none;
+                width: 100%;
+                height: 100%;
+                resize: none;
+                background: whitesmoke;
+            }
 
-                position: fixed;
-                bottom: 0;
-                width: 70vw;
-                height: 60px;
-                background: rgba(255, 255, 255, 0.596);
-                backdrop-filter: blur(8px);
-                display: flex;
-                align-items: center;
-                animation: fadein 600ms forwards ease;
+            .send-btn {
+                padding: 0 10px;
 
-                textarea {
-                    padding: 10px;
-                    font-size: 1.2rem;
-                    line-height: 100%;
-                    border: none;
-                    outline: none;
-                    width: 100%;
-                    height: 100%;
-                    resize: none;
-                    background: whitesmoke;
-                }
-
-                .send-btn {
-                    padding: 0 10px;
-
-                    img {
-                        width: 30px;
-                        height: 30px;
-                        object-fit: contain;
-                        filter: invert(60%);
-                    }
+                img {
+                    width: 30px;
+                    height: 30px;
+                    object-fit: contain;
+                    filter: invert(60%);
                 }
             }
         }
 
         .contact-header {
-            width: 70vw;
+            width: 100%;
             height: auto;
             display: flex;
             align-items: center;
@@ -466,54 +477,7 @@
 
 
 
-@media only screen and (max-width: 600px) {
-    .chat-page {
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-template-rows: 100vh auto;
-    }
 
-    .menu {
-        grid-row: 2/3;
-        height: auto;
-        overflow: visible !important;
-        /* position: absolute;
-        bottom: 0; */
-        // display: none;
-    }
-
-    .conversation-list {
-        height: auto !important;
-        overflow: visible !important;
-        padding-bottom: 0 !important;
-        //   margin-bottom: 60px !important;
-    }
-
-    .menu-options {
-        position: relative !important;
-        padding-bottom: 80px !important;
-    }
-
-    .messages-container {
-        position: relative;
-    }
-
-    .message-input {
-        width: 100vw !important;
-        position: absolute;
-
-        textarea {
-            width: 100%;
-
-        }
-    }
-
-    .contact-header {
-        width: 100vw !important;
-        position: fixed !important;
-
-    }
-}
 
 
 
