@@ -26,8 +26,9 @@ const api = {
 
         return result.data;
     },
-    authenticate: async (data) => {
-        console.log(endpoint + "/authenticate")
+    authenticate: async (data, id) => {
+
+        console.log(endpoint + id)
 
         const result = await axios.post(endpoint + "/authenticate", {
             [Number(data) ? 'mobile' : 'email']: data

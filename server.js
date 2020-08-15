@@ -3,6 +3,7 @@ const app = express();
 const compression = require('compression');
 
 //app.listen will not work when using in socket.io
+const cookieParser = require('cookie-parser');
 
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
@@ -12,7 +13,12 @@ const path = require('path');
 const cors = require('cors');
 
 app.use(compression());
-app.use(cors());
+app.use(cors({
+    // origin: "http://localhost:3000",
+    origin: "*",
+    credentials: true,
+}));
+app.use(cookieParser());
 // api and other routes
 
 const PORT = process.env.PORT || 8000;
