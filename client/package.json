@@ -20,6 +20,7 @@
     "universal-cookie": "^4.0.3"
   },
   "scripts": {
+    "homepage": "/chat",
     "start": "react-scripts start",
     "server-start": "cd .. && npm start",
     "build": "react-scripts build",
