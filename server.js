@@ -33,9 +33,9 @@ app.use('/api', api);
 
 // serve static files for react client
 const root = path.join(__dirname, 'client', 'build')
-app.use(express.static((root), { maxAge: 31557600 }));
+app.use('/chat', express.static((root), { maxAge: 31557600 }));
 
-app.get('/chat/*', (req, res) => {
+app.get('/*', (req, res) => {
     res.setHeader('Cache-Control', 'public, max-age=86400');
     res.sendFile('index.html', { root });
 });
