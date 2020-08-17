@@ -22,15 +22,15 @@ import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
-import IconButton from '@material-ui/core/IconButton';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Avatar from '@material-ui/core/Avatar';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
 
@@ -245,8 +245,6 @@ const Conversation = ({ conversation }) => {
 
       setOpenedconversation(conversation_opened);
     }
-
-    console.log(opened_conversation);
   }, [conversation, setOpenedconversation]);
   const indicator =
     conversation.unread &&
@@ -282,7 +280,6 @@ const Conversation = ({ conversation }) => {
       </Button>
     );
   } else {
-    console.log(conversation);
     return (
       <Button
         onClick={() => {

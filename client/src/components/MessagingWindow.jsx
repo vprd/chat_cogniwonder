@@ -5,8 +5,23 @@ import { ChatContext } from './ChatContext';
 import getendpoint from '../api-endpoint';
 import io from 'socket.io-client';
 
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
+
 import MenuIcon from '@material-ui/icons/Menu';
 import IconButton from '@material-ui/core/IconButton';
+import TextField from '@material-ui/core/TextField';
+
+import Button from '@material-ui/core/Button';
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+// import { Icon } from '@material-ui/core';
 /* import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
  */
@@ -25,19 +40,15 @@ const MessagingWindow = ({ drawer }) => {
   }, [openedconversation]); */
 
   if (Object.keys(openedconversation).length) {
-    function ChangeName({ groupname, setgroupname, setchangegroupname }) {
-      let newname = '';
-      const inputRef = useRef();
-      const onchange = () => {
-        newname = inputRef.current.value;
-        console.log(newname);
-      };
-      useEffect(() => {
-        // const inputfield = document.querySelector('#group-name-changer');
-        const inputfield = inputRef.current;
-        inputfield.value = groupname;
-        inputfield.focus();
+    /* function ChangeName({ groupname, setgroupname, setchangegroupname }) {
+      const [chatname, setChatname] = useState(groupname);
 
+      const inputRef = useRef();
+      const onchange = ({ target }) => {
+        setChatname(inputRef.current.value);
+      };
+
+      useEffect(() => {
         const dismiss = (e) => {
           if (e.keyCode === 27) setchangegroupname(false);
         };
@@ -46,20 +57,26 @@ const MessagingWindow = ({ drawer }) => {
 
         return () => {
           document.removeEventListener('keydown', dismiss);
+          // document.removeEventListener('blur', () => setchangegroupname(false));
         };
       });
 
       return (
         <form onSubmit={setgroupname} className="group-name-input">
-          <input
-            ref={inputRef}
+          <TextField
+            inputRef={inputRef}
             onChange={onchange}
-            id="group-name-changer"
-            type="text"
+            ref={inputRef}
+            margin="dense"
+            id="outlined-basic"
+            label="chat name"
+            variant="outlined"
+            value={chatname}
+            autoFocus
           />
         </form>
       );
-    }
+    } */
 
     let conversation_name = openedconversation.conversation_name;
 
@@ -88,20 +105,54 @@ const MessagingWindow = ({ drawer }) => {
             src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-5.png"
             alt="profile"
           />
-          <div className="about" onClick={() => setchangegroupname(true)}>
+          <div className="about">
             {!changegroupname ? (
-              <h4>{conversation_name}</h4>
+              <>
+                <h4>{conversation_name}</h4>
+                <EditOutlinedIcon
+                  className="edit-icon"
+                  onClick={() => setchangegroupname(true)}
+                />
+              </>
             ) : (
-              <ChangeName
+              <Dialog
+                open={changegroupname}
+                onClose={() => setchangegroupname(false)}
+                aria-labelledby="form-dialog-title"
+              >
+                <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    To subscribe to this website, please enter your email
+                    address here. We will send updates occasionally.
+                  </DialogContentText>
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    id="name"
+                    label="Email Address"
+                    type="email"
+                    fullWidth
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button
+                    onClick={() => setchangegroupname(false)}
+                    color="primary"
+                  >
+                    Cancel
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            )}
+            {/* <ChangeName
                 groupname={conversation_name}
                 setgroupname={setconversation_name}
                 {...{ setchangegroupname }}
-              />
-            )}
-            <img
-              src="https://img.icons8.com/android/24/000000/info.png"
-              alt=""
-            />
+              /> */}
+            <IconButton style={{ marginLeft: 'auto' }}>
+              <MoreVertIcon />
+            </IconButton>
           </div>
         </div>
 
@@ -197,7 +248,7 @@ const Messages = () => {
         const lastMessage = document
           .querySelector('.messages-view')
           .firstChild.getAttribute('data-message-id');
-        console.log(lastMessage);
+
         setLoading_messages(true);
         const messagesobj = await getmessages(
           openedconversation.conversation_id,

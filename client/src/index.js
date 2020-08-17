@@ -14,11 +14,10 @@ import { GlobalContextProvider } from './components/GloablContext';
 
 
 ReactDOM.render(
-  <React.StrictMode>
-    <GlobalContextProvider>
-      <App />
-    </GlobalContextProvider>
-  </React.StrictMode>,
+  <GlobalContextProvider>
+    <App />
+  </GlobalContextProvider>
+  ,
   document.getElementById('root')
 );
 

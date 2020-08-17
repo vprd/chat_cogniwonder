@@ -204,6 +204,12 @@
   background: rgba(255, 255, 255, 0.842);
 }
 
+.chat-page .chat-screen .contact-header h4 {
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+}
+
 .chat-page .chat-screen .contact-header img {
   border-radius: 50%;
   width: 45px;
@@ -218,6 +224,29 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.chat-page .chat-screen .contact-header .about h4 {
+  font-size: 1.2rem;
+}
+
+.chat-page .chat-screen .contact-header .about .edit-icon {
+  margin-left: 10px;
+  width: 20px;
+  height: 20px;
+  opacity: 0;
+  pointer-events: none;
+  cursor: pointer;
+  -webkit-transition: opacity 100ms ease;
+  transition: opacity 100ms ease;
+}
+
+.chat-page .chat-screen .contact-header .about:hover .edit-icon {
+  opacity: 1;
+  pointer-events: all;
 }
 
 .chat-page .chat-screen .contact-header .about img {
@@ -227,10 +256,6 @@
   -o-object-fit: cover;
      object-fit: cover;
   cursor: pointer;
-}
-
-.chat-page .chat-screen .contact-header .about input {
-  width: 100%;
 }
 
 .chat-page .menu {
