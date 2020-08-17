@@ -32,11 +32,12 @@ app.use(bodyParser.json());
 app.use('/api', api);
 
 // serve static files for react client
-app.use(express.static(path.resolve(__dirname + '/client/build'), { maxAge: 31557600 }));
+const root = path.join(__dirname, 'client', 'build')
+app.use(express.static((root), { maxAge: 31557600 }));
 
 app.get('/*', (req, res) => {
     res.setHeader('Cache-Control', 'public, max-age=86400');
-    res.sendFile(path.resolve(__dirname + '/client/build/index.html'));
+    res.sendFile('index.html', { root });
 });
 
 http.listen(PORT, () => console.log('server started on:' + PORT));
