@@ -35,7 +35,7 @@ app.use('/api', api);
 const root = path.join(__dirname, 'client', 'build')
 app.use(express.static((root), { maxAge: 31557600 }));
 
-app.get('/*', (req, res) => {
+app.get('/chat/*', (req, res) => {
     res.setHeader('Cache-Control', 'public, max-age=86400');
     res.sendFile('index.html', { root });
 });
