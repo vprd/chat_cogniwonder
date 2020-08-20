@@ -400,7 +400,7 @@
 
 .chat-page .start-chat {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -417,6 +417,19 @@
   background: whitesmoke;
   -webkit-animation: fadein-right 800ms forwards ease;
           animation: fadein-right 800ms forwards ease;
+}
+
+.chat-page .start-chat > div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.chat-page .start-chat > div h2 {
+  margin-left: 10px;
 }
 
 .chat-page .start-chat img {

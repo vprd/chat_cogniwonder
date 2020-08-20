@@ -12,14 +12,19 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const cors = require('cors');
 
-app.use(compression());
+const allowedOrigins = require('./allowedOrigins.json');
+
 app.use(cors({
-    // origin: "http://localhost:3000",
-    origin: "*",
+    origin: allowedOrigins.origin,
     credentials: true,
 }));
-app.use(cookieParser());
+/* app.use(cors({
+    origin: "http://localhost:3000/",
+    credentials: true,
+})); */
 // api and other routes
+app.use(cookieParser());
+app.use(compression());
 
 const PORT = process.env.PORT || 8000;
 

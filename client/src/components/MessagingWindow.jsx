@@ -120,18 +120,17 @@ const MessagingWindow = ({ drawer }) => {
                 onClose={() => setchangegroupname(false)}
                 aria-labelledby="form-dialog-title"
               >
-                <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+                <DialogTitle id="form-dialog-title">
+                  Change Conversation name
+                </DialogTitle>
                 <DialogContent>
-                  <DialogContentText>
-                    To subscribe to this website, please enter your email
-                    address here. We will send updates occasionally.
-                  </DialogContentText>
+                  <DialogContentText>Display name</DialogContentText>
                   <TextField
                     autoFocus
                     margin="dense"
                     id="name"
-                    label="Email Address"
-                    type="email"
+                    label="Name"
+                    type="username"
                     fullWidth
                   />
                 </DialogContent>
@@ -163,7 +162,12 @@ const MessagingWindow = ({ drawer }) => {
   return (
     <div className="start-chat">
       <img src="https://img.icons8.com/nolan/256/speech-bubble.png" alt="" />
-      <h2>Chat</h2>
+      <div>
+        <IconButton>
+          <MenuIcon />
+        </IconButton>
+        <h2>Chat</h2>
+      </div>
     </div>
   );
 };

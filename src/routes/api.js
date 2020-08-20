@@ -10,22 +10,22 @@ module.exports = (io) => {
     socketListener.conversations().then(() => socketListener.notifications());
 
     router.get('/benchmarkserial', async (req, res) => {
-        // console.time('serial')
+        console.time('serial')
         res.send(JSON.stringify(await dbController.sequentialget()))
-        // console.timeEnd('serial')
+        console.timeEnd('serial')
     })
     router.get('/benchmarkparallel', async (req, res) => {
-        // console.time('parellel')
+        console.time('parellel')
         res.send(JSON.stringify(await dbController.parallelget()))
-        // console.timeEnd('parellel')
+        console.timeEnd('parellel')
     })
 
-    router.post('/authenticate', async (req, res) => {
+    router.post('/authenticate', authenticate, async (req, res) => {
 
         res.send(JSON.stringify(await dbController.authenticate(req.body)));
     });
 
-    router.post('/conversations', async (req, res) => {
+    router.post('/conversations', authenticate, async (req, res) => {
         if (req.body.userid) {
             const conversations = await dbController.getConversations(req.body.userid);
 
@@ -36,19 +36,18 @@ module.exports = (io) => {
         }
     });
 
-    router.post('/messages', async (req, res) => {
+    router.post('/messages', authenticate, async (req, res) => {
 
         if (req.body.conversation_id && req.body.page >= 0) res.send(JSON.stringify(await dbController.getMessages(req.body.conversation_id, req.body.page)));
-
         else if (req.body.conversation_id) res.send(JSON.stringify(await dbController.getMessages(req.body.conversation_id)));
+
     });
 
     router.post('/search', async (req, res) => {
-
         res.send(JSON.stringify(await dbController.searchUsers(req.body)))
     });
 
-    router.post('/startconversation', async (req, res) => {
+    router.post('/startconversation', authenticate, async (req, res) => {
 
         if (req.body.ids && req.body.creator) {
             const result = await dbController.createConversation(req.body.ids, req.body.creator)
@@ -63,4 +62,17 @@ module.exports = (io) => {
     //socket io setup
 
     return router;
+}
+
+async function authenticate(req, res, next) {
+    // console.log(req.body.cookies);
+    if (req.body.cookies) {
+        const user = await dbController.authorize(req.body.cookies);
+        if (user) {
+            req.user = user;
+            next();
+        } else {
+            res.sendStatus(401);
+        }
+    }
 }

@@ -1,10 +1,14 @@
-import React, { createContext, useState } from 'react';
+import React, { useEffect, createContext, useState } from 'react';
 import api from './api';
 export const GlobalContext = createContext();
 
 export const GlobalContextProvider = ({ children }) => {
   const [authentication, setAuthentication] = useState(false);
   const [user, setuser] = useState({ userid: 0, name: '' });
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   async function Authenticate(email_pwd, id) {
     const user = await api.authenticate(email_pwd, id);

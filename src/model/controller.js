@@ -70,7 +70,11 @@ const control = {
         log(await this.createConversation([1, 2, 3]));
         log(await this.createConversation([1, 3, 5]));
     },
-
+    authorize: async function ({ mdn, cwcc }) {
+        const user = (await this._query(`SELECT * FROM User_SSC WHERE mobile=${mdn}`))[0];
+        if (user.chat_token === cwcc) return user;
+        return false;
+    },
     authenticate: async function ({ email, mobile }) {
         /*  if ((typeof username === 'string') && (typeof password === 'string')) {
              const result = (await this._query(`SELECT * FROM users WHERE NAME='${username}'`))[0];
@@ -342,7 +346,8 @@ Date.prototype.toMysqlFormat = function () {
     await control._query(`SELECT * FROM conversations`);
     console.timeEnd() */
     // console.log(await control._query(`ALTER TABLE conversations ADD creator INT`))
-    //control._query(`ALTER TABLE messages CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci`)
+    // console.log(await control._query(`SELECT * FROM User_SSC WHERE chat_token='cw5f35a349096779.421'`))
+    // control._query(`ALTER TABLE messages CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci`)
     //control.createConversation([1,2])
 })();
 
