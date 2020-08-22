@@ -20,12 +20,12 @@ module.exports = (io) => {
         console.timeEnd('parellel')
     })
 
-    router.post('/authenticate', authenticate, async (req, res) => {
+    router.post('/authenticate', autherize, async (req, res) => {
 
         res.send(JSON.stringify(await dbController.authenticate(req.body)));
     });
 
-    router.post('/conversations', authenticate, async (req, res) => {
+    router.post('/conversations', autherize, async (req, res) => {
         if (req.body.userid) {
             const conversations = await dbController.getConversations(req.body.userid);
 
@@ -36,7 +36,7 @@ module.exports = (io) => {
         }
     });
 
-    router.post('/messages', authenticate, async (req, res) => {
+    router.post('/messages', autherize, async (req, res) => {
 
         if (req.body.conversation_id && req.body.page >= 0) res.send(JSON.stringify(await dbController.getMessages(req.body.conversation_id, req.body.page)));
         else if (req.body.conversation_id) res.send(JSON.stringify(await dbController.getMessages(req.body.conversation_id)));
@@ -47,7 +47,7 @@ module.exports = (io) => {
         res.send(JSON.stringify(await dbController.searchUsers(req.body)))
     });
 
-    router.post('/startconversation', authenticate, async (req, res) => {
+    router.post('/startconversation', autherize, async (req, res) => {
 
         if (req.body.ids && req.body.creator) {
             const result = await dbController.createConversation(req.body.ids, req.body.creator)
@@ -64,7 +64,7 @@ module.exports = (io) => {
     return router;
 }
 
-async function authenticate(req, res, next) {
+async function autherize(req, res, next) {
     // console.log(req.body.cookies);
     if (req.body.cookies) {
         const user = await dbController.authorize(req.body.cookies);

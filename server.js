@@ -14,10 +14,7 @@ const cors = require('cors');
 
 const allowedOrigins = require('./allowedOrigins.json');
 
-app.use(cors({
-    origin: allowedOrigins.origin,
-    credentials: true,
-}));
+app.use(cors());
 /* app.use(cors({
     origin: "http://localhost:3000/",
     credentials: true,
