@@ -163,7 +163,7 @@ const MessagingWindow = ({ drawer }) => {
     <div className="start-chat">
       <img src="https://img.icons8.com/nolan/256/speech-bubble.png" alt="" />
       <div>
-        <IconButton>
+        <IconButton onClick={() => drawer.set(!drawer.state)}>
           <MenuIcon />
         </IconButton>
         <h2>Chat</h2>
