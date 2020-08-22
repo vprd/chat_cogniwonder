@@ -67,6 +67,7 @@ module.exports = (io) => {
 async function autherize(req, res, next) {
     // console.log(req.body.cookies);
     if (req.body.cookies) {
+        console.log(req.body.cookies)
         const user = await dbController.authorize(req.body.cookies);
         if (user) {
             req.user = user;
