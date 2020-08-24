@@ -31,43 +31,84 @@ export const ChatContextProvider = ({ children }) => {
   //global context
   const { user } = useContext(GlobalContext);
 
-  const [openedconversation, setOpenedconversation] = useState({});
   const [conversations, setconversations] = useState([]);
+  const [openedconversation, setOpenedconversation] = useState({});
   const [sock, setSock] = useState({});
+  const conversationListLength = useRef(conversations.length);
+  // const pconversationListLength = useRef(conversations.length);
 
   useEffect(() => {
     const sock = io(socket_endpoint);
-    sock.emit(
-      'subscribe',
-      conversations.map((conversation) => ({
-        room: 'conversation' + conversation.conversation_id,
-      }))
-    );
-
-    sock.on('message', (message) => {
-      console.log('message from:', message);
-    });
-
+    const onconnect = () => {
+      console.log('connected');
+      sock.emit(
+        'subscribe',
+        conversations.map((conversation) => ({
+          room: 'conversation' + conversation.conversation_id,
+        }))
+      );
+    };
+    sock.on('connect', onconnect);
     // sock.emit('message', { conversation_id: 9 });
     setSock(sock);
-    console.log('connected ti beta chanel', conversations);
-  }, [conversations]);
+
+    return () => {
+      sock.removeListener('connect', onconnect);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [conversations.length]);
+
+  const updateConversations = useCallback(
+    async function updateConversations() {
+      const convos = await api.getconversations(user.id);
+
+      for (let convo of convos) {
+        const data = await api.getmessages(convo.conversation_id);
+        try {
+          convo.recent_activity = data.messages[data.messages.length - 1].date;
+        } catch (error) {}
+      }
+
+      conversationListLength.current = convos.length;
+      setconversations(convos);
+    },
+    [user]
+  );
+
+  useEffect(() => {
+    if (sock.on) {
+      const online = (user) => {
+        console.log(user, 'is online');
+      };
+      sock.on('online', online);
+      const message = async (message) => {
+        if (openedconversation.conversation_id !== message.conversation_id) {
+          console.log(
+            'new message in:',
+            message.conversation_id,
+            ' for ',
+            openedconversation.conversation_id
+          );
+          await updateConversations();
+          markUndread(message.conversation_id);
+        }
+      };
+      sock.on('message', message);
+      return () => {
+        sock.off('online', online);
+        sock.off('message', message);
+      };
+    }
+  }, [sock, openedconversation, updateConversations]);
 
   async function startconversation(participants) {
     if (participants && participants.length) {
       const ids = [...participants, user].map((parti) => parti.id);
       await api.startconversation(ids, user.id);
-
-      // await updateConversations();
+      await updateConversations();
     }
   }
-  const updateConversations = useCallback(
-    async function updateConversations() {
-      const convos = await api.getconversations(user.id);
-      setconversations(convos);
-    },
-    [user.id]
-  );
+
   useEffect(() => {
     if (user.id) {
       const socket = io(`${socket_endpoint}notification${user.id}`);
@@ -100,28 +141,29 @@ export const ChatContextProvider = ({ children }) => {
 
   useEffect(() => {
     updateConversations();
+    // console.log('update convo changed');
   }, [updateConversations]);
 
+  useEffect(() => {
+    markRead(openedconversation.conversation_id);
+    console.log('op convo changed', openedconversation);
+  }, [openedconversation]);
+
   function markUndread(conversation_id) {
-    /* setconversations(
-      conversations.map((conversation) => {
-        if (
-          conversation_id === conversation.conversation_id &&
-          conversation_id !== openedconversation.conversation_id
-        )
-          conversation.unread = true;
-        return conversation;
-      })
-    ); */
+    const conversationElement = document.querySelector(
+      `.conversation${conversation_id}`
+    );
+    console.log(conversationElement);
+    conversationElement.classList.add('unread-conversation');
   }
   function markRead(conversation_id) {
-    /* setconversations(
-      conversations.map((conversation) => {
-        if (conversation_id === conversation.conversation_id)
-          conversation.unread = false;
-        return conversation;
-      })
-    ); */
+    try {
+      const conversationElement = document.querySelector(
+        `.conversation${conversation_id}`
+      );
+      console.log(conversationElement);
+      conversationElement.classList.remove('unread-conversation');
+    } catch (error) {}
   }
 
   return (

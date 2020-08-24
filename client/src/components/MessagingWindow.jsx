@@ -2,9 +2,6 @@ import React, { useRef, useState, useEffect, useContext } from 'react';
 
 import { ChatContext } from './ChatContext';
 
-import getendpoint from '../api-endpoint';
-import io from 'socket.io-client';
-
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -21,12 +18,12 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+// import { connect } from 'socket.io-client';
 // import { Icon } from '@material-ui/core';
 /* import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
  */
-const endpoint = `${getendpoint()}`;
-const socket_endpoint = endpoint;
+// const endpoint = `${getendpoint()}`;
 
 const MessagingWindow = ({ drawer }) => {
   const { openedconversation, user } = useContext(ChatContext);
@@ -40,44 +37,6 @@ const MessagingWindow = ({ drawer }) => {
   }, [openedconversation]); */
 
   if (Object.keys(openedconversation).length) {
-    /* function ChangeName({ groupname, setgroupname, setchangegroupname }) {
-      const [chatname, setChatname] = useState(groupname);
-
-      const inputRef = useRef();
-      const onchange = ({ target }) => {
-        setChatname(inputRef.current.value);
-      };
-
-      useEffect(() => {
-        const dismiss = (e) => {
-          if (e.keyCode === 27) setchangegroupname(false);
-        };
-
-        document.addEventListener('keydown', dismiss);
-
-        return () => {
-          document.removeEventListener('keydown', dismiss);
-          // document.removeEventListener('blur', () => setchangegroupname(false));
-        };
-      });
-
-      return (
-        <form onSubmit={setgroupname} className="group-name-input">
-          <TextField
-            inputRef={inputRef}
-            onChange={onchange}
-            ref={inputRef}
-            margin="dense"
-            id="outlined-basic"
-            label="chat name"
-            variant="outlined"
-            value={chatname}
-            autoFocus
-          />
-        </form>
-      );
-    } */
-
     let conversation_name = openedconversation.conversation_name;
 
     if (Array.isArray(conversation_name)) {
@@ -171,9 +130,13 @@ const MessagingWindow = ({ drawer }) => {
 };
 
 const Messages = () => {
-  const { getmessages, openedconversation, user, sock } = useContext(
-    ChatContext
-  );
+  const {
+    getmessages,
+    openedconversation,
+    user,
+    sock,
+    updateConversations,
+  } = useContext(ChatContext);
 
   const [messages, setmessages] = useState([]);
   const [page, setPage] = useState(0);
@@ -208,19 +171,21 @@ const Messages = () => {
   }, [openedconversation, getmessages]);
 
   useEffect(() => {
-    sock.on('message', async (message) => {
+    const messenger = async (message) => {
       if (message.conversation_id === openedconversation.conversation_id) {
         setmessages(
           (await getmessages(openedconversation.conversation_id)).messages
         );
         scrollToBottom();
+        updateConversations().then(() => {});
       }
-    });
+    };
+    sock.on('message', messenger);
 
     return () => {
-      sock.removeAllListeners('message');
+      sock.off('message', messenger);
     };
-  }, [getmessages, openedconversation, sock]);
+  }, [getmessages, openedconversation, sock, updateConversations]);
 
   useEffect(() => {
     const message_container = document.querySelector('.messages-view');
@@ -311,6 +276,7 @@ const Messages = () => {
     setTimeout(() => {
       scrollToBottom();
       messageInput.value = '';
+      updateConversations();
     }, 100);
   };
 
@@ -335,7 +301,7 @@ const Messages = () => {
                   {...message}
                   text={message.message}
                   sender_name={message.sender}
-                  group={openedconversation.group}
+                  group={openedconversation.conversation.length > 2}
                   delevering={message.delevering}
                 />
               );

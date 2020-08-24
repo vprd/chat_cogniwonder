@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import getendpoint from '../api-endpoint'
 import Cookies from 'universal-cookie';
+import { orderBy } from 'natural-orderby';
 
 
 const endpoint = `${getendpoint()}api`;
@@ -16,8 +17,14 @@ const api = {
         const result = await post(point, {
             userid
         });
-
-        return result.data;
+        if (result.data.recent_activity) {
+            result.data.recent_activity = new Date(result.data.recent_activity)
+        } else {
+            result.data.recent_activity = new Date(0)
+        }
+        const sorted = orderBy(result.data, [(v) => v.recent_activity], ["desc", "asc"]);
+        console.log(sorted)
+        return sorted;
     },
 
     getmessages: async (conversation_id, page) => {

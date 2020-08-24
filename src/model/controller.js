@@ -265,6 +265,10 @@ const control = {
         const result = await this._query(`UPDATE conversations SET conversation_name='${conversation_name}' WHERE conversation_id=${conversation_id}`);
         return result;
     },
+    updateConversationActivity: async function (conversation_id, date) {
+        const createdDate = new Date(date) || new Date();
+        return await this._query(`UPDATE conversations SET recent_activity = '${createdDate.toMysqlFormat()}' WHERE conversation_id=${conversation_id}`);
+    },
 
     // inserts a message in the main messages table
     // props can be any additions properties that may need to be adde in the future

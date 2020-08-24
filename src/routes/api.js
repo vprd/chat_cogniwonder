@@ -1,7 +1,7 @@
 const router = require('express').Router();
 //const socketio = require('socket.io');
 const dbController = require('../model/controller');
-const { ConversationHandler, Chat } = require('./chat/sockets-handler');
+const Chat = require('./chat/sockets-handler');
 
 
 module.exports = function (io) {
@@ -29,7 +29,6 @@ module.exports = function (io) {
     router.post('/conversations', autherize, async (req, res) => {
         if (req.body.userid) {
             const conversations = await dbController.getConversations(req.body.userid);
-
             res.send(JSON.stringify(conversations));
         } else {
 
@@ -68,7 +67,6 @@ module.exports = function (io) {
 async function autherize(req, res, next) {
     // console.log(req.body.cookies);
     if (req.body.cookies) {
-        console.log(req.body.cookies)
         const user = await dbController.authorize(req.body.cookies);
         if (user) {
             req.user = user;

@@ -193,11 +193,6 @@ const Options = ({ setaddconversationview }) => {
 const ConversationList = () => {
   const { conversations } = useContext(ChatContext);
 
-  /* useEffect(() => {
-    updateConversations();
-    // eslint-disable-next-line
-  }, []); */
-
   if (conversations.length) {
     return (
       <div className="conversation-list">
@@ -225,16 +220,11 @@ const Conversation = ({ conversation }) => {
       messageInput.focus();
     });
     const conversation_opened = { ...conversation, group };
-
-    window.localStorage.setItem(
-      'openedconversation',
-      JSON.stringify(conversation_opened)
-    );
-
-    setOpenedconversation(conversation_opened);
+    console.log(conversation);
+    setOpenedconversation(conversation);
   };
 
-  useEffect(() => {
+  /*  useEffect(() => {
     const opened_conversation = JSON.parse(
       window.localStorage.getItem('openedconversation')
     );
@@ -251,7 +241,8 @@ const Conversation = ({ conversation }) => {
 
       setOpenedconversation(conversation_opened);
     }
-  }, [conversation, setOpenedconversation]);
+  }, [conversation, setOpenedconversation]); */
+
   const indicator =
     conversation.unread &&
     !(conversation.conversation_id === openedconversation.conversation_id)
@@ -269,17 +260,15 @@ const Conversation = ({ conversation }) => {
       <Button
         style={{ borderRight: indicator }}
         onClick={onclick}
-        className="conversation"
+        className={`conversation conversation${conversation.conversation_id}`}
+        data-conversationid={conversation.conversation_id}
         id={
           conversation.conversation_id === openedconversation.conversation_id
             ? 'opened-conversation'
             : ''
         }
       >
-        <Avatar
-          src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-5.png"
-          alt="profile"
-        />
+        <Avatar>{conversation_name[0]}</Avatar>
         <div className="about">
           <h4>{conversation_name}</h4>
         </div>
@@ -293,7 +282,7 @@ const Conversation = ({ conversation }) => {
           onclick(null, true);
           // setOpenedconversation({ ...conversation, group: true });
         }}
-        className="conversation group-conversation"
+        className={`conversation group-conversation conversation${conversation.conversation_id}`}
         id={
           conversation.conversation_id === openedconversation.conversation_id
             ? 'opened-conversation'

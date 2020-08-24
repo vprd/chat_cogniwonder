@@ -634,4 +634,8 @@
   -webkit-animation-delay: 0.5s;
           animation-delay: 0.5s;
 }
+
+.unread-conversation {
+  border-right: 4px solid #6eff51 !important;
+}
 /*# sourceMappingURL=chat-page.css.map */

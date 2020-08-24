@@ -563,3 +563,7 @@
 .loader>div:nth-child(5) {
     animation-delay: 0.5s;
 }
+
+.unread-conversation {
+    border-right: 4px solid rgb(110, 255, 81) !important;
+}

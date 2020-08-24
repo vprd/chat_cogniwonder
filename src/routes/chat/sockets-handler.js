@@ -6,9 +6,7 @@ const dbController = require('../../model/controller');
 
 function Chat(io) {
     io.on('connection', function (socket) {
-        console.log('test architexture')
         socket.on('subscribe', function (room) {
-            console.log('joining room', room);
             if (Array.isArray(room)) {
                 room.forEach(r => {
                     socket.join(r.room);
@@ -16,25 +14,22 @@ function Chat(io) {
             } else {
                 socket.join(room.room);
             }
-            console.log('socket is connected to:', socket.rooms)
         })
 
         socket.on('unsubscribe', function (room) {
-            console.log('leaving room', room);
             socket.leave(room);
         })
 
         socket.on('send', function (data) {
-            console.log('sending message');
             io.sockets.in(data.room).emit('message', data);
         });
         socket.on('message', async function (message) {
-            console.log('sending message');
 
             if (message.message && message.sender && message.conversation_id) {
 
                 io.sockets.in('conversation' + message.conversation_id).emit('message', message);
                 await dbController.insertMessage(message);
+                await dbController.updateConversationActivity(message.conversation_id, message.date)
             }
         });
 
@@ -43,7 +38,7 @@ function Chat(io) {
 
 
 // class to handle realtime message and pings when new message arrives
-class ConversationHandler {
+/* class ConversationHandler {
 
     constructor(io) {
 
@@ -137,5 +132,5 @@ class ConversationHandler {
 
 
 }
-
-module.exports = { ConversationHandler, Chat };
+ */
+module.exports = Chat;
