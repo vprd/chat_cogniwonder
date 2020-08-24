@@ -86,8 +86,6 @@ const MessagingWindow = ({ drawer }) => {
         .join(', ');
     }
 
-    const setconversation_name = (newname) => {};
-
     return (
       <div className="chat-screen">
         <div className="contact-header">
@@ -173,14 +171,9 @@ const MessagingWindow = ({ drawer }) => {
 };
 
 const Messages = () => {
-  const { getmessages, openedconversation, user } = useContext(ChatContext);
-
-  let socketRef = useRef(
-    io(`${socket_endpoint}conversation${openedconversation.conversation_id}`, {
-      transport: ['websocket'],
-    })
+  const { getmessages, openedconversation, user, sock } = useContext(
+    ChatContext
   );
-  const socket = socketRef.current;
 
   const [messages, setmessages] = useState([]);
   const [page, setPage] = useState(0);
@@ -215,7 +208,7 @@ const Messages = () => {
   }, [openedconversation, getmessages]);
 
   useEffect(() => {
-    socket.on('message', async (message) => {
+    sock.on('message', async (message) => {
       if (message.conversation_id === openedconversation.conversation_id) {
         setmessages(
           (await getmessages(openedconversation.conversation_id)).messages
@@ -225,9 +218,9 @@ const Messages = () => {
     });
 
     return () => {
-      socket.removeAllListeners('message');
+      sock.removeAllListeners('message');
     };
-  }, [getmessages, openedconversation, socket]);
+  }, [getmessages, openedconversation, sock]);
 
   useEffect(() => {
     const message_container = document.querySelector('.messages-view');
@@ -308,7 +301,11 @@ const Messages = () => {
     setCount(count + 1);
     scrollToBottom();
     // messageObject.delivering = undefined;
-    socket.emit('message', messageObject);
+    // socket.emit('message', messageObject);
+
+    console.log('sending message');
+    // messageObject.conversation_id = 5;
+    sock.emit('message', messageObject);
     const messageInput = document.querySelector('.message-input textarea');
     messageInput.focus();
     setTimeout(() => {

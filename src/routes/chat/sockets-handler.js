@@ -4,6 +4,44 @@ const log = () => { };
 const dbController = require('../../model/controller');
 
 
+function Chat(io) {
+    io.on('connection', function (socket) {
+        console.log('test architexture')
+        socket.on('subscribe', function (room) {
+            console.log('joining room', room);
+            if (Array.isArray(room)) {
+                room.forEach(r => {
+                    socket.join(r.room);
+                })
+            } else {
+                socket.join(room.room);
+            }
+            console.log('socket is connected to:', socket.rooms)
+        })
+
+        socket.on('unsubscribe', function (room) {
+            console.log('leaving room', room);
+            socket.leave(room);
+        })
+
+        socket.on('send', function (data) {
+            console.log('sending message');
+            io.sockets.in(data.room).emit('message', data);
+        });
+        socket.on('message', async function (message) {
+            console.log('sending message');
+
+            if (message.message && message.sender && message.conversation_id) {
+
+                io.sockets.in('conversation' + message.conversation_id).emit('message', message);
+                await dbController.insertMessage(message);
+            }
+        });
+
+    });
+}
+
+
 // class to handle realtime message and pings when new message arrives
 class ConversationHandler {
 
@@ -16,6 +54,8 @@ class ConversationHandler {
         this.notifications.bind(this)
         this.notify.bind(this)
     }
+
+
 
     async conversations() {
 
@@ -33,7 +73,6 @@ class ConversationHandler {
 
 
                     if (message.message && message.sender && message.conversation_id) {
-
 
                         dbController.insertMessage(message).catch(e => {
                             conversationNamespace.emit('message', { ...message, error: e })
@@ -99,4 +138,4 @@ class ConversationHandler {
 
 }
 
-module.exports = ConversationHandler;
+module.exports = { ConversationHandler, Chat };

@@ -10,22 +10,18 @@ import './scss/Login.css';
 
 const cookies = new Cookies();
 
-/* cookies.set('mdn', '8884016724');
-cookies.set('cwcc', 'cw5f35a349096779.421'); */
+// cookies.set('mdn', '8884016724');
+// cookies.set('mdn', '1234567890');
+// cookies.set('cwcc', 'cw5f35a349096779.421');
 const Login = () => {
   const { Authenticate } = useContext(GlobalContext);
   let username = '';
 
   useEffect(() => {
     try {
-      // let username = window.location.search.split('?')[1];
       Authenticate(cookies.get('mdn'), cookies.get('cwcc'));
     } catch {}
 
-    /* const username = localStorage.getItem('email_pwd');
-    if (username) {
-      Authenticate(username);
-    } */
     // eslint-disable-next-line
   }, []);
 

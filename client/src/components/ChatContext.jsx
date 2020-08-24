@@ -19,6 +19,7 @@ import { useCallback } from 'react';
 const endpoint = `${getendpoint()}`;
 
 const socket_endpoint = endpoint;
+
 window.SOCKET_SETUP = 0;
 /* mainsocket.on('debug', (message) => {
   console.log('debugger:',message);
@@ -32,39 +33,26 @@ export const ChatContextProvider = ({ children }) => {
 
   const [openedconversation, setOpenedconversation] = useState({});
   const [conversations, setconversations] = useState([]);
+  const [sock, setSock] = useState({});
 
-  /* const sockets = useMemo(
-    function () {
-      if (
-        Array.isArray(conversations) &&
-        conversations.length &&
-        window.SOCKET_SETUP !== conversations.length
-      ) {
-        console.log('starting listeners');
-        const newconversation_sockets = conversations.map((conversation) => {
-          const socket = io(
-            `${socket_endpoint}conversation${conversation.conversation_id}`
-          );
+  useEffect(() => {
+    const sock = io(socket_endpoint);
+    sock.emit(
+      'subscribe',
+      conversations.map((conversation) => ({
+        room: 'conversation' + conversation.conversation_id,
+      }))
+    );
 
-          socket.on('connect', () => {
-            console.log('socket.io connected');
-          });
+    sock.on('message', (message) => {
+      console.log('message from:', message);
+    });
 
-          window.SOCKET_SETUP = conversations.length;
-          return { id: conversation.conversation_id, socket };
-        });
-        return newconversation_sockets.sort();
-      }
-    },
-    [conversations]
-  ); */
-  // const conversation_sockets_reference = useRef(sockets);
-  // const conversation_sockets = conversation_sockets_reference.current;
-  /* useEffect(() => {
-    connectToConversationSockets();
-  }, [conversations]); */
-  /* const render_counter = useRef(0);
-  console.log(render_counter.current++); */
+    // sock.emit('message', { conversation_id: 9 });
+    setSock(sock);
+    console.log('connected ti beta chanel', conversations);
+  }, [conversations]);
+
   async function startconversation(participants) {
     if (participants && participants.length) {
       const ids = [...participants, user].map((parti) => parti.id);
@@ -145,6 +133,7 @@ export const ChatContextProvider = ({ children }) => {
         markRead,
         user,
         // getSocket,
+        sock,
         openedconversation,
         setOpenedconversation,
         updateConversations,

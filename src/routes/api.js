@@ -1,13 +1,14 @@
 const router = require('express').Router();
 //const socketio = require('socket.io');
 const dbController = require('../model/controller');
-const ConversationHandler = require('./chat/sockets-handler');
+const { ConversationHandler, Chat } = require('./chat/sockets-handler');
 
 
-module.exports = (io) => {
+module.exports = function (io) {
 
-    const socketListener = new ConversationHandler(io);
-    socketListener.conversations().then(() => socketListener.notifications());
+    // const socketListener = new ConversationHandler(io);
+    // socketListener.conversations().then(() => socketListener.notifications());
+    Chat(io)
 
     router.get('/benchmarkserial', async (req, res) => {
         console.time('serial')
@@ -51,7 +52,7 @@ module.exports = (io) => {
 
         if (req.body.ids && req.body.creator) {
             const result = await dbController.createConversation(req.body.ids, req.body.creator)
-            socketListener.addconversation(result.insertId, req.body.ids);
+            // socketListener.addconversation(result.insertId, req.body.ids);
             res.send(JSON.stringify(result))
         } else {
             res.sendStatus(400);

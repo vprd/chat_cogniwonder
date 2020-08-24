@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import MessagingWindow from './MessagingWindow';
 //context
 import { ChatContext, ChatContextProvider } from './ChatContext';
+
 // Assets
 import logo from './assets/img/logo.png';
 
@@ -95,12 +96,17 @@ const useStyles = makeStyles((theme) => ({
 
 const ChatPage = () => {
   const classes = useStyles();
-  const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-
+  const { user } = useContext(GlobalContext);
   useEffect(() => {
-    // setOpen(true);
-  }, []);
+    setTimeout(() => {
+      try {
+        if (user.mobile) setOpen(true);
+      } catch (error) {
+        console.log('failed to open drawer');
+      }
+    }, 3000);
+  }, [user]);
 
   return (
     <ChatContextProvider>
