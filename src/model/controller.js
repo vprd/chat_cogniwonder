@@ -1,4 +1,3 @@
-const log = console.log;
 
 const { con2 } = require('./db')()
 const dbconnection = con2;
@@ -8,19 +7,10 @@ const SqlString = require('sqlstring');
 const control = {
 
     dbconnection,
-
-    /* _testing = async () => {
-
-        const result = await this._query('UPDATE conversations SET PWD = "test" WHERE PWD IS NULL');
-        log(result);
-
-        return result
-    } */
-
     _listUsers: async function () {
 
         const result = await this._query('SELECT * FROM User_SSC');
-        log(result)
+        console.log(result)
         return result
     },
 
@@ -54,21 +44,21 @@ const control = {
         control._query(`TRUNCATE TABLE userconversation`);
         control._query(`TRUNCATE TABLE messages`);
 
-        log('reset');
+        console.log('reset');
     },
     _resettotestsdata: async function () {
 
         this._delete();
 
-        log(await this.createConversation([1, 2]));
-        log(await this.createConversation([2, 3]));
-        log(await this.createConversation([3, 4]));
-        log(await this.createConversation([4, 5]));
-        log(await this.createConversation([5, 6]));
-        log(await this.createConversation([6, 1]));
-        log(await this.createConversation([1, 2, 3, 4, 5, 6]));
-        log(await this.createConversation([1, 2, 3]));
-        log(await this.createConversation([1, 3, 5]));
+        console.log(await this.createConversation([1, 2]));
+        console.log(await this.createConversation([2, 3]));
+        console.log(await this.createConversation([3, 4]));
+        console.log(await this.createConversation([4, 5]));
+        console.log(await this.createConversation([5, 6]));
+        console.log(await this.createConversation([6, 1]));
+        console.log(await this.createConversation([1, 2, 3, 4, 5, 6]));
+        console.log(await this.createConversation([1, 2, 3]));
+        console.log(await this.createConversation([1, 3, 5]));
     },
     authorize: async function ({ mdn, cwcc }) {
         if (mdn && cwcc) {
