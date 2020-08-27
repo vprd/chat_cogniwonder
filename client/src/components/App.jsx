@@ -14,8 +14,6 @@ const App = () => {
   const { authentication } = useContext(GlobalContext);
 
   useEffect(() => {
-    console.log(authentication);
-
     if (authentication) {
       setTimeout(() => {
         const loader = document.querySelector('#intro-loader');
@@ -38,7 +36,8 @@ const App = () => {
   useEffect(() => {
     const keypress = (e) => {
       if (e.key === 'd' && e.ctrlKey) {
-        console.log('toggling dev mode');
+        console.log('dev mode enabled');
+        console.log('you can view server logs here aswell');
         Debugger();
       }
     };

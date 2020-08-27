@@ -77,18 +77,10 @@ export const ChatContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (sock.on) {
-      const online = (user) => {
-        console.log(user, 'is online');
-      };
+      const online = (user) => {};
       sock.on('online', online);
       const message = async (message) => {
         if (openedconversation.conversation_id !== message.conversation_id) {
-          console.log(
-            'new message in:',
-            message.conversation_id,
-            ' for ',
-            openedconversation.conversation_id
-          );
           await updateConversations();
           markUndread(message.conversation_id);
         }
@@ -113,13 +105,13 @@ export const ChatContextProvider = ({ children }) => {
     if (user.id) {
       const socket = io(`${socket_endpoint}notification${user.id}`);
 
-      socket.on('connect', () =>
-        console.log('connected to notification channel')
-      );
+      socket.on('connect', () => {
+        // console.log('connected to notification channel')
+      });
 
       socket.on('notification', async (notification) => {
         if (notification.event === 'newconversation') {
-          console.log('added to new convo');
+          // console.log('added to new convo');
           await updateConversations();
         }
       });
@@ -146,14 +138,14 @@ export const ChatContextProvider = ({ children }) => {
 
   useEffect(() => {
     markRead(openedconversation.conversation_id);
-    console.log('op convo changed', openedconversation);
+    // console.log('op convo changed', openedconversation);
   }, [openedconversation]);
 
   function markUndread(conversation_id) {
     const conversationElement = document.querySelector(
       `.conversation${conversation_id}`
     );
-    console.log(conversationElement);
+    // console.log(conversationElement);
     conversationElement.classList.add('unread-conversation');
   }
   function markRead(conversation_id) {
@@ -161,7 +153,7 @@ export const ChatContextProvider = ({ children }) => {
       const conversationElement = document.querySelector(
         `.conversation${conversation_id}`
       );
-      console.log(conversationElement);
+      // console.log(conversationElement);
       conversationElement.classList.remove('unread-conversation');
     } catch (error) {}
   }

@@ -23,7 +23,6 @@ const api = {
             result.data.recent_activity = new Date(0)
         }
         const sorted = orderBy(result.data, [(v) => v.recent_activity], ["desc", "asc"]);
-        console.log(sorted)
         return sorted;
     },
 
@@ -37,7 +36,7 @@ const api = {
     },
     authenticate: async (data, id) => {
 
-        console.log(endpoint + id)
+        console.log(endpoint)
         try {
             const result = await post(endpoint + "/authenticate", {
                 [Number(data) ? 'mobile' : 'email']: data,
@@ -46,6 +45,7 @@ const api = {
             return result.data;
         } catch (error) {
             console.log('authentication failed')
+            alert('authentication failed')
             return false
         }
 

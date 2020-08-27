@@ -106,7 +106,6 @@ const MessagingWindow = ({ drawer }) => {
         </IconButton>
         <h2>Chat</h2>
       </div>
-
     </div>
   );
 };
@@ -281,7 +280,6 @@ const Messages = () => {
     // messageObject.delivering = undefined;
     // socket.emit('message', messageObject);
 
-    console.log('sending message');
     // messageObject.conversation_id = 5;
     sock.emit('message', messageObject);
     const messageInput = document.querySelector('.message-input textarea');
