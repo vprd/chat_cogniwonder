@@ -10,9 +10,16 @@ import './scss/Login.css';
 
 const cookies = new Cookies();
 
-cookies.set('mdn', '8884016724');
-// cookies.set('mdn', '1234567890');
-cookies.set('cwcc', 'cw5f35a349096779.421');
+window.addEventListener('keydown', (e) => {
+  console.log(e);
+  if (e.ctrlKey && e.key === 't') {
+    cookies.set('mdn', '8884016724');
+    // cookies.set('mdn', '1234567890');
+    cookies.set('cwcc', 'cw5f35a349096779.421');
+    window.location.reload();
+  }
+});
+
 const Login = () => {
   const { Authenticate } = useContext(GlobalContext);
   let username = '';

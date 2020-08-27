@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 // components
 import Login from './Login';
 
@@ -34,11 +34,17 @@ const App = () => {
   }, [authentication]);
 
   useEffect(() => {
+    if (window.localStorage.getItem('debug')) {
+      Debugger();
+    }
     const keypress = (e) => {
       if (e.key === 'd' && e.ctrlKey) {
-        console.log('dev mode enabled');
-        console.log('you can view server logs here aswell');
-        Debugger();
+        if (!window.localStorage.getItem('debug')) {
+          Debugger();
+        } else {
+          window.localStorage.clear();
+          console.log('server debugger disabled');
+        }
       }
     };
 

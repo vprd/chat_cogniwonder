@@ -1,9 +1,9 @@
-import React, { useRef, useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import { ChatContext } from './ChatContext';
 
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+// import Menu from '@material-ui/core/Menu';
+// import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 
@@ -16,7 +16,7 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
+// import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 // import { connect } from 'socket.io-client';
 // import { Icon } from '@material-ui/core';

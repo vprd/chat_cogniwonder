@@ -1,5 +1,3 @@
-
-
 export default function endpoint() {
 
         const endpoint = [
@@ -17,6 +15,5 @@ export default function endpoint() {
                         window.API_ENDPOINT = window.location.origin + '/';
                         return window.API_ENDPOINT;
         }
-
 }
 

@@ -4,7 +4,6 @@ import React, {
   createContext,
   useContext,
   useState,
-  useMemo,
 } from 'react';
 
 import api from './api';

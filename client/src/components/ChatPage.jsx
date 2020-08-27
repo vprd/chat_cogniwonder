@@ -5,7 +5,7 @@ import MessagingWindow from './MessagingWindow';
 import { ChatContext, ChatContextProvider } from './ChatContext';
 
 // Assets
-import logo from './assets/img/logo.png';
+// import logo from './assets/img/logo.png';
 
 // style
 import './scss/chat-page.css';
