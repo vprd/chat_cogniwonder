@@ -10,9 +10,9 @@ import './scss/Login.css';
 
 const cookies = new Cookies();
 
-// cookies.set('mdn', '8884016724');
+cookies.set('mdn', '8884016724');
 // cookies.set('mdn', '1234567890');
-// cookies.set('cwcc', 'cw5f35a349096779.421');
+cookies.set('cwcc', 'cw5f35a349096779.421');
 const Login = () => {
   const { Authenticate } = useContext(GlobalContext);
   let username = '';

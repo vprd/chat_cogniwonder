@@ -20,11 +20,11 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 // import { connect } from 'socket.io-client';
 // import { Icon } from '@material-ui/core';
-/* import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
- */
+import Avatar from '@material-ui/core/Avatar';
+import AvatarGroup from '@material-ui/lab/AvatarGroup';
 // const endpoint = `${getendpoint()}`;
-
 const MessagingWindow = ({ drawer }) => {
   const { openedconversation, user } = useContext(ChatContext);
   const [changegroupname, setchangegroupname] = useState(false);
@@ -35,11 +35,10 @@ const MessagingWindow = ({ drawer }) => {
       // list.scrollTop = list.scrollHeight;
     }
   }, [openedconversation]); */
-
+  let conversation_name;
   if (Object.keys(openedconversation).length) {
-    let conversation_name = openedconversation.conversation_name;
-
-    if (Array.isArray(conversation_name)) {
+    if (Array.isArray(openedconversation.conversation_name)) {
+      conversation_name = [...openedconversation.conversation_name];
       conversation_name = conversation_name
         .filter((name) => name !== user.first_name)
         .join(', ');
@@ -53,54 +52,36 @@ const MessagingWindow = ({ drawer }) => {
               style={{ marginRight: 10 }}
               onClick={() => drawer.set(!drawer.state)}
             >
-              <MenuIcon />
+              <ChevronRightIcon />
             </IconButton>
           ) : (
-            <></>
+            <IconButton
+              style={{ marginRight: 10 }}
+              onClick={() => drawer.set(!drawer.state)}
+            >
+              <ChevronLeftIcon />
+            </IconButton>
           )}
-          <img
-            src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-5.png"
-            alt="profile"
-          />
+          {openedconversation.conversation.length > 2 ? (
+            <AvatarGroup max={4}>
+              {openedconversation.conversation_name.map((name, i) => (
+                <Avatar key={i}>{name[0]}</Avatar>
+              ))}
+            </AvatarGroup>
+          ) : (
+            <Avatar>{conversation_name[0]}</Avatar>
+          )}
+
           <div className="about">
-            {!changegroupname ? (
-              <>
-                <h4>{conversation_name}</h4>
-                <EditOutlinedIcon
-                  className="edit-icon"
-                  onClick={() => setchangegroupname(true)}
-                />
-              </>
-            ) : (
-              <Dialog
-                open={changegroupname}
-                onClose={() => setchangegroupname(false)}
-                aria-labelledby="form-dialog-title"
-              >
-                <DialogTitle id="form-dialog-title">
-                  Change Conversation name
-                </DialogTitle>
-                <DialogContent>
-                  <DialogContentText>Display name</DialogContentText>
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    id="name"
-                    label="Name"
-                    type="username"
-                    fullWidth
-                  />
-                </DialogContent>
-                <DialogActions>
-                  <Button
-                    onClick={() => setchangegroupname(false)}
-                    color="primary"
-                  >
-                    Cancel
-                  </Button>
-                </DialogActions>
-              </Dialog>
-            )}
+            <h4>{conversation_name}</h4>
+            <EditOutlinedIcon
+              className="edit-icon"
+              onClick={() => setchangegroupname(true)}
+            />
+            <ChangeName
+              setchangegroupname={setchangegroupname}
+              changegroupname={changegroupname}
+            />
             {/* <ChangeName
                 groupname={conversation_name}
                 setgroupname={setconversation_name}
@@ -125,9 +106,41 @@ const MessagingWindow = ({ drawer }) => {
         </IconButton>
         <h2>Chat</h2>
       </div>
+
     </div>
   );
 };
+
+function ChangeName({ name, changegroupname, setchangegroupname }) {
+  return (
+    <Dialog
+      open={changegroupname}
+      onClose={() => setchangegroupname(false)}
+      aria-labelledby="form-dialog-title"
+    >
+      <DialogTitle id="form-dialog-title">Group Name</DialogTitle>
+      <DialogContent>
+        {/* <DialogContentText>Display name</DialogContentText> */}
+        <TextField
+          onChange={(e) => {
+            e.persist();
+          }}
+          autoFocus
+          margin="dense"
+          id="name"
+          label="Name"
+          type="username"
+          fullWidth
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => setchangegroupname(false)} color="primary">
+          Cancel
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
 
 const Messages = () => {
   const {

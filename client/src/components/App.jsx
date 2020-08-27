@@ -1,5 +1,4 @@
-import React, { useContext, useEffect } from 'react';
-
+import React, { useState, useContext, useEffect } from 'react';
 // components
 import Login from './Login';
 
@@ -9,6 +8,8 @@ import { GlobalContext } from './GloablContext';
 
 // assets
 import logo from './assets/img/logoWhite.png';
+
+import Debugger from './Debugger';
 const App = () => {
   const { authentication } = useContext(GlobalContext);
 
@@ -33,6 +34,19 @@ const App = () => {
       }, 2000);
     }
   }, [authentication]);
+
+  useEffect(() => {
+    const keypress = (e) => {
+      if (e.key === 'd' && e.ctrlKey) {
+        console.log('toggling dev mode');
+        Debugger();
+      }
+    };
+
+    window.addEventListener('keypress', keypress);
+
+    return () => window.removeEventListener('keypress', keypress);
+  }, []);
 
   return (
     <>

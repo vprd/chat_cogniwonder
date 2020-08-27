@@ -37,10 +37,12 @@ module.exports = function (io) {
     });
 
     router.post('/messages', autherize, async (req, res) => {
-
         if (req.body.conversation_id && req.body.page >= 0) res.send(JSON.stringify(await dbController.getMessages(req.body.conversation_id, req.body.page)));
         else if (req.body.conversation_id) res.send(JSON.stringify(await dbController.getMessages(req.body.conversation_id)));
+    });
 
+    router.post('/sarch', async (req, res) => {
+        res.send(JSON.stringify(await dbController.searchUsers(req.body)))
     });
 
     router.post('/search', async (req, res) => {

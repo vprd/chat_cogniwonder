@@ -1,3 +1,18 @@
+Function.prototype.clone = function () {
+    var that = this;
+    var temp = function () {
+        return that.apply(this, arguments);
+    };
+    for (var key in this) {
+        if (this.hasOwnProperty(key)) {
+            temp[key] = this[key];
+        }
+    }
+    return temp;
+};
+const log = console.log.clone()
+let logger = false
+
 const express = require('express');
 const app = express();
 const compression = require('compression');
@@ -7,6 +22,22 @@ const cookieParser = require('cookie-parser');
 
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
+const debug = io.of('/debug');
+
+debug.on('connection', (socket) => {
+    logger = true
+    setTimeout(() => console.log('hey from server'))
+
+    socket.on('disconnect', () => logger = false)
+})
+console.log = (...args) => {
+    if (logger) {
+        debug.emit('debug', args);
+        log(...args)
+    }
+}
+
+
 // express middlewares
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -38,4 +69,7 @@ app.get('/*', (req, res) => {
     res.sendFile('index.html', { root });
 });
 
-http.listen(PORT, () => console.log('server started on:' + PORT));
+http.listen(PORT, () => log('server started on:' + PORT));
+
+
+// misc

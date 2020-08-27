@@ -70,6 +70,15 @@ const api = {
 
         return result.data;
     },
+    changeconversationname: async (ids, creator) => {
+        const point = endpoint + '/startconversation';
+
+        const result = await post(point, {
+            ids, creator
+        });
+
+        return result.data;
+    },
 
 }
 

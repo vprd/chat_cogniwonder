@@ -14,10 +14,10 @@ import { GlobalContext } from './GloablContext';
 import api from './api';
 
 import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
+/* import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -28,10 +28,10 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-import IconButton from '@material-ui/core/IconButton';
+import MailIcon from '@material-ui/icons/Mail'; */
+// import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+// import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Avatar from '@material-ui/core/Avatar';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
 
@@ -147,12 +147,12 @@ const Menu = ({ drawer }) => {
   const { user } = useContext(GlobalContext);
 
   useEffect(() => {
-    document.querySelector('.menu header').scrollIntoView();
+    // document.querySelector('.menu header').scrollIntoView();
   }, []);
   return (
     <>
       <div className="menu">
-        <header>
+        {/* <header>
           <img src={logo} alt="logo" />
           <h2>{user.first_name}</h2>
           <IconButton
@@ -161,7 +161,7 @@ const Menu = ({ drawer }) => {
           >
             <ChevronLeftIcon />
           </IconButton>
-        </header>
+        </header> */}
 
         <ConversationList />
         <Options setaddconversationview={setaddconversationview} />
@@ -192,7 +192,7 @@ const Options = ({ setaddconversationview }) => {
 
 const ConversationList = () => {
   const { conversations } = useContext(ChatContext);
-
+  console.log(conversations);
   if (conversations.length) {
     return (
       <div className="conversation-list">
@@ -219,29 +219,10 @@ const Conversation = ({ conversation }) => {
       const messageInput = document.querySelector('.message-input textarea');
       messageInput.focus();
     });
-    const conversation_opened = { ...conversation, group };
-    console.log(conversation);
+    // const conversation_opened = { ...conversation, group };
+    
     setOpenedconversation(conversation);
   };
-
-  /*  useEffect(() => {
-    const opened_conversation = JSON.parse(
-      window.localStorage.getItem('openedconversation')
-    );
-    if (
-      opened_conversation &&
-      conversation.conversation_id === opened_conversation.conversation_id
-    ) {
-      setTimeout(() => {
-        document.querySelector('.messages-view').style.display = 'none';
-        const messageInput = document.querySelector('.message-input textarea');
-        messageInput.focus();
-      });
-      const conversation_opened = { ...conversation, group: false };
-
-      setOpenedconversation(conversation_opened);
-    }
-  }, [conversation, setOpenedconversation]); */
 
   const indicator =
     conversation.unread &&

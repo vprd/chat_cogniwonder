@@ -71,14 +71,19 @@ const control = {
         log(await this.createConversation([1, 3, 5]));
     },
     authorize: async function ({ mdn, cwcc }) {
-        try {
-            const user = (await this._query(`SELECT * FROM User_SSC WHERE mobile='${mdn}'`))[0];
-            if (user.chat_token === cwcc) return user;
-            return false;
+        if (mdn && cwcc) {
+            try {
+                const user = (await this._query(`SELECT * FROM User_SSC WHERE mobile='${mdn}'`))[0];
+                if (user.chat_token === cwcc) return user;
+                return false;
 
-        } catch (error) {
-            console.log('something went wrong in authorize function');
-            console.log(error);
+            } catch (error) {
+                console.log('something went wrong in authorize function');
+                console.log(error);
+            }
+        } else {
+            console.warn('mdn or cwcc was missing')
+            return false
         }
     },
     authenticate: async function ({ email, mobile }) {
