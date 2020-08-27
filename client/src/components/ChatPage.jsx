@@ -192,7 +192,7 @@ const Options = ({ setaddconversationview }) => {
 
 const ConversationList = () => {
   const { conversations } = useContext(ChatContext);
-  console.log(conversations);
+  // console.log(conversations);
   if (conversations.length) {
     return (
       <div className="conversation-list">
@@ -220,7 +220,7 @@ const Conversation = ({ conversation }) => {
       messageInput.focus();
     });
     // const conversation_opened = { ...conversation, group };
-    
+
     setOpenedconversation(conversation);
   };
 

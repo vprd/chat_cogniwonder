@@ -40,7 +40,6 @@ export const ChatContextProvider = ({ children }) => {
   useEffect(() => {
     const sock = io(socket_endpoint);
     const onconnect = () => {
-      console.log('connected');
       sock.emit(
         'subscribe',
         conversations.map((conversation) => ({
