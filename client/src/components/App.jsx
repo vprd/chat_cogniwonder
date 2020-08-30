@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 // components
 import Login from './Login';
+import Avatar from '@material-ui/core/Avatar';
 
 import ChatPage from './ChatPage';
 //Global context
@@ -53,6 +54,14 @@ const App = () => {
     return () => window.removeEventListener('keypress', keypress);
   }, []);
 
+  /* return (
+    <div className="messages-container">
+      <div className="message-view">
+        <MessageBlock id="sender" />
+        <MessageBlock />
+      </div>
+    </div>
+  ); */
   return (
     <>
       {authentication ? <ChatPage /> : <Login />}

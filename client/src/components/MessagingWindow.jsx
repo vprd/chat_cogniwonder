@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 
 import { ChatContext } from './ChatContext';
+import { GlobalContext } from './GloablContext';
 
 // import Menu from '@material-ui/core/Menu';
 // import MenuItem from '@material-ui/core/MenuItem';
@@ -171,9 +172,11 @@ const Messages = () => {
   useEffect(() => {
     (async () => {
       const messagesobj = await getmessages(openedconversation.conversation_id);
+
       setmessages(messagesobj.messages);
       setPage(messagesobj.page);
       setCount(messagesobj.count);
+
       scrollToBottom();
 
       return () => {
@@ -185,11 +188,14 @@ const Messages = () => {
   useEffect(() => {
     const messenger = async (message) => {
       if (message.conversation_id === openedconversation.conversation_id) {
-        setmessages(
-          (await getmessages(openedconversation.conversation_id)).messages
-        );
+        const newMessages = (
+          await getmessages(openedconversation.conversation_id)
+        ).messages;
+
+        setmessages(newMessages);
+
         scrollToBottom();
-        updateConversations().then(() => {});
+        updateConversations();
       }
     };
     sock.on('message', messenger);
@@ -305,17 +311,8 @@ const Messages = () => {
             <></>
           )}
           {messages ? (
-            messages.map((message, i) => {
-              return (
-                <Message
-                  key={i}
-                  {...message}
-                  text={message.message}
-                  sender_name={message.sender}
-                  group={openedconversation.conversation.length > 2}
-                  delevering={message.delevering}
-                />
-              );
+            groupBySenderId(messages).map((message_group, i) => {
+              return <MessageBlock key={i} messages={message_group} />;
             })
           ) : (
             <></>
@@ -343,6 +340,19 @@ const Messages = () => {
     </>
   );
 };
+
+function groupBySenderId(messages) {
+  let r = [];
+
+  messages.forEach((message) => {
+    r.length > 0 &&
+    r[r.length - 1][r[r.length - 1].length - 1].sender_id === message.sender_id
+      ? r[r.length - 1].push(message)
+      : r.push([message]);
+  });
+
+  return r;
+}
 
 const Message = ({
   type = 'message',
@@ -382,6 +392,32 @@ const Message = ({
     );
   }
 };
+
+function MessageBlock({ messages }) {
+  const { user } = useContext(GlobalContext);
+  const id = user.id === messages[0].sender_id ? 'sender' : '';
+
+  return (
+    <div className="message-block" id={id}>
+      <Avatar>{messages[0].sender[0]}</Avatar>
+      <div className="messages-2">
+        {messages.map((message, i) => (
+          <Message2 key={i} message={message} />
+        ))}
+
+        <span>{messages[0].sender}</span>
+      </div>
+    </div>
+  );
+}
+
+function Message2({ message }) {
+  return (
+    <div className="message-2">
+      <span>{message.message}</span>
+    </div>
+  );
+}
 
 function formatAMPM(date) {
   var hours = date.getHours();

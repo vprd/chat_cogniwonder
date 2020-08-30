@@ -573,6 +573,82 @@
   color: white;
 }
 
+.message-block {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+  padding-left: 10px;
+}
+
+.message-block > span {
+  font-weight: 800;
+}
+
+.message-block .messages-2 {
+  margin-left: 10px;
+}
+
+.message-block .messages-2 > :first-child {
+  border-top-right-radius: 12px;
+}
+
+.message-block .messages-2 > :nth-last-child(2) {
+  border-bottom-right-radius: 12px;
+}
+
+.message-block .message-2 {
+  margin: 5px 0;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 10px 12px;
+  background-color: var(--accent-color);
+  color: white;
+  font-weight: 500;
+  border-radius: 3px;
+}
+
+#sender {
+  margin-left: auto;
+  padding-left: 0;
+  padding-right: 10px;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: reverse;
+      -ms-flex-direction: row-reverse;
+          flex-direction: row-reverse;
+}
+
+#sender .messages-2 {
+  margin-right: 10px;
+}
+
+#sender .messages-2 > span {
+  display: block;
+  text-align: right;
+}
+
+#sender .messages-2 > :first-child {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 0;
+}
+
+#sender .messages-2 > :nth-last-child(2) {
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 0;
+}
+
+#sender .message-2 {
+  background-color: white;
+  margin-left: auto;
+  color: black;
+}
+
 @-webkit-keyframes loader {
   50% {
     -webkit-filter: blur(5px);

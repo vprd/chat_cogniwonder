@@ -73,3 +73,4 @@ http.listen(PORT, () => log('server started on:' + PORT));
 
 
 // misc
+// git add . && git commit -m update && git push && git push heroku master

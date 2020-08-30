@@ -11,7 +11,6 @@ import './scss/Login.css';
 const cookies = new Cookies();
 
 window.addEventListener('keydown', (e) => {
-  console.log(e);
   if (e.ctrlKey && e.key === 't') {
     cookies.set('mdn', '8884016724');
     // cookies.set('mdn', '1234567890');
@@ -53,16 +52,7 @@ const Login = () => {
             required
           />
         </div>
-        {/* <div className="password">
-          <input
-            onChange={onchange}
-            type="password"
-            name="password"
-            id="password"
-            placeholder="password"
-            required
-          />
-        </div> */}
+
         <button type="submit">Log in</button>
       </form>
     </div>

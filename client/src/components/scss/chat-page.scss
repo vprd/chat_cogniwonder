@@ -512,6 +512,77 @@
     color: white;
 }
 
+.message-block {
+
+    width: fit-content;
+    display: flex;
+    align-items: flex-end;
+    padding-left: 10px;
+
+    &>span {
+        font-weight: 800;
+    }
+
+    .messages-2 {
+        margin-left: 10px;
+
+
+
+        &>:first-child {
+            border-top-right-radius: 12px;
+        }
+
+        &>:nth-last-child(2) {
+            border-bottom-right-radius: 12px;
+        }
+    }
+
+    .message-2 {
+        margin: 5px 0;
+        width: fit-content;
+        padding: 10px 12px;
+        background-color: var(--accent-color);
+        color: white;
+        font-weight: 500;
+        border-radius: 3px;
+    }
+}
+
+
+
+#sender {
+    margin-left: auto;
+    padding-left: 0;
+    padding-right: 10px;
+    flex-direction: row-reverse;
+
+    .messages-2 {
+        margin-right: 10px;
+
+        &>span {
+            display: block;
+            text-align: right;
+        }
+
+        &>:first-child {
+            border-top-left-radius: 12px;
+            border-top-right-radius: 0;
+        }
+
+        &>:nth-last-child(2) {
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 0;
+        }
+    }
+
+    .message-2 {
+        background-color: white;
+        margin-left: auto;
+        color: black;
+    }
+}
+
+
 
 
 

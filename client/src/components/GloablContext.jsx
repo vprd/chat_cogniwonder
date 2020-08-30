@@ -7,7 +7,7 @@ export const GlobalContextProvider = ({ children }) => {
   const [user, setuser] = useState({ userid: 0, name: '' });
 
   useEffect(() => {
-    console.log('user: ', user.name);
+    console.log('user: ', user);
   }, [user]);
 
   async function Authenticate(email_pwd, id) {

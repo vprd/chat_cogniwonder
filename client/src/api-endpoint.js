@@ -8,7 +8,7 @@ export default function endpoint() {
 
         switch (window.location.origin) {
                 case 'http://localhost:3000':
-                        window.API_ENDPOINT = endpoint[2];
+                        window.API_ENDPOINT = endpoint[0];
                         return window.API_ENDPOINT;
 
                 default:
