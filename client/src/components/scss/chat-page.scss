@@ -589,18 +589,26 @@
         background-color: white;
         margin-left: auto;
         color: black;
+        display: flex;
+        flex-direction: column;
+
+        span {
+            display: block;
+        }
+
+        svg {
+            width: 15px;
+            height: 15px;
+            margin-left: auto;
+            margin-top: 4px;
+        }
     }
 }
 
 
 
-
-
-
-
-
-
 // indicators
+
 @keyframes loader {
     50% {
         filter: blur(5px);

@@ -7,8 +7,9 @@ import { GlobalContext } from './GloablContext';
 // import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
-
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import MenuIcon from '@material-ui/icons/Menu';
+
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 
@@ -416,8 +417,13 @@ function MessageBlock({ messages }) {
 
 function Message2({ message }) {
   return (
-    <div className="message-2">
+    <div
+      className="message-2"
+      id={message.delivering ? 'delivering-message' : ''}
+    >
       <span>{message.message}</span>
+
+      {message.delivering ? <AccessTimeIcon /> : <></>}
     </div>
   );
 }
