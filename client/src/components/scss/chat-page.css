@@ -1,3 +1,16 @@
+.dummy-header {
+  height: 55px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
 .chat-page {
   --height: calc(100vh - 55px);
   height: var(--height);
@@ -264,6 +277,7 @@
   position: relative;
   height: var(--height);
   overflow: hidden;
+  margin-top: 55px;
   padding-bottom: 70px;
   -webkit-animation: fadein-left 400ms forwards ease;
           animation: fadein-left 400ms forwards ease;
@@ -584,6 +598,7 @@
       -ms-flex-align: end;
           align-items: flex-end;
   padding-left: 10px;
+  padding-bottom: 25px;
 }
 
 .message-block > span {

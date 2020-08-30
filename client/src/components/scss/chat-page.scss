@@ -1,3 +1,10 @@
+.dummy-header {
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .chat-page {
     --height: calc(100vh - 55px);
     height: var(--height);
@@ -240,6 +247,7 @@
 
         height: var(--height);
         overflow: hidden;
+        margin-top: 55px;
         padding-bottom: 70px;
 
         animation: fadein-left 400ms forwards ease;
@@ -518,6 +526,7 @@
     display: flex;
     align-items: flex-end;
     padding-left: 10px;
+    padding-bottom: 25px;
 
     &>span {
         font-weight: 800;

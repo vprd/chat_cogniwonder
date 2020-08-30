@@ -115,6 +115,15 @@ const ChatPage = () => {
         <MessagingWindow />
       </div> */}
       <div className="chat-page">
+        {window.location.origin === 'http://localhost:3000' ||
+        window.location.origin === 'http://localhost:8000' ||
+        window.location.origin === 'https://cogniwonder.herokuapp.com' ? (
+          <div className="dummy-header">
+            <h2>Dummy Header</h2>
+          </div>
+        ) : (
+          <></>
+        )}
         <div className={classes.root}>
           <CssBaseline />
 

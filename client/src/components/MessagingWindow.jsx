@@ -404,7 +404,6 @@ function MessageBlock({ messages }) {
         {messages.map((message, i) => (
           <Message2 key={i} message={message} />
         ))}
-
         <span>{messages[0].sender}</span>
       </div>
     </div>
