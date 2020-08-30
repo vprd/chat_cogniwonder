@@ -9,6 +9,7 @@
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  background: white;
 }
 
 .chat-page {
@@ -618,7 +619,7 @@
 }
 
 .message-block .message-2 {
-  margin: 5px 0;
+  margin: 2px 0;
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;

@@ -172,12 +172,16 @@ const Messages = () => {
   useEffect(() => {
     (async () => {
       const messagesobj = await getmessages(openedconversation.conversation_id);
+      setTimeout(() => {
+        scrollToBottom();
+        setTimeout(() => {
+          scrollToBottom();
+        }, 100);
+      });
 
       setmessages(messagesobj.messages);
       setPage(messagesobj.page);
       setCount(messagesobj.count);
-
-      scrollToBottom();
 
       return () => {
         setmessages([]);
