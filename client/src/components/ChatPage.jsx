@@ -248,7 +248,7 @@ const Conversation = ({ conversation }) => {
   if (conversation.conversation.length === 2) {
     return (
       <Button
-        style={{ borderRight: indicator }}
+        style={{ borderRight: indicator, textTransform: 'none' }}
         onClick={onclick}
         className={`conversation conversation${conversation.conversation_id}`}
         data-conversationid={conversation.conversation_id}
@@ -267,6 +267,7 @@ const Conversation = ({ conversation }) => {
   } else {
     return (
       <Button
+        style={{ textTransform: 'none' }}
         onClick={() => {
           markRead(conversation.conversation_id);
           onclick(null, true);

@@ -232,6 +232,7 @@ const Messages = () => {
       if (!e.target.scrollTop && !loading_messages && messages.length < count) {
         const lastMessage = document
           .querySelector('.messages-view')
+          .firstChild.querySelector('.messages')
           .firstChild.getAttribute('data-message-id');
 
         setLoading_messages(true);
@@ -405,7 +406,7 @@ function MessageBlock({ messages }) {
   return (
     <div className="message-block" id={id}>
       <Avatar>{messages[0].sender[0]}</Avatar>
-      <div className="messages-2">
+      <div className="messages">
         {messages.map((message, i) => (
           <Message2 key={i} message={message} />
         ))}
@@ -418,7 +419,8 @@ function MessageBlock({ messages }) {
 function Message2({ message }) {
   return (
     <div
-      className="message-2"
+      className="message"
+      data-message-id={message.message_id}
       id={message.delivering ? 'delivering-message' : ''}
     >
       <span>{message.message}</span>
