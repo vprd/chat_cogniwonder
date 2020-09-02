@@ -6,7 +6,6 @@ import { ChatContext, ChatContextProvider } from './ChatContext';
 
 // Assets
 import logo from './assets/img/logo.png';
-
 // style
 import './scss/chat-page.css';
 import { GlobalContext } from './GloablContext';
@@ -33,7 +32,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Avatar from '@material-ui/core/Avatar';
-
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
 
 const drawerWidth = 250;
@@ -110,22 +108,8 @@ const ChatPage = () => {
   }, [user]);
 
   return (
-    <ChatContextProvider>
-      {/* <div className="chat-page">
-        <Menu />
-        <MessagingWindow />
-      </div> */}
+    <ChatContextProvider maxSnack={3}>
       <div className="chat-page">
-        {/* window.location.origin === 'http://localhost:3000' ||
-        window.location.origin === 'http://localhost:8000' ||
-        window.location.origin === 'https://cogniwonder.herokuapp.com' ? (
-          <div className="dummy-header">
-            <h2>Dummy Header</h2>
-          </div>
-        ) : (
-          <></>
-        ) */}
-
         <div className={classes.root}>
           <CssBaseline />
 
@@ -203,18 +187,20 @@ const Options = ({ setaddconversationview }) => {
 
 const ConversationList = () => {
   const { conversations } = useContext(ChatContext);
-  // console.log(conversations);
-  if (conversations.length) {
-    return (
-      <div className="conversation-list">
-        {conversations.map((conversation, i) => (
-          <Conversation key={i} conversation={conversation} />
-        ))}
-      </div>
-    );
-  } else {
-    return <div className="empty-conversation-list"></div>;
-  }
+
+  return (
+    <>
+      {conversations.length ? (
+        <div className="conversation-list">
+          {conversations.map((conversation, i) => (
+            <Conversation key={i} conversation={conversation} />
+          ))}
+        </div>
+      ) : (
+        <div className="empty-conversation-list"></div>
+      )}
+    </>
+  );
 };
 
 const Conversation = ({ conversation }) => {

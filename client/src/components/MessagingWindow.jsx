@@ -15,6 +15,7 @@ import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 
 import Button from '@material-ui/core/Button';
+import RefreshIcon from '@material-ui/icons/Refresh';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -30,15 +31,14 @@ import Avatar from '@material-ui/core/Avatar';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
 // const endpoint = `${getendpoint()}`;
 const MessagingWindow = ({ drawer }) => {
-  const { openedconversation, user } = useContext(ChatContext);
+  const { openedconversation, user, socketState, setSocketState } = useContext(
+    ChatContext
+  );
   const [changegroupname, setchangegroupname] = useState(false);
 
-  /* useEffect(() => {
-    if (Object.keys(openedconversation).length) {
-      const list = document.querySelector('.chat-screen');
-      // list.scrollTop = list.scrollHeight;
-    }
-  }, [openedconversation]); */
+  useEffect(() => {
+    console.log(socketState);
+  }, [socketState]);
   let conversation_name;
   if (Object.keys(openedconversation).length) {
     if (Array.isArray(openedconversation.conversation_name)) {
@@ -225,7 +225,7 @@ const Messages = () => {
   }, [messages]);
 
   const [loading_messages, setLoading_messages] = useState(false);
-  useEffect(() => {
+  /* useEffect(() => {
     const main_message_container = document.querySelector(
       '.messages-container'
     );
@@ -258,10 +258,11 @@ const Messages = () => {
       }
     };
 
-    main_message_container.addEventListener('scroll', onscroll);
+    // main_message_container.addEventListener('scroll', onscroll);
 
     return () => {
-      main_message_container.removeEventListener('scroll', onscroll);
+      // console.log('event removed');
+      // main_message_container.removeEventListener('scroll', onscroll);
     };
   }, [
     page,
@@ -270,7 +271,35 @@ const Messages = () => {
     openedconversation,
     getmessages,
     messages,
-  ]);
+  ]); */
+
+  const onscroll = async (e) => {
+    if (!e.target.scrollTop && !loading_messages && messages.length < count) {
+      const lastMessage = document
+        .querySelector('.messages-view')
+        .firstChild.querySelector('.messages')
+        .firstChild.getAttribute('data-message-id');
+
+      setLoading_messages(true);
+      const messagesobj = await getmessages(
+        openedconversation.conversation_id,
+        page
+      );
+
+      setmessages(messagesobj.messages);
+      setPage(messagesobj.page);
+      setLoading_messages(false);
+      setTimeout(() => {
+        try {
+          document
+            .querySelector(`div[data-message-id="${lastMessage}"]`)
+            .scrollIntoView(true);
+        } catch (error) {}
+      }, 0);
+      // setCount(messagesobj.count);
+    } else {
+    }
+  };
 
   let message = '';
 
@@ -307,7 +336,7 @@ const Messages = () => {
 
   return (
     <>
-      <div className="messages-container">
+      <div onScroll={onscroll} className="messages-container">
         <div className="messages-view">
           {loading_messages ? (
             <div className="loader">
@@ -359,7 +388,7 @@ function groupBySenderId(messages) {
   return r;
 }
 
-const Message = ({
+/* const Message = ({
   type = 'message',
   text,
   sender_name,
@@ -396,7 +425,7 @@ const Message = ({
       </div>
     );
   }
-};
+}; */
 
 function MessageBlock({ messages }) {
   const { user } = useContext(GlobalContext);

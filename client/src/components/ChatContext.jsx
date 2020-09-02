@@ -4,6 +4,7 @@ import React, {
   createContext,
   useContext,
   useState,
+  useCallback,
 } from 'react';
 
 import api from './api';
@@ -11,9 +12,11 @@ import io from 'socket.io-client';
 
 //global context
 import { GlobalContext } from './GloablContext';
+import { useSnackbar } from 'notistack';
 
 import getendpoint from '../api-endpoint';
-import { useCallback } from 'react';
+import IconButton from '@material-ui/core/IconButton';
+import RefreshIcon from '@material-ui/icons/Refresh';
 
 const endpoint = `${getendpoint()}`;
 
@@ -33,20 +36,45 @@ export const ChatContextProvider = ({ children }) => {
   const [conversations, setconversations] = useState([]);
   const [openedconversation, setOpenedconversation] = useState({});
   const [sock, setSock] = useState({});
+  const [socketState, setSocketState] = useState(false);
   const conversationListLength = useRef(conversations.length);
   // const pconversationListLength = useRef(conversations.length);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   useEffect(() => {
     const sock = io(socket_endpoint);
+    let errorSnack;
     const onconnect = () => {
+      errorSnack && closeSnackbar(errorSnack);
+      enqueueSnackbar('connected', {
+        variant: 'success',
+        autoHideDuration: 2000,
+        preventDuplicate: true,
+      });
       sock.emit(
         'subscribe',
         conversations.map((conversation) => ({
           room: 'conversation' + conversation.conversation_id,
         }))
       );
+
+      sock.on(
+        'disconnect',
+        () =>
+          (errorSnack = enqueueSnackbar('disconnected', {
+            variant: 'error',
+            persist: true,
+            preventDuplicate: true,
+            action: (key) => (
+              <IconButton onClick={() => window.location.reload()}>
+                <RefreshIcon />
+              </IconButton>
+            ),
+          }))
+      );
     };
     sock.on('connect', onconnect);
+
     // sock.emit('message', { conversation_id: 9 });
     setSock(sock);
 
@@ -170,6 +198,8 @@ export const ChatContextProvider = ({ children }) => {
         setOpenedconversation,
         updateConversations,
         conversations,
+        socketState,
+        setSocketState,
       }}
     >
       {children}
