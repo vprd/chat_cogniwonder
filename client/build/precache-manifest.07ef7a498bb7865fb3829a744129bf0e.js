@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "4e1a70338ae064268667904c53d17999",
+    "revision": "4df5d8c739f51150f4e3cfe7620c9e53",
     "url": "/assets/chat/index.html"
   },
   {
-    "revision": "8d6abf95caaf4a2b9e05",
-    "url": "/assets/chat/static/css/main.c0dd96cd.chunk.css"
+    "revision": "94e342163412883153f1",
+    "url": "/assets/chat/static/css/main.a7f9b48c.chunk.css"
   },
   {
-    "revision": "be126c22f5725b2f4080",
-    "url": "/assets/chat/static/js/2.95f61f4c.chunk.js"
+    "revision": "5edfc7c696cf0ba5a72e",
+    "url": "/assets/chat/static/js/2.f07c9388.chunk.js"
   },
   {
     "revision": "c26f3d5c94cc3bd99dca61de4ce14d4a",
-    "url": "/assets/chat/static/js/2.95f61f4c.chunk.js.LICENSE.txt"
+    "url": "/assets/chat/static/js/2.f07c9388.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "8d6abf95caaf4a2b9e05",
-    "url": "/assets/chat/static/js/main.bf26fa8f.chunk.js"
+    "revision": "94e342163412883153f1",
+    "url": "/assets/chat/static/js/main.c0fa4f90.chunk.js"
   },
   {
     "revision": "139c60b53f6b71430ed1",
