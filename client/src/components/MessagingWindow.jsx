@@ -423,6 +423,7 @@ function Message2({ message }) {
   ) {
     console.log(message);
   }
+  // message.message = message.message.replace(/(?:\r\n|\r|\n)/g, '<br>');
   return (
     <div
       className="message"
