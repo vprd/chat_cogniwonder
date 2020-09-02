@@ -5,7 +5,7 @@ import MessagingWindow from './MessagingWindow';
 import { ChatContext, ChatContextProvider } from './ChatContext';
 
 // Assets
-// import logo from './assets/img/logo.png';
+import logo from './assets/img/logo.png';
 
 // style
 import './scss/chat-page.css';
@@ -29,10 +29,11 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail'; */
-// import IconButton from '@material-ui/core/IconButton';
+import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
-// import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Avatar from '@material-ui/core/Avatar';
+
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
 
 const drawerWidth = 250;
@@ -115,7 +116,7 @@ const ChatPage = () => {
         <MessagingWindow />
       </div> */}
       <div className="chat-page">
-        {window.location.origin === 'http://localhost:3000' ||
+        {/* window.location.origin === 'http://localhost:3000' ||
         window.location.origin === 'http://localhost:8000' ||
         window.location.origin === 'https://cogniwonder.herokuapp.com' ? (
           <div className="dummy-header">
@@ -123,7 +124,8 @@ const ChatPage = () => {
           </div>
         ) : (
           <></>
-        )}
+        ) */}
+
         <div className={classes.root}>
           <CssBaseline />
 
@@ -161,7 +163,7 @@ const Menu = ({ drawer }) => {
   return (
     <>
       <div className="menu">
-        {/* <header>
+        <header>
           <img src={logo} alt="logo" />
           <h2>{user.first_name}</h2>
           <IconButton
@@ -170,7 +172,7 @@ const Menu = ({ drawer }) => {
           >
             <ChevronLeftIcon />
           </IconButton>
-        </header> */}
+        </header>
 
         <ConversationList />
         <Options setaddconversationview={setaddconversationview} />

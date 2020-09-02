@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 
 import { ChatContext } from './ChatContext';
 import { GlobalContext } from './GloablContext';
+import { ReactTinyLink } from 'react-tiny-link';
 
 // import Menu from '@material-ui/core/Menu';
 // import MenuItem from '@material-ui/core/MenuItem';
@@ -22,6 +23,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 // import { connect } from 'socket.io-client';
 // import { Icon } from '@material-ui/core';
+import SendIcon from '@material-ui/icons/Send';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Avatar from '@material-ui/core/Avatar';
@@ -337,10 +339,7 @@ const Messages = () => {
           placeholder="type something..."
         />
         <div onClick={sendmessage} className="send-btn">
-          <img
-            src="https://img.icons8.com/material-outlined/64/000000/filled-sent.png"
-            alt="semdbtn"
-          />
+          <SendIcon />
         </div>
       </div>
     </>
@@ -417,6 +416,13 @@ function MessageBlock({ messages }) {
 }
 
 function Message2({ message }) {
+  if (
+    new RegExp(
+      '([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?'
+    ).test(message)
+  ) {
+    console.log(message);
+  }
   return (
     <div
       className="message"

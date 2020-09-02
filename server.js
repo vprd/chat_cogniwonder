@@ -26,10 +26,12 @@ const debug = io.of('/debug');
 
 debug.on('connection', (socket) => {
     logger = true
-    setTimeout(() => console.log('hey from server'))
-
     socket.on('disconnect', () => logger = false)
+
+    // test log
+    setTimeout(() => console.log('hey from server'))
 })
+
 console.log = (...args) => {
     if (logger) {
         debug.emit('debug', args);
