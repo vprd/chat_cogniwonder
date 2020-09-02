@@ -25,20 +25,14 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 // import { connect } from 'socket.io-client';
 // import { Icon } from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Avatar from '@material-ui/core/Avatar';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
 // const endpoint = `${getendpoint()}`;
 const MessagingWindow = ({ drawer }) => {
-  const { openedconversation, user, socketState, setSocketState } = useContext(
-    ChatContext
-  );
+  const { openedconversation, user } = useContext(ChatContext);
   const [changegroupname, setchangegroupname] = useState(false);
 
-  useEffect(() => {
-    console.log(socketState);
-  }, [socketState]);
   let conversation_name;
   if (Object.keys(openedconversation).length) {
     if (Array.isArray(openedconversation.conversation_name)) {
@@ -59,12 +53,7 @@ const MessagingWindow = ({ drawer }) => {
               <ChevronRightIcon />
             </IconButton>
           ) : (
-            <IconButton
-              style={{ marginRight: 10 }}
-              onClick={() => drawer.set(!drawer.state)}
-            >
-              <ChevronLeftIcon />
-            </IconButton>
+            <></>
           )}
           {openedconversation.conversation.length > 2 ? (
             <AvatarGroup max={4}>
@@ -460,8 +449,11 @@ function Message2({ message }) {
       id={message.delivering ? 'delivering-message' : ''}
     >
       <span>{message.message}</span>
-
-      {message.delivering ? <AccessTimeIcon /> : <></>}
+      {/* <AccessTimeIcon
+        id="message-loader"
+        style={{ transform: message.delivering ? 'scale(1)' : 'scale(0)' }}
+      /> */}
+      {message.delivering ? <AccessTimeIcon id="message-loader" /> : <></>}
     </div>
   );
 }

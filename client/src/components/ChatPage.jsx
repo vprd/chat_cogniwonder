@@ -34,7 +34,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Avatar from '@material-ui/core/Avatar';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
 
-const drawerWidth = 250;
+const drawerWidth = 252;
 
 const useStyles = makeStyles((theme) => ({
   root: {

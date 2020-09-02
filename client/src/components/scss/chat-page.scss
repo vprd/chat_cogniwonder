@@ -570,6 +570,34 @@
 
 
 // indicators
+#message-loader {
+    // transform: scale(0);
+    transition: scale 600ms ease;
+
+
+
+    // animation: blur-fade 2s infinite ease;
+}
+
+@keyframes blur-fade {
+
+    0%,
+    100% {
+        filter: blur(0);
+        opacity: .8;
+        transform: rotate(0deg);
+    }
+
+    50% {
+        opacity: .4;
+        filter: blur(1px);
+        transform: rotate(180deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
 
 @keyframes loader {
     50% {
