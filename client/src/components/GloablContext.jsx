@@ -1,10 +1,15 @@
 import React, { useEffect, createContext, useState } from 'react';
 import api from './api';
+import { useSnackbar } from 'notistack';
+import IconButton from '@material-ui/core/IconButton';
+import RefreshIcon from '@material-ui/icons/Refresh';
 export const GlobalContext = createContext();
 
 export const GlobalContextProvider = ({ children }) => {
   const [authentication, setAuthentication] = useState(false);
   const [user, setuser] = useState({ userid: 0, name: '' });
+
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     console.log('user: ', user);
@@ -23,6 +28,17 @@ export const GlobalContextProvider = ({ children }) => {
       });
       setTimeout(() => setAuthentication(true));
     } else {
+      enqueueSnackbar('Authentication failed', {
+        variant: 'error',
+        anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+        persist: true,
+        preventDuplicate: true,
+        action: () => (
+          <IconButton onClick={() => window.location.reload()}>
+            <RefreshIcon />
+          </IconButton>
+        ),
+      });
       setAuthentication(false);
     }
 

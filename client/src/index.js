@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 
 // Global styling
 import './index.css';
+import { SnackbarProvider } from 'notistack';
 
 // main app
 import App from './components/App';
@@ -14,9 +15,11 @@ import { GlobalContextProvider } from './components/GloablContext';
 
 
 ReactDOM.render(
-  <GlobalContextProvider>
-    <App />
-  </GlobalContextProvider>
+  <SnackbarProvider>
+    <GlobalContextProvider>
+      <App />
+    </GlobalContextProvider>
+  </SnackbarProvider>
   ,
   document.getElementById('root')
 );

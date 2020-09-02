@@ -1,12 +1,10 @@
 import React, { useContext, useEffect } from 'react';
 // components
 import Login from './Login';
-import Avatar from '@material-ui/core/Avatar';
 
 import ChatPage from './ChatPage';
 //Global context
 import { GlobalContext } from './GloablContext';
-import { SnackbarProvider } from 'notistack';
 // assets
 import logo from './assets/img/logoWhite.png';
 
@@ -44,7 +42,6 @@ const App = () => {
           Debugger();
         } else {
           window.localStorage.clear();
-          console.log('server debugger disabled');
         }
       }
     };
@@ -63,7 +60,7 @@ const App = () => {
     </div>
   ); */
   return (
-    <SnackbarProvider>
+    <>
       {authentication ? <ChatPage /> : <Login />}
       <div className="intro-sequence">
         <img src={logo} alt="" />
@@ -73,7 +70,7 @@ const App = () => {
           <figure className="page"></figure>
         </div>
       </div>
-    </SnackbarProvider>
+    </>
   );
 };
 

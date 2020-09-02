@@ -45,7 +45,7 @@ const api = {
             return result.data;
         } catch (error) {
             console.log('authentication failed')
-            alert('authentication failed')
+            // alert('authentication failed')
             return false
         }
 
