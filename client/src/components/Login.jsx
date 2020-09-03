@@ -13,7 +13,10 @@ const cookies = new Cookies();
 window.addEventListener('keydown', (e) => {
   if (e.ctrlKey && e.key === 't') {
     cookies.set('mdn', '8884016724');
-    // cookies.set('mdn', '1234567890');
+    cookies.set('cwcc', 'cw5f35a349096779.421');
+    window.location.reload();
+  } else if (e.ctrlKey && e.key === 'r') {
+    cookies.set('mdn', '1234567890');
     cookies.set('cwcc', 'cw5f35a349096779.421');
     window.location.reload();
   }

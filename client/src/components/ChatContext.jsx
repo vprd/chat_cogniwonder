@@ -43,14 +43,15 @@ export const ChatContextProvider = ({ children }) => {
 
   useEffect(() => {
     const sock = io(socket_endpoint);
-    let errorSnack;
+    var errorSnack;
     const onconnect = () => {
-      errorSnack && closeSnackbar(errorSnack);
+      errorSnack && setTimeout(() => closeSnackbar(errorSnack));
       enqueueSnackbar('connected', {
         variant: 'success',
         autoHideDuration: 2000,
         preventDuplicate: true,
       });
+
       sock.emit(
         'subscribe',
         conversations.map((conversation) => ({
@@ -63,7 +64,7 @@ export const ChatContextProvider = ({ children }) => {
         () =>
           (errorSnack = enqueueSnackbar('disconnected', {
             variant: 'error',
-            persist: true,
+            autoHideDuration: 5000,
             preventDuplicate: true,
             action: (key) => (
               <IconButton onClick={() => window.location.reload()}>

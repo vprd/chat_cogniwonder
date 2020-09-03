@@ -34,6 +34,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Avatar from '@material-ui/core/Avatar';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
 
+import FlipMove from 'react-flip-move';
 const drawerWidth = 252;
 
 const useStyles = makeStyles((theme) => ({
@@ -191,11 +192,13 @@ const ConversationList = () => {
   return (
     <>
       {conversations.length ? (
-        <div className="conversation-list">
-          {conversations.map((conversation, i) => (
-            <Conversation key={i} conversation={conversation} />
-          ))}
-        </div>
+        <FlipMove className="conversation-list" duration={4000}>
+          <>
+            {conversations.map((conversation, i) => (
+              <Conversation key={i} conversation={conversation} />
+            ))}
+          </>
+        </FlipMove>
       ) : (
         <div className="empty-conversation-list"></div>
       )}

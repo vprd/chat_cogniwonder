@@ -19,8 +19,10 @@ const compression = require('compression');
 
 //app.listen will not work when using in socket.io
 const cookieParser = require('cookie-parser');
+const httpObj = require('http');
 
-const http = require('http').createServer(app);
+const http = httpObj.Server(app);
+
 const io = require('socket.io')(http);
 const debug = io.of('/debug');
 
