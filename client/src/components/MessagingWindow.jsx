@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 
+import { v1 } from 'uuid';
+
 import { ChatContext } from './ChatContext';
 import { GlobalContext } from './GloablContext';
 import { ReactTinyLink } from 'react-tiny-link';
@@ -183,15 +185,30 @@ const Messages = () => {
 
   useEffect(() => {
     const messenger = async (message) => {
-      if (message.conversation_id === openedconversation.conversation_id) {
-        const newMessages = (
+      // console.log('message from socket', message);
+      if (
+        message.conversation_id === openedconversation.conversation_id &&
+        message.sender_id !== user.id
+      ) {
+        /* const newMessages = (
           await getmessages(openedconversation.conversation_id)
-        ).messages;
-
-        setmessages(newMessages);
+        ).messages; */
+        message.delivering = false;
+        setmessages((oldmessages) => [...oldmessages, message]);
 
         scrollToBottom();
         updateConversations();
+      } else if (message.sender_id === user.id) {
+        setmessages((oldmessages) => {
+          const newmessages = oldmessages.map((m) => {
+            if (m.tempid === message.tempid) {
+              message.delivering = false;
+              return message;
+            }
+            return m;
+          });
+          return newmessages;
+        });
       }
     };
     sock.on('message', messenger);
@@ -199,7 +216,14 @@ const Messages = () => {
     return () => {
       sock.off('message', messenger);
     };
-  }, [getmessages, openedconversation, sock, updateConversations]);
+  }, [
+    messages,
+    getmessages,
+    openedconversation,
+    sock,
+    updateConversations,
+    user,
+  ]);
 
   useEffect(() => {
     const message_container = document.querySelector('.messages-view');
@@ -308,6 +332,7 @@ const Messages = () => {
     // console.log('message', message);
     message.current = message.current.trim();
     const messageObject = {
+      tempid: v1(),
       message: message.current,
       sender: `${user.first_name} ${user.last_name}`,
       sender_id: user.id,
