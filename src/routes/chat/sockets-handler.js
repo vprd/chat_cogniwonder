@@ -25,10 +25,10 @@ function Chat(io) {
 
             if (message.message && message.sender && message.conversation_id) {
 
-                logger && console.time('parallel-' + message.sender)
+                logger && console.time('parallel-' + message.tempid)
                 await Promise.all([io.sockets.in('conversation' + message.conversation_id).emit('message', message),
                 dbController.insertMessage(message), dbController.updateConversationActivity(message.conversation_id, message.date)])
-                logger && console.timeEnd('parallel-' + message.sender)
+                logger && console.timeEnd('parallel-' + message.tempid)
 
                 // logger && console.time('sending-with-socket')
                 // await io.sockets.in('conversation' + message.conversation_id).emit('message', message);
@@ -39,7 +39,6 @@ function Chat(io) {
                 // logger && console.timeEnd('updating db')
             }
         });
-
 
 
     });
