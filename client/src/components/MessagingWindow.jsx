@@ -290,10 +290,17 @@ const Messages = () => {
     }
   };
 
+  const [sendButton, setSendButton] = useState(false);
+
   let message = '';
 
   const onchange = (e) => {
     message = e.target.value;
+    if (message.trim()) {
+      setSendButton(true);
+    } else {
+      setSendButton(false);
+    }
   };
 
   const sendmessage = () => {
@@ -321,6 +328,8 @@ const Messages = () => {
       messageInput.value = '';
       updateConversations();
     }, 100);
+    message = '';
+    setSendButton(false);
   };
 
   return (
@@ -349,14 +358,18 @@ const Messages = () => {
         <textarea
           onChange={onchange}
           onKeyDown={(e) => {
-            if (!e.shiftKey && e.keyCode === 13 && message.trim() !== '') {
+            if (!e.shiftKey && e.keyCode === 13 && sendButton) {
               sendmessage();
             }
           }}
           type="text"
           placeholder="type something..."
         />
-        <IconButton onClick={sendmessage} className="send-btn">
+        <IconButton
+          disabled={!sendButton}
+          onClick={sendmessage}
+          className="send-btn"
+        >
           <SendIcon />
         </IconButton>
       </div>
