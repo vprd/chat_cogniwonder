@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 
 import { ChatContext } from './ChatContext';
 import { GlobalContext } from './GloablContext';
@@ -292,11 +292,12 @@ const Messages = () => {
 
   const [sendButton, setSendButton] = useState(false);
 
-  let message = '';
+  const message = useRef();
 
   const onchange = (e) => {
-    message = e.target.value;
-    if (message.trim()) {
+    message.current = e.target.value;
+    console.log(message);
+    if (message.current.trim()) {
       setSendButton(true);
     } else {
       setSendButton(false);
@@ -304,9 +305,10 @@ const Messages = () => {
   };
 
   const sendmessage = () => {
-    message = message.trim();
+    console.log('message', message);
+    message.current = message.current.trim();
     const messageObject = {
-      message,
+      message: message.current,
       sender: `${user.first_name} ${user.last_name}`,
       sender_id: user.id,
       conversation_id: openedconversation.conversation_id,
@@ -327,9 +329,9 @@ const Messages = () => {
       scrollToBottom();
       messageInput.value = '';
       updateConversations();
+      setSendButton(false);
+      message.current = '';
     }, 100);
-    message = '';
-    setSendButton(false);
   };
 
   return (
@@ -360,6 +362,7 @@ const Messages = () => {
           onKeyDown={(e) => {
             if (!e.shiftKey && e.keyCode === 13 && sendButton) {
               sendmessage();
+              // e.target.value = '';
             }
           }}
           type="text"
