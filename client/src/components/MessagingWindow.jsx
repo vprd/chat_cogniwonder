@@ -356,9 +356,9 @@ const Messages = () => {
           type="text"
           placeholder="type something..."
         />
-        <div onClick={sendmessage} className="send-btn">
+        <IconButton onClick={sendmessage} className="send-btn">
           <SendIcon />
-        </div>
+        </IconButton>
       </div>
     </>
   );
