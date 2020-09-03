@@ -296,7 +296,7 @@ const Messages = () => {
 
   const onchange = (e) => {
     message.current = e.target.value;
-    console.log(message);
+    // console.log(message);
     if (message.current.trim()) {
       setSendButton(true);
     } else {
@@ -305,7 +305,7 @@ const Messages = () => {
   };
 
   const sendmessage = () => {
-    console.log('message', message);
+    // console.log('message', message);
     message.current = message.current.trim();
     const messageObject = {
       message: message.current,

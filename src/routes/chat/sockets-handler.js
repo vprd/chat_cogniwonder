@@ -24,13 +24,19 @@ function Chat(io) {
         socket.on('message', async function (message) {
 
             if (message.message && message.sender && message.conversation_id) {
-                console.time('sending-with-socket')
-                await io.sockets.in('conversation' + message.conversation_id).emit('message', message);
-                console.timeEnd('sending-with-socket')
-                console.time('updating db')
-                await dbController.insertMessage(message);
-                await dbController.updateConversationActivity(message.conversation_id, message.date)
-                console.timeEnd('updating db')
+
+                logger && console.time('parallel-' + message.sender)
+                await Promise.all([io.sockets.in('conversation' + message.conversation_id).emit('message', message),
+                dbController.insertMessage(message), dbController.updateConversationActivity(message.conversation_id, message.date)])
+                logger && console.timeEnd('parallel-' + message.sender)
+
+                // logger && console.time('sending-with-socket')
+                // await io.sockets.in('conversation' + message.conversation_id).emit('message', message);
+                // logger && console.timeEnd('sending-with-socket')
+                // logger && console.time('updating db')
+                // await dbController.insertMessage(message);
+                // await dbController.updateConversationActivity(message.conversation_id, message.date)
+                // logger && console.timeEnd('updating db')
             }
         });
 

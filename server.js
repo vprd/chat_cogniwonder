@@ -11,7 +11,7 @@ Function.prototype.clone = function () {
     return temp;
 };
 const log = console.log.clone()
-let logger = false
+global.logger = false
 
 const express = require('express');
 const app = express();
@@ -47,7 +47,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const cors = require('cors');
 
-const allowedOrigins = require('./allowedOrigins.json');
+// const allowedOrigins = require('./allowedOrigins.json');
 
 app.use(cors());
 // api and other routes

@@ -7,8 +7,12 @@ export default function Debugger() {
   const endpoint = `${getendpoint()}`;
   const socket = io(endpoint + 'debug');
   const update = (message) => {
-    if (message.length === 1) message = message[0];
-    console.log('server: ', message);
+    if (message.length === 1) {
+      message = message[0];
+      console.log(message);
+    } else {
+      console.log(...message);
+    }
   };
   window.localStorage.setItem('debug', 'true');
   socket.on('debug', update);
