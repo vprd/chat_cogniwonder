@@ -17,13 +17,13 @@ const express = require('express');
 const app = express();
 const compression = require('compression');
 
+
 //app.listen will not work when using in socket.io
 const cookieParser = require('cookie-parser');
-const httpObj = require('http');
 
-const http = httpObj.Server(app);
+const server = require('http').createServer(app);
 
-const io = require('socket.io')(http);
+const io = require('socket.io')(server);
 const debug = io.of('/debug');
 
 debug.on('connection', (socket) => {
@@ -73,8 +73,7 @@ app.get('/*', (req, res) => {
     res.sendFile('index.html', { root });
 });
 
-http.listen(PORT, () => log('server started on:' + PORT));
-
+server.listen(PORT, () => log('server started on:' + PORT));
 
 // misc
 // git add . && git commit -m update && git push && git push heroku master
