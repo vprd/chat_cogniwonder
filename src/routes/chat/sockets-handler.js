@@ -24,10 +24,11 @@ function Chat(io) {
         socket.on('message', async function (message) {
 
             if (message.message && message.sender && message.conversation_id) {
-
                 io.sockets.in('conversation' + message.conversation_id).emit('message', message);
+                console.time()
                 await dbController.insertMessage(message);
                 await dbController.updateConversationActivity(message.conversation_id, message.date)
+                console.timeEnd()
             }
         });
 
