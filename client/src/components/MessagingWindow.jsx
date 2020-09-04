@@ -329,7 +329,7 @@ const Messages = () => {
   };
 
   const sendmessage = async () => {
-    if (model) {
+    if (true) {
       message.current = message.current.trim();
       const messageInput = document.querySelector('.message-input textarea');
       // messageInput.value = message.current;
