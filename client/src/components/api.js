@@ -4,6 +4,17 @@ import getendpoint from '../api-endpoint'
 import Cookies from 'universal-cookie';
 import { orderBy } from 'natural-orderby';
 
+import { setupCache } from 'axios-cache-adapter'
+
+// Create `axios-cache-adapter` instance
+const cache = setupCache({
+    maxAge: 15 * 60 * 1000
+})
+
+// Create `axios` instance passing the newly created `cache.adapter`
+const axios_cached_api = axios.create({
+    adapter: cache.adapter
+})
 
 const endpoint = `${getendpoint()}api`;
 
@@ -31,7 +42,7 @@ const api = {
         const result = await post(point, {
             conversation_id, page
         });
-
+        // console.log(result.data)
         return result.data;
     },
     authenticate: async (data, id) => {
@@ -83,7 +94,7 @@ const api = {
 }
 
 async function post(point, data) {
-    return await axios.post(point, { ...data, cookies: { mdn: cookies.get('mdn'), cwcc: cookies.get('cwcc') } });
+    return await axios_cached_api.post(point, { ...data, cookies: { mdn: cookies.get('mdn'), cwcc: cookies.get('cwcc') } });
 }
 
 export default api;

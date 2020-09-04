@@ -4,7 +4,7 @@ import { v1 } from 'uuid';
 
 import { ChatContext } from './ChatContext';
 import { GlobalContext } from './GloablContext';
-import { ReactTinyLink } from 'react-tiny-link';
+// import { ReactTinyLink } from 'react-tiny-link';
 
 // import Menu from '@material-ui/core/Menu';
 // import MenuItem from '@material-ui/core/MenuItem';
@@ -17,7 +17,7 @@ import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 
 import Button from '@material-ui/core/Button';
-import RefreshIcon from '@material-ui/icons/Refresh';
+// import RefreshIcon from '@material-ui/icons/Refresh';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -143,6 +143,8 @@ const Messages = () => {
     user,
     sock,
     updateConversations,
+    messagesLoad,
+    setMessagesLoad,
   } = useContext(ChatContext);
 
   const [messages, setmessages] = useState([]);
@@ -226,16 +228,20 @@ const Messages = () => {
   ]);
 
   useEffect(() => {
-    const message_container = document.querySelector('.messages-view');
+    /* const message_container = document.querySelector('.messages-view');
+    
+    // message_container.style.display = '';
+    message_container.style.opacity = '1';
+    // chat_container.scrollTop = 0; */
+    setMessagesLoad(false);
     const chat_container = document.querySelector('.chat-screen');
-
-    message_container.style.display = '';
-    // chat_container.scrollTop = 0;
     chat_container.scrollIntoView(true);
+
     return () => {
-      message_container.style.display = 'none';
+      // message_container.style.display = 'none';
+      // message_container.style.opacity = '0';
     };
-  }, [messages]);
+  }, [messages, setMessagesLoad]);
 
   const [loading_messages, setLoading_messages] = useState(false);
   /* useEffect(() => {
@@ -362,7 +368,13 @@ const Messages = () => {
   return (
     <>
       <div onScroll={onscroll} className="messages-container">
-        <div className="messages-view">
+        <div
+          style={{
+            // display: messagesLoad ? 'none' : '',
+            opacity: messagesLoad ? '0' : '1',
+          }}
+          className="messages-view"
+        >
           {loading_messages ? (
             <div className="loader">
               <div></div>
@@ -379,6 +391,18 @@ const Messages = () => {
           ) : (
             <></>
           )}
+        </div>
+
+        <div
+          style={{
+            // display: !messagesLoad ? 'none' : '',
+            opacity: messagesLoad ? '1' : '0',
+          }}
+          className="loader message-loader"
+        >
+          <div></div>
+          <div></div>
+          <div></div>
         </div>
       </div>
       <div className="message-input">

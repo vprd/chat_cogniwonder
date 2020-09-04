@@ -37,7 +37,10 @@ export const ChatContextProvider = ({ children }) => {
   const [openedconversation, setOpenedconversation] = useState({});
   const [sock, setSock] = useState({});
   const [socketState, setSocketState] = useState(false);
+
+  const [messagesLoad, setMessagesLoad] = useState(false);
   const conversationListLength = useRef(conversations.length);
+
   // const pconversationListLength = useRef(conversations.length);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
@@ -185,10 +188,14 @@ export const ChatContextProvider = ({ children }) => {
     } catch (error) {}
   }
 
+  function getmessages(conversation_id, page) {
+    return api.getmessages(conversation_id, page);
+  }
+
   return (
     <ChatContext.Provider
       value={{
-        getmessages: api.getmessages,
+        getmessages,
         markUndread,
         startconversation,
         markRead,
@@ -201,6 +208,8 @@ export const ChatContextProvider = ({ children }) => {
         conversations,
         socketState,
         setSocketState,
+        messagesLoad,
+        setMessagesLoad,
       }}
     >
       {children}
