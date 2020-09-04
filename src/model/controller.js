@@ -72,7 +72,7 @@ const control = {
                 console.log(error);
             }
         } else {
-            console.warn('mdn or cwcc was missing')
+            console.warn('mdn or cwcc was missing', mdn, cwcc)
             return false
         }
     },
@@ -268,7 +268,7 @@ const control = {
     // inserts a message in the main messages table
     // props can be any additions properties that may need to be adde in the future
     insertMessage: async function ({ sender_id, message, sender, conversation_id, date, props = {} }) {
-
+        console.log(message)
         if (message && sender && conversation_id) {
             const createdDate = new Date(date) || new Date();
             const extraProps = JSON.stringify(props);

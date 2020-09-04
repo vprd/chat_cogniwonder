@@ -216,14 +216,14 @@ const Conversation = ({ conversation }) => {
     setMessagesLoad,
   } = useContext(ChatContext);
 
-  const onclick = (e, group) => {
+  const onclick = () => {
     // markRead(conversation.conversation_id);
     setTimeout(() => {
-      // document.querySelector('.messages-view').style.opacity = '0';
+      document.querySelector('.messages-view').style.opacity = '0';
       setMessagesLoad(true);
       const messageInput = document.querySelector('.message-input textarea');
       messageInput.focus();
-    });
+    }, 100);
     // const conversation_opened = { ...conversation, group };
 
     setOpenedconversation(conversation);

@@ -19,24 +19,21 @@ function Chat(io) {
         })
 
         socket.on('send', function (data) {
+            // console.log('data', data)
             io.sockets.in(data.room).emit('message', data);
         });
         socket.on('message', async function (message) {
-
-            if (message.message && message.sender && message.conversation_id) {
-
+            if (message.toxicity) {
+                io.sockets.in('conversation' + message.conversation_id).emit('message', message)
+                console.log(message.toxicity)
+            }
+            else if (message.message && message.sender && message.conversation_id && !message.toxicity) {
+                // console.log(message.toxicity)
                 logger && console.time('parallel-' + message.tempid)
                 await Promise.all([io.sockets.in('conversation' + message.conversation_id).emit('message', message),
                 dbController.insertMessage(message), dbController.updateConversationActivity(message.conversation_id, message.date)])
                 logger && console.timeEnd('parallel-' + message.tempid)
 
-                // logger && console.time('sending-with-socket')
-                // await io.sockets.in('conversation' + message.conversation_id).emit('message', message);
-                // logger && console.timeEnd('sending-with-socket')
-                // logger && console.time('updating db')
-                // await dbController.insertMessage(message);
-                // await dbController.updateConversationActivity(message.conversation_id, message.date)
-                // logger && console.timeEnd('updating db')
             }
         });
 

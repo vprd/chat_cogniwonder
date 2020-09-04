@@ -4,8 +4,9 @@ import { v1 } from 'uuid';
 
 import { ChatContext } from './ChatContext';
 import { GlobalContext } from './GloablContext';
-// import { ReactTinyLink } from 'react-tiny-link';
 
+// import { ReactTinyLink } from 'react-tiny-link';
+import Toxic from './toxic';
 // import Menu from '@material-ui/core/Menu';
 // import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -22,7 +23,7 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-// import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 // import { connect } from 'socket.io-client';
 // import { Icon } from '@material-ui/core';
@@ -30,7 +31,13 @@ import SendIcon from '@material-ui/icons/Send';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Avatar from '@material-ui/core/Avatar';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
+
+import { useSnackbar } from 'notistack';
+
 // const endpoint = `${getendpoint()}`;
+// import useTextToxicity from 'react-text-toxicity';
+import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
+
 const MessagingWindow = ({ drawer }) => {
   const { openedconversation, user } = useContext(ChatContext);
   const [changegroupname, setchangegroupname] = useState(false);
@@ -150,6 +157,34 @@ const Messages = () => {
   const [messages, setmessages] = useState([]);
   const [page, setPage] = useState(0);
   const [count, setCount] = useState(0);
+  const [model, setModel] = useState(null);
+  const [loading_messages, setLoading_messages] = useState(false);
+  const [toxicityDetector, setToxicityDetector] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    window.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.key === 'a') {
+        setToxicityDetector((old) => {
+          enqueueSnackbar(!old + '', {
+            variant: !old ? 'success' : 'error',
+            autoHideDuration: 2000,
+            preventDuplicate: true,
+          });
+          return !old;
+        });
+      }
+    });
+
+    setTimeout(() => {
+      Toxic().then((m) => {
+        // console.log(m);
+        setModel(m);
+      });
+
+      // .init().then((m) => );
+    }, 0);
+  }, [enqueueSnackbar]);
 
   function scrollToBottom() {
     const main_message_container = document.querySelector(
@@ -184,10 +219,13 @@ const Messages = () => {
       };
     })();
   }, [openedconversation, getmessages]);
-
+  const [warning, setWarning] = useState(false);
   useEffect(() => {
     const messenger = async (message) => {
-      // console.log('message from socket', message);
+      console.log('got message', message);
+      if (message.toxicity) {
+        setWarning(true);
+      }
       if (
         message.conversation_id === openedconversation.conversation_id &&
         message.sender_id !== user.id
@@ -218,14 +256,7 @@ const Messages = () => {
     return () => {
       sock.off('message', messenger);
     };
-  }, [
-    messages,
-    getmessages,
-    openedconversation,
-    sock,
-    updateConversations,
-    user,
-  ]);
+  }, [messages, openedconversation, sock, updateConversations, user]);
 
   useEffect(() => {
     /* const message_container = document.querySelector('.messages-view');
@@ -243,54 +274,16 @@ const Messages = () => {
     };
   }, [messages, setMessagesLoad]);
 
-  const [loading_messages, setLoading_messages] = useState(false);
+  /* const [typedText, setTypedText] = useState('');
+
+  const predictions = useTextToxicity(typedText, { delay: 500 }); */
+
   /* useEffect(() => {
-    const main_message_container = document.querySelector(
-      '.messages-container'
-    );
-
-    const onscroll = async (e) => {
-      if (!e.target.scrollTop && !loading_messages && messages.length < count) {
-        const lastMessage = document
-          .querySelector('.messages-view')
-          .firstChild.querySelector('.messages')
-          .firstChild.getAttribute('data-message-id');
-
-        setLoading_messages(true);
-        const messagesobj = await getmessages(
-          openedconversation.conversation_id,
-          page
-        );
-
-        setmessages(messagesobj.messages);
-        setPage(messagesobj.page);
-        setLoading_messages(false);
-        setTimeout(() => {
-          try {
-            document
-              .querySelector(`div[data-message-id="${lastMessage}"]`)
-              .scrollIntoView(true);
-          } catch (error) {}
-        }, 0);
-        // setCount(messagesobj.count);
-      } else {
-      }
-    };
-
-    // main_message_container.addEventListener('scroll', onscroll);
-
-    return () => {
-      // console.log('event removed');
-      // main_message_container.removeEventListener('scroll', onscroll);
-    };
-  }, [
-    page,
-    count,
-    loading_messages,
-    openedconversation,
-    getmessages,
-    messages,
-  ]); */
+    if (predictions) {
+      console.log(predictions[6].match);
+      // predictions.reduce;
+    }
+  }, [predictions]); */
 
   const onscroll = async (e) => {
     if (!e.target.scrollTop && !loading_messages && messages.length < count) {
@@ -300,11 +293,12 @@ const Messages = () => {
         .firstChild.getAttribute('data-message-id');
 
       setLoading_messages(true);
+
       const messagesobj = await getmessages(
         openedconversation.conversation_id,
         page
       );
-
+      console.log('setting new messages');
       setmessages(messagesobj.messages);
       setPage(messagesobj.page);
       setLoading_messages(false);
@@ -334,39 +328,66 @@ const Messages = () => {
     }
   };
 
-  const sendmessage = () => {
-    // console.log('message', message);
-    message.current = message.current.trim();
-    const messageObject = {
-      tempid: v1(),
-      message: message.current,
-      sender: `${user.first_name} ${user.last_name}`,
-      sender_id: user.id,
-      conversation_id: openedconversation.conversation_id,
-      date: new Date(),
-      delivering: true,
-    };
-    setmessages([...messages, messageObject]);
-    setCount(count + 1);
-    scrollToBottom();
-    // messageObject.delivering = undefined;
-    // socket.emit('message', messageObject);
+  const sendmessage = async () => {
+    if (model) {
+      message.current = message.current.trim();
+      const messageInput = document.querySelector('.message-input textarea');
+      // messageInput.value = message.current;
 
-    // messageObject.conversation_id = 5;
-    sock.emit('message', messageObject);
-    const messageInput = document.querySelector('.message-input textarea');
-    messageInput.focus();
-    setTimeout(() => {
+      const messageObject = {
+        tempid: v1(),
+        message: message.current,
+        sender: `${user.first_name} ${user.last_name}`,
+        sender_id: user.id,
+        conversation_id: openedconversation.conversation_id,
+        date: new Date(),
+        delivering: true,
+      };
+      setTimeout(() => {
+        scrollToBottom();
+        updateConversations();
+        setSendButton(false);
+        messageInput.value = '';
+        message.current = '';
+      }, 0);
+
+      setmessages([...messages, messageObject]);
+      setCount(count + 1);
+
       scrollToBottom();
-      messageInput.value = '';
-      updateConversations();
-      setSendButton(false);
-      message.current = '';
-    }, 100);
+
+      messageInput.focus();
+
+      const toxicity = toxicityDetector
+        ? (await model.check(message.current)).filter((p) => p.results[0].match)
+        : undefined;
+      messageObject.toxicity =
+        toxicityDetector && toxicity.length ? toxicity : undefined;
+      sock.emit('message', messageObject);
+    }
   };
 
   return (
     <>
+      <Dialog
+        open={warning}
+        onClose={() => setWarning(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Warning</DialogTitle>
+        <DialogContent>
+          <ReportProblemOutlinedIcon />
+          <DialogContentText id="alert-dialog-description">
+            Toxicity will not be tolerated, all toxic messages will dissapear
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setWarning(false)} color="primary" autoFocus>
+            i understand
+          </Button>
+        </DialogActions>
+      </Dialog>
       <div onScroll={onscroll} className="messages-container">
         <div
           style={{
@@ -410,15 +431,15 @@ const Messages = () => {
           onChange={onchange}
           onKeyDown={(e) => {
             if (!e.shiftKey && e.keyCode === 13 && sendButton) {
+              e.target.value = '';
               sendmessage();
-              // e.target.value = '';
             }
           }}
           type="text"
           placeholder="type something..."
         />
         <IconButton
-          disabled={!sendButton}
+          disabled={!!(!sendButton && model)}
           onClick={sendmessage}
           className="send-btn"
         >
@@ -519,6 +540,7 @@ function Message2({ message }) {
         style={{ transform: message.delivering ? 'scale(1)' : 'scale(0)' }}
       /> */}
       {message.delivering ? <AccessTimeIcon id="message-loader" /> : <></>}
+      {message.toxicity ? <ReportProblemOutlinedIcon /> : <></>}
     </div>
   );
 }

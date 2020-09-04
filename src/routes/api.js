@@ -26,7 +26,7 @@ module.exports = function (io) {
         })
 
         router.post('/authenticate', autherize, async (req, res) => {
-            console.log(req.body)
+            // console.log(req.body)
             res.send(JSON.stringify(await dbController.authenticate(req.body)));
         });
 
