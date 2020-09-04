@@ -1,4 +1,4 @@
-import * as toxicity from '@tensorflow-models/toxicity';
+// import * as toxicity from '@tensorflow-models/toxicity';
 
 /* const threshold = 0.9;
 
@@ -12,14 +12,15 @@ toxicity.load(threshold, labelsToInclude).then(model => {
 
 
 export default async function Toxic(threshold = .9, labelsToInclude) {
-    const model = await toxicity.load(threshold, labelsToInclude)
+    /* const model = await toxicity.load(threshold, labelsToInclude)
 
     return {
         model,
         check: async (text) => {
             return await model.classify([text]);
         }
-    }
+    } */
+    return false
 }
 
 /*  {
