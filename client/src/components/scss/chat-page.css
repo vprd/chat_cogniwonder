@@ -652,6 +652,25 @@
   margin-top: 4px;
 }
 
+.empty-conversation-list {
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.empty-conversation-list .loader {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
 #message-loader {
   -webkit-animation: blur-fade 2s infinite ease;
           animation: blur-fade 2s infinite ease;

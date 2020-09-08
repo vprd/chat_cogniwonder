@@ -33,7 +33,7 @@ export const ChatContextProvider = ({ children }) => {
   //global context
   const { user } = useContext(GlobalContext);
 
-  const [conversations, setconversations] = useState([]);
+  const [conversations, setconversations] = useState(false);
   const [openedconversation, setOpenedconversation] = useState({});
   const [sock, setSock] = useState({});
   const [socketState, setSocketState] = useState(false);
@@ -91,15 +91,17 @@ export const ChatContextProvider = ({ children }) => {
   const updateConversations = useCallback(
     async function updateConversations() {
       const convos = await api.getconversations(user.id);
+      if (convos) {
+        for (let convo of convos) {
+          const data = await api.getmessages(convo.conversation_id);
+          try {
+            convo.recent_activity =
+              data.messages[data.messages.length - 1].date;
+          } catch (error) {}
+        }
 
-      for (let convo of convos) {
-        const data = await api.getmessages(convo.conversation_id);
-        try {
-          convo.recent_activity = data.messages[data.messages.length - 1].date;
-        } catch (error) {}
+        conversationListLength.current = convos.length;
       }
-
-      conversationListLength.current = convos.length;
       setconversations(convos);
     },
     [user]

@@ -188,7 +188,14 @@ const Options = ({ setaddconversationview }) => {
 
 const ConversationList = () => {
   const { conversations } = useContext(ChatContext);
+  // const conversations = false;
 
+  if (Array.isArray(conversations) && !conversations.length) {
+    console.log('here', conversations);
+    return (
+      <div className="empty-conversation-list">you have no conversations</div>
+    );
+  }
   return (
     <>
       {conversations.length ? (
@@ -200,7 +207,13 @@ const ConversationList = () => {
           </>
         </FlipMove>
       ) : (
-        <div className="empty-conversation-list"></div>
+        <div className="empty-conversation-list">
+          <div className="loader">
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
       )}
     </>
   );

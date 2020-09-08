@@ -579,9 +579,19 @@
     }
 }
 
+.empty-conversation-list {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
+    .loader {
+        width: fit-content;
+    }
 
-// indicators
+    // indicators
+}
+
 #message-loader {
     animation: blur-fade 2s infinite ease;
 }

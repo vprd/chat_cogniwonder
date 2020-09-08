@@ -13,6 +13,18 @@ module.exports = function (io) {
 
 
         Chat(io)
+        /* const conversations_socket = io.of('/conversations');
+        conversations_socket.on('connection', socket => {
+            socket.on('conversations', data => {
+                if (data.action === 'get') {
+                    const user = await dbController.authorize(data.cookies);
+                    if (user) {
+                        console.log(user)
+                        // const conversations = await dbController.getConversations(user.userid);
+                    }
+                }
+            })
+        }) */
 
         router.get('/benchmarkserial', async (req, res) => {
             console.time('serial')

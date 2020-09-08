@@ -28,11 +28,13 @@ const api = {
         const result = await post(point, {
             userid
         });
-        if (result.data.recent_activity) {
+        console.log(result.data.recent_activity)
+        if (result.data.length === 0) return false
+        /* if (result.data.recent_activity) {
             result.data.recent_activity = new Date(result.data.recent_activity)
         } else {
             result.data.recent_activity = new Date(0)
-        }
+        } */
         const sorted = orderBy(result.data, [(v) => v.recent_activity], ["desc", "asc"]);
         return sorted;
     },
