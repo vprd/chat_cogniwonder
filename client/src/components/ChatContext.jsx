@@ -69,13 +69,13 @@ export const ChatContextProvider = ({ children }) => {
         autoHideDuration: 2000,
         preventDuplicate: true,
       });
-
-      sock.emit(
-        'subscribe',
-        conversations.map((conversation) => ({
-          room: 'conversation' + conversation.conversation_id,
-        }))
-      );
+      if (Array.isArray(conversations))
+        sock.emit(
+          'subscribe',
+          conversations.map((conversation) => ({
+            room: 'conversation' + conversation.conversation_id,
+          }))
+        );
 
       sock.on(
         'disconnect',
