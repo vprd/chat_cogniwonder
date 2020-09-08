@@ -9,6 +9,7 @@ import React, {
 
 import api from './api';
 import io from 'socket.io-client';
+import { orderBy } from 'natural-orderby';
 
 //global context
 import { GlobalContext } from './GloablContext';
@@ -17,7 +18,9 @@ import { useSnackbar } from 'notistack';
 import getendpoint from '../api-endpoint';
 import IconButton from '@material-ui/core/IconButton';
 import RefreshIcon from '@material-ui/icons/Refresh';
+import Cookies from 'universal-cookie';
 
+const cookies = new Cookies();
 const endpoint = `${getendpoint()}`;
 
 const socket_endpoint = endpoint;
@@ -36,16 +39,28 @@ export const ChatContextProvider = ({ children }) => {
   const [conversations, setconversations] = useState(false);
   const [openedconversation, setOpenedconversation] = useState({});
   const [sock, setSock] = useState({});
+  const [conversations_socket, setConversations_socket] = useState();
   const [socketState, setSocketState] = useState(false);
 
   const [messagesLoad, setMessagesLoad] = useState(false);
-  const conversationListLength = useRef(conversations.length);
+  // const conversationListLength = useRef(conversations.length);
 
   // const pconversationListLength = useRef(conversations.length);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   useEffect(() => {
     const sock = io(socket_endpoint);
+    const conversation_socket = io(socket_endpoint + 'conversations');
+
+    const onconversation_socket_update = (data) => {
+      const sorted = orderBy(data, [(v) => v.recent_activity], ['desc', 'asc']);
+      setconversations(sorted);
+    };
+    conversation_socket.on('connect', () => {
+      console.log('conversation socket connected');
+      conversation_socket.on('update', onconversation_socket_update);
+      setConversations_socket(conversation_socket);
+    });
     var errorSnack;
     const onconnect = () => {
       errorSnack && setTimeout(() => closeSnackbar(errorSnack));
@@ -84,13 +99,20 @@ export const ChatContextProvider = ({ children }) => {
 
     return () => {
       sock.removeListener('connect', onconnect);
+      conversation_socket.off('update', onconversation_socket_update);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversations.length]);
 
   const updateConversations = useCallback(
     async function updateConversations() {
-      const convos = await api.getconversations(user.id);
+      if (conversations_socket) {
+        conversations_socket.emit('conversations', {
+          action: 'get',
+          cookies: { mdn: cookies.get('mdn'), cwcc: cookies.get('cwcc') },
+        });
+      }
+      /* const convos = await api.getconversations(user.id);
       if (convos) {
         for (let convo of convos) {
           const data = await api.getmessages(convo.conversation_id);
@@ -102,9 +124,11 @@ export const ChatContextProvider = ({ children }) => {
 
         conversationListLength.current = convos.length;
       }
-      setconversations(convos);
+      // setconversations(convos);
+      console.log('local', convos); */
     },
-    [user]
+
+    [conversations_socket]
   );
 
   useEffect(() => {

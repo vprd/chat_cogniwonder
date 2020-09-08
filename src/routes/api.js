@@ -13,18 +13,29 @@ module.exports = function (io) {
 
 
         Chat(io)
-        /* const conversations_socket = io.of('/conversations');
+        const conversations_socket = io.of('/conversations');
         conversations_socket.on('connection', socket => {
-            socket.on('conversations', data => {
+
+            socket.on('conversations', async data => {
                 if (data.action === 'get') {
                     const user = await dbController.authorize(data.cookies);
                     if (user) {
-                        console.log(user)
-                        // const conversations = await dbController.getConversations(user.userid);
+                        const convos = await dbController.getConversations(user.id);
+                        if (convos) {
+                            for (let convo of convos) {
+                                const data = (await dbController.getMessages(convo.conversation_id))
+                                // const data = await api.getmessages(convo.conversation_id);
+                                try {
+                                    convo.recent_activity =
+                                        data.messages[data.messages.length - 1].date;
+                                } catch (error) { }
+                            }
+                        }
+                        socket.emit('update', convos)
                     }
                 }
             })
-        }) */
+        })
 
         router.get('/benchmarkserial', async (req, res) => {
             console.time('serial')
