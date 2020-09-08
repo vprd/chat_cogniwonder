@@ -41,7 +41,6 @@ module.exports = function (io) {
                                         data.messages[data.messages.length - 1].date;
                                 } catch (error) { }
                             } */
-                            console.log(convos)
                         }
                         socket.emit('update', convos)
                     }
