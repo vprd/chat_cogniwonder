@@ -20,16 +20,28 @@ module.exports = function (io) {
                 if (data.action === 'get') {
                     const user = await dbController.authorize(data.cookies);
                     if (user) {
-                        const convos = await dbController.getConversations(user.id);
+                        let convos = await dbController.getConversations(user.id);
+                        async function updateActivity(convo) {
+                            const data = (await dbController.getMessages(convo.conversation_id))
+                            // const data = await api.getmessages(convo.conversation_id);
+                            try {
+                                convo.recent_activity =
+                                    data.messages[data.messages.length - 1].date;
+                            } catch (error) { }
+                            return convo
+                        }
+
                         if (convos) {
-                            for (let convo of convos) {
+                            convos = await Promise.all(convos.map(convo => updateActivity(convo)))
+
+                            /* for (let convo of convos) {
                                 const data = (await dbController.getMessages(convo.conversation_id))
-                                // const data = await api.getmessages(convo.conversation_id);
                                 try {
                                     convo.recent_activity =
                                         data.messages[data.messages.length - 1].date;
                                 } catch (error) { }
-                            }
+                            } */
+                            console.log(convos)
                         }
                         socket.emit('update', convos)
                     }
