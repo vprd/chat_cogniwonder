@@ -29,10 +29,10 @@ function Chat(io) {
             }
             else if (message.message && message.sender && message.conversation_id && !message.toxicity) {
                 // console.log(message.toxicity)
-                logger && console.time('parallel-' + message.tempid)
+                // logger && console.time('parallel-' + message.tempid)
                 await Promise.all([io.sockets.in('conversation' + message.conversation_id).emit('message', message),
                 dbController.insertMessage(message), dbController.updateConversationActivity(message.conversation_id, message.date)])
-                logger && console.timeEnd('parallel-' + message.tempid)
+                // logger && console.timeEnd('parallel-' + message.tempid)
 
             }
         });

@@ -32,7 +32,16 @@ import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Avatar from '@material-ui/core/Avatar';
+import Chip from '@material-ui/core/Chip';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
+
+// import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 import FlipMove from 'react-flip-move';
 const drawerWidth = 252;
@@ -306,9 +315,45 @@ const Conversation = ({ conversation }) => {
   }
 };
 
+function AddConversationDialog2() {
+  const [open, setOpen] = useState(false);
+  const handleClose = () => setOpen(false);
+  return (
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="form-dialog-title"
+    >
+      <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          To subscribe to this website, please enter your email address here. We
+          will send updates occasionally.
+        </DialogContentText>
+        <TextField
+          autoFocus
+          margin="dense"
+          id="name"
+          label="Email Address"
+          type="email"
+          fullWidth
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} color="primary">
+          Cancel
+        </Button>
+        <Button onClick={handleClose} color="primary">
+          Subscribe
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
 const AddConversationDialog = ({ setaddconversationview }) => {
-  const [sugesstions, setsugesstions] = useState();
-  const [participants, setparticipants] = useState();
+  const [sugesstions, setsugesstions] = useState([]);
+  const [participants, setparticipants] = useState([]);
   const { user, startconversation } = useContext(ChatContext);
 
   const addparticipant = (suggestion) => {
@@ -326,7 +371,7 @@ const AddConversationDialog = ({ setaddconversationview }) => {
   };
 
   useEffect(() => {
-    const input = document.querySelector('#conversation-adder');
+    /* const input = document.querySelector('#conversation-adder');
     const conversationadd = document; //|| document.querySelector('.conversation-add');
     input.focus();
     const enteradd = (e) => {
@@ -345,11 +390,11 @@ const AddConversationDialog = ({ setaddconversationview }) => {
     return () => {
       conversationadd.removeEventListener('keydown', dismiss);
       input.removeEventListener('keydown', enteradd);
-    };
+    }; */
   });
 
   const onchange = async (e) => {
-    e.preventDefault();
+    e.persist();
 
     if (e.target.value !== '') {
       const s = await api.search(e.target.value);
@@ -371,36 +416,41 @@ const AddConversationDialog = ({ setaddconversationview }) => {
     setparticipants(newlist);
   };
 
+  const dismiss = (e) => {
+    setaddconversationview(false);
+  };
   const start = async () => {
+    console.log(participants);
+    dismiss();
     startconversation(participants);
   };
-  const dismiss = (e) => {
-    if (e.target.className === 'conversation-add') {
-      setaddconversationview(false);
-    }
-  };
+
   return (
-    <div className="conversation-add" onClick={dismiss}>
-      <form onSubmit={(e) => e.preventDefault()}>
+    <Dialog className="conversation-add" open={true} onClose={dismiss}>
+      <DialogContent>
         <div className="users-input">
           <h2>Create</h2>
           {participants && participants.length !== 0 && (
             <div className="participants">
               {participants.map((participant, i) => (
-                <div key={i} className="participant">
-                  <span>{participant.first_name}</span>
-                  <img
-                    onClick={() => {
-                      removeparticipant(participant);
-                    }}
-                    src="https://img.icons8.com/pastel-glyph/64/000000/cancel.png"
-                    alt="cancel"
-                  />
-                </div>
+                <Chip
+                  style={{ margin: '4px' }}
+                  key={i}
+                  icon={
+                    <Avatar style={{ width: '22px', height: '22px' }}>
+                      {participant.first_name[0]}
+                    </Avatar>
+                  }
+                  label={participant.first_name}
+                  onDelete={() => {
+                    removeparticipant(participant);
+                  }}
+                  variant="outlined"
+                />
               ))}
             </div>
           )}
-          <input
+          <TextField
             onChange={onchange}
             onSubmit={(e) => e.preventDefault()}
             id="conversation-adder"
@@ -409,6 +459,12 @@ const AddConversationDialog = ({ setaddconversationview }) => {
             placeholder="email/mobile"
             required
             autoComplete="off"
+            autoFocus
+            margin="dense"
+            // id="name"
+            // label="Email Address"
+            // type="email"
+            fullWidth
           />
 
           {sugesstions && sugesstions.length !== 0 && (
@@ -426,16 +482,14 @@ const AddConversationDialog = ({ setaddconversationview }) => {
             </div>
           )}
         </div>
-        <button
-          className={
-            participants && participants.length ? '' : 'disabled-button'
-          }
-          onClick={start}
-        >
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={dismiss}>cancel</Button>
+        <Button disabled={!participants.length} onClick={start}>
           Start
-        </button>
-      </form>
-    </div>
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 

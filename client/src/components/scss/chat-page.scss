@@ -365,11 +365,11 @@
     }
 
     .conversation-add {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
+        // position: absolute;
+        // width: 100%;
+        // height: 100%;
+        // top: 0;
+        // left: 0;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -380,7 +380,7 @@
 
         backdrop-filter: blur(12px) brightness(.8);
 
-        .participants {
+        /* .participants {
             background: white;
             border-radius: 4px;
             margin-top: 8px;
@@ -408,36 +408,9 @@
                     object-fit: cover;
                 }
             }
-        }
+        } */
 
-        .suggestions {
-            padding: 10px;
-            padding-top: 15px;
-            background: white;
-            margin-bottom: 10px;
-            border-radius: 4px;
-            max-height: 100px;
-            overflow-y: scroll;
 
-            &::-webkit-scrollbar {
-                display: none;
-            }
-
-            .suggestion {
-                padding-bottom: 2px;
-                margin-bottom: 5px;
-                border-bottom: 1px solid rgb(172, 172, 172);
-                cursor: pointer;
-
-                h4 {
-                    font-size: .8rem;
-                }
-
-                p {
-                    font-size: .7rem;
-                }
-            }
-        }
 
         span {
             display: block;
@@ -462,6 +435,34 @@
     }
 }
 
+.suggestions {
+    // padding: 10px;
+// padding-top: 15px;
+    background: white;
+
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    .suggestion {
+        padding-bottom: 2px;
+        margin-bottom: 5px;
+        border-bottom: 1px solid rgb(172, 172, 172);
+        cursor: pointer;
+
+        h4 {
+            font-size: .8rem;
+        }
+
+        p {
+            font-size: .7rem;
+        }
+    }
+}
 
 .group-conversation {
 
