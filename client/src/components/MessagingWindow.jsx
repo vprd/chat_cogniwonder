@@ -30,6 +30,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import SendIcon from '@material-ui/icons/Send';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Avatar from '@material-ui/core/Avatar';
+import Collapse from '@material-ui/core/Collapse';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
 
 import { useSnackbar } from 'notistack';
@@ -203,12 +204,6 @@ const Messages = () => {
   useEffect(() => {
     (async () => {
       const messagesobj = await getmessages(openedconversation.conversation_id);
-      setTimeout(() => {
-        scrollToBottom();
-        setTimeout(() => {
-          scrollToBottom();
-        }, 100);
-      });
 
       setmessages(messagesobj.messages);
       setPage(messagesobj.page);
@@ -222,7 +217,7 @@ const Messages = () => {
   const [warning, setWarning] = useState(false);
   useEffect(() => {
     const messenger = async (message) => {
-      console.log('got message', message);
+      // console.log('got message', message);
       if (message.toxicity) {
         setWarning(true);
       }
@@ -236,7 +231,6 @@ const Messages = () => {
         message.delivering = false;
         setmessages((oldmessages) => [...oldmessages, message]);
 
-        scrollToBottom();
         updateConversations();
       } else if (message.sender_id === user.id) {
         setmessages((oldmessages) => {
@@ -265,8 +259,6 @@ const Messages = () => {
     message_container.style.opacity = '1';
     // chat_container.scrollTop = 0; */
     setMessagesLoad(false);
-    const chat_container = document.querySelector('.chat-screen');
-    chat_container.scrollIntoView(true);
 
     return () => {
       // message_container.style.display = 'none';
@@ -286,12 +278,11 @@ const Messages = () => {
   }, [predictions]); */
 
   const onscroll = async (e) => {
-    if (!e.target.scrollTop && !loading_messages && messages.length < count) {
-      const lastMessage = document
-        .querySelector('.messages-view')
-        .firstChild.querySelector('.messages')
-        .firstChild.getAttribute('data-message-id');
+    const s =
+      Math.abs(e.target.scrollTop) >=
+      Math.abs(e.target.scrollHeight - e.target.offsetHeight);
 
+    if (s && !loading_messages && messages.length < count) {
       setLoading_messages(true);
 
       const messagesobj = await getmessages(
@@ -302,15 +293,6 @@ const Messages = () => {
       setmessages(messagesobj.messages);
       setPage(messagesobj.page);
       setLoading_messages(false);
-      setTimeout(() => {
-        try {
-          document
-            .querySelector(`div[data-message-id="${lastMessage}"]`)
-            .scrollIntoView(true);
-        } catch (error) {}
-      }, 0);
-      // setCount(messagesobj.count);
-    } else {
     }
   };
 
@@ -320,7 +302,7 @@ const Messages = () => {
 
   const onchange = (e) => {
     message.current = e.target.value;
-    // console.log(message);
+
     if (message.current.trim()) {
       setSendButton(true);
     } else {
@@ -332,7 +314,6 @@ const Messages = () => {
     if (true) {
       message.current = message.current.trim();
       const messageInput = document.querySelector('.message-input textarea');
-      // messageInput.value = message.current;
 
       const messageObject = {
         tempid: v1(),
@@ -344,7 +325,6 @@ const Messages = () => {
         delivering: true,
       };
       setTimeout(() => {
-        scrollToBottom();
         updateConversations();
         setSendButton(false);
         messageInput.value = '';
@@ -353,8 +333,6 @@ const Messages = () => {
 
       setmessages([...messages, messageObject]);
       setCount(count + 1);
-
-      scrollToBottom();
 
       messageInput.focus();
 
@@ -388,8 +366,9 @@ const Messages = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      <div onScroll={onscroll} className="messages-container">
+      <div className="messages-container">
         <div
+          onScroll={onscroll}
           style={{
             // display: messagesLoad ? 'none' : '',
             opacity: messagesLoad ? '0' : '1',
@@ -406,9 +385,11 @@ const Messages = () => {
             <></>
           )}
           {messages ? (
-            groupBySenderId(messages).map((message_group, i) => {
-              return <MessageBlock key={i} messages={message_group} />;
-            })
+            groupBySenderId(messages)
+              .map((message_group, i) => {
+                return <MessageBlock key={i} messages={message_group} />;
+              })
+              .reverse()
           ) : (
             <></>
           )}
@@ -452,14 +433,12 @@ const Messages = () => {
 
 function groupBySenderId(messages) {
   let r = [];
-
   messages.forEach((message) => {
     r.length > 0 &&
     r[r.length - 1][r[r.length - 1].length - 1].sender_id === message.sender_id
       ? r[r.length - 1].push(message)
       : r.push([message]);
   });
-
   return r;
 }
 
@@ -520,28 +499,26 @@ function MessageBlock({ messages }) {
 }
 
 function Message2({ message }) {
-  if (
-    new RegExp(
-      '([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?'
-    ).test(message)
-  ) {
-    console.log(message);
-  }
-  // message.message = message.message.replace(/(?:\r\n|\r|\n)/g, '<br>');
+  const [reveal, setReveal] = useState(false);
+  useEffect(() => {
+    setReveal(true);
+  }, []);
   return (
-    <div
-      className="message"
-      data-message-id={message.message_id}
-      id={message.delivering ? 'delivering-message' : ''}
-    >
-      <span>{message.message}</span>
-      {/* <AccessTimeIcon
+    <Collapse in={reveal}>
+      <div
+        className="message"
+        data-message-id={message.message_id}
+        id={message.delivering ? 'delivering-message' : ''}
+      >
+        <span>{message.message}</span>
+        {/* <AccessTimeIcon
         id="message-loader"
         style={{ transform: message.delivering ? 'scale(1)' : 'scale(0)' }}
       /> */}
-      {message.delivering ? <AccessTimeIcon id="message-loader" /> : <></>}
-      {message.toxicity ? <ReportProblemOutlinedIcon /> : <></>}
-    </div>
+        {message.delivering ? <AccessTimeIcon id="message-loader" /> : <></>}
+        {message.toxicity ? <ReportProblemOutlinedIcon /> : <></>}
+      </div>
+    </Collapse>
   );
 }
 

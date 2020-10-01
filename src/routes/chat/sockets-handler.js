@@ -1,7 +1,5 @@
 // db controller to save the messages
 const dbController = require('../../model/controller');
-
-
 function Chat(io) {
     io.on('connection', function (socket) {
         socket.on('subscribe', function (room) {

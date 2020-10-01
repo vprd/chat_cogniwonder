@@ -59,10 +59,7 @@ module.exports = function (io) {
             console.timeEnd('parellel')
         })
 
-        router.post('/authenticate', autherize, async (req, res) => {
-            // console.log(req.body)
-            res.send(JSON.stringify(await dbController.authenticate(req.body)));
-        });
+        router.post('/authenticate', autherize, async (req, res) => res.send(JSON.stringify(await dbController.authenticate(req.body))));
 
         router.post('/conversations', autherize, async (req, res) => {
             if (req.body.userid) {
