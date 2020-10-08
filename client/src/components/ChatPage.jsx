@@ -200,7 +200,6 @@ const ConversationList = () => {
   // const conversations = false;
 
   if (Array.isArray(conversations) && !conversations.length) {
-    console.log('here', conversations);
     return (
       <div className="empty-conversation-list">you have no conversations</div>
     );
@@ -263,6 +262,7 @@ const Conversation = ({ conversation }) => {
       .filter((name) => name !== user.first_name)
       .join(', ');
   }
+  if (conversation.display_name) conversation_name = conversation.display_name;
   if (conversation.conversation.length === 2) {
     return (
       <Button
@@ -420,7 +420,6 @@ const AddConversationDialog = ({ setaddconversationview }) => {
     setaddconversationview(false);
   };
   const start = async () => {
-    console.log(participants);
     dismiss();
     startconversation(participants);
   };

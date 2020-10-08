@@ -563,33 +563,33 @@
   font-weight: 800;
 }
 
-.message-block .messages {
-  margin-left: 10px;
-  max-width: 300px;
-}
-
-.message-block .messages > :first-child {
-  border-top-right-radius: 12px;
-  border-bottom-right-radius: 12px;
-}
-
-.message-block .messages > :nth-last-child(2) {
-  border-top-right-radius: 12px;
-  border-bottom-right-radius: 12px;
-}
-
 .message-block .message {
-  margin: 2px 0;
+  margin: 1px 0;
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
-  padding: 10px 12px;
+  padding: 10px 16px;
   background-color: var(--accent-color);
   color: white;
   font-size: 1rem;
   border-radius: 8px;
   word-break: break-word;
   white-space: pre-line;
+  border-top-right-radius: 1.5rem;
+  border-bottom-right-radius: 1.5rem;
+}
+
+.message-block .messages {
+  margin-left: 10px;
+  max-width: 300px;
+}
+
+.message-block .messages > :first-child .message {
+  border-top-left-radius: 1.5rem;
+}
+
+.message-block .messages > :nth-last-child(2) .message {
+  border-bottom-left-radius: 1.5rem;
 }
 
 #sender {
@@ -611,18 +611,12 @@
   text-align: right;
 }
 
-#sender .messages > :first-child {
-  border-top-left-radius: 12px;
-  border-bottom-left-radius: 12px;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+#sender .messages > :first-child .message {
+  border-top-right-radius: 1.5rem;
 }
 
-#sender .messages > :nth-last-child(2) {
-  border-bottom-left-radius: 12px;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+#sender .messages > :nth-last-child(2) .message {
+  border-bottom-right-radius: 1.5rem;
 }
 
 #sender .message {
@@ -637,6 +631,8 @@
       -ms-flex-direction: column;
           flex-direction: column;
   border-radius: 8px;
+  border-top-left-radius: 1.5rem;
+  border-bottom-left-radius: 1.5rem;
 }
 
 #sender .message span {

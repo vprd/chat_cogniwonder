@@ -112,20 +112,6 @@ export const ChatContextProvider = ({ children }) => {
           cookies: { mdn: cookies.get('mdn'), cwcc: cookies.get('cwcc') },
         });
       }
-      /* const convos = await api.getconversations(user.id);
-      if (convos) {
-        for (let convo of convos) {
-          const data = await api.getmessages(convo.conversation_id);
-          try {
-            convo.recent_activity =
-              data.messages[data.messages.length - 1].date;
-          } catch (error) {}
-        }
-
-        conversationListLength.current = convos.length;
-      }
-      // setconversations(convos);
-      console.log('local', convos); */
     },
 
     [conversations_socket]
@@ -135,16 +121,30 @@ export const ChatContextProvider = ({ children }) => {
     if (sock.on) {
       const online = (user) => {};
       sock.on('online', online);
+
       const message = async (message) => {
         if (openedconversation.conversation_id !== message.conversation_id) {
           await updateConversations();
           markUndread(message.conversation_id);
         }
       };
+      const onupadte = async (update) => {
+        if (update.type === 'name') {
+          // console.log(update, openedconversation);
+          await updateConversations();
+          setOpenedconversation((o) => ({
+            ...o,
+            display_name: update.conversation_name,
+          }));
+        }
+      };
+      sock.on('convo-update', onupadte);
+
       sock.on('message', message);
       return () => {
         sock.off('online', online);
         sock.off('message', message);
+        sock.off('convo-update', onupadte);
       };
     }
   }, [sock, openedconversation, updateConversations]);
@@ -236,6 +236,7 @@ export const ChatContextProvider = ({ children }) => {
         setSocketState,
         messagesLoad,
         setMessagesLoad,
+        conversations_socket,
       }}
     >
       {children}

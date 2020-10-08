@@ -83,11 +83,11 @@ const api = {
 
         return result.data;
     },
-    changeconversationname: async (ids, creator) => {
-        const point = endpoint + '/startconversation';
+    changeconversationname: async (conversation_id, conversation_name) => {
+        const point = endpoint + '/nameconversation';
 
         const result = await post(point, {
-            ids, creator
+            conversation_id, conversation_name
         });
 
         return result.data;

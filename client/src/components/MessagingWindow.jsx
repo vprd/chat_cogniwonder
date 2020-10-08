@@ -34,24 +34,30 @@ import Collapse from '@material-ui/core/Collapse';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
 
 import { useSnackbar } from 'notistack';
+import Cookies from 'universal-cookie';
 
 // const endpoint = `${getendpoint()}`;
 // import useTextToxicity from 'react-text-toxicity';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
-
+const cookies = new Cookies();
 const MessagingWindow = ({ drawer }) => {
   const { openedconversation, user } = useContext(ChatContext);
   const [changegroupname, setchangegroupname] = useState(false);
 
   let conversation_name;
   if (Object.keys(openedconversation).length) {
-    if (Array.isArray(openedconversation.conversation_name)) {
+    if (
+      Array.isArray(openedconversation.conversation_name) &&
+      !openedconversation.display_name
+    ) {
       conversation_name = [...openedconversation.conversation_name];
       conversation_name = conversation_name
         .filter((name) => name !== user.first_name)
         .join(', ');
     }
-
+    if (openedconversation.display_name)
+      conversation_name = openedconversation.display_name;
+    console.log(openedconversation);
     return (
       <div className="chat-screen">
         <div className="contact-header">
@@ -114,19 +120,51 @@ const MessagingWindow = ({ drawer }) => {
 };
 
 function ChangeName({ name, changegroupname, setchangegroupname }) {
+  const { openedconversation, conversations_socket } = useContext(ChatContext);
+
+  const [newname, setNewname] = useState('');
+
+  const [warn, setWarn] = useState(false);
+
+  const change = () => {
+    if (newname.trim()) {
+      conversations_socket.emit('conversations', {
+        action: 'changename',
+        conversation_id: openedconversation.conversation_id,
+        conversation_name: newname,
+        cookies: { mdn: cookies.get('mdn'), cwcc: cookies.get('cwcc') },
+      });
+      setNewname('');
+      setchangegroupname(false);
+      setWarn(false);
+    } else {
+      setWarn(true);
+    }
+  };
+
+  useEffect(() => {});
+
   return (
     <Dialog
       open={changegroupname}
       onClose={() => setchangegroupname(false)}
       aria-labelledby="form-dialog-title"
     >
-      <DialogTitle id="form-dialog-title">Group Name</DialogTitle>
+      {!warn ? (
+        <DialogTitle id="form-dialog-title">Group Name</DialogTitle>
+      ) : (
+        <DialogTitle style={{ color: 'red' }} id="form-dialog-title">
+          Invalid group name
+        </DialogTitle>
+      )}
       <DialogContent>
         {/* <DialogContentText>Display name</DialogContentText> */}
         <TextField
           onChange={(e) => {
-            e.persist();
+            setNewname(e.target.value);
           }}
+          style={{ color: warn ? 'red' : '' }}
+          value={newname}
           autoFocus
           margin="dense"
           id="name"
@@ -138,6 +176,9 @@ function ChangeName({ name, changegroupname, setchangegroupname }) {
       <DialogActions>
         <Button onClick={() => setchangegroupname(false)} color="primary">
           Cancel
+        </Button>
+        <Button onClick={() => change()} color="primary">
+          change
         </Button>
       </DialogActions>
     </Dialog>

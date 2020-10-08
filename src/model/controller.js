@@ -248,17 +248,31 @@ const control = {
         const conversations = (await Promise.all(convoids.map(id => {
             return this._query(`SELECT * FROM conversations WHERE conversation_id=${id} ORDER BY recent_activity asc`);
         }))).map(c => {
+            const cname = JSON.parse(c[0].conversation_name)
+            if (Array.isArray(cname)) {
+                c[0].conversation_name = JSON.parse(c[0].conversation_name);
+            } else if (cname.display_name && cname.users) {
+                c[0].conversation_name = cname.users;
+                c[0].display_name = cname.display_name;
+            }
             c[0].conversation = JSON.parse(c[0].conversation);
-            c[0].conversation_name = JSON.parse(c[0].conversation_name);
             return c[0];
         });
 
         return conversations;
     },
 
-    setConversationName: async function (conversation_id, conversation_name) {
-        const result = await this._query(`UPDATE conversations SET conversation_name='${conversation_name}' WHERE conversation_id=${conversation_id}`);
-        return result;
+    setConversationName: async function ({ conversation_id, conversation_name }) {
+        const result = (await this._query(`SELECT * FROM conversations WHERE conversation_id=${conversation_id}`))[0];
+        const cname = JSON.parse(result.conversation_name)
+        let newcname = {}
+        if (Array.isArray(cname)) {
+            newcname.display_name = conversation_id
+            newcname.users = cname
+        } else {
+            newcname = { ...cname, display_name: conversation_name }
+        }
+        return await this._query(`UPDATE conversations SET conversation_name='${JSON.stringify(newcname)}' WHERE conversation_id=${conversation_id}`);
     },
     updateConversationActivity: async function (conversation_id, date) {
         const createdDate = new Date(date) || new Date();

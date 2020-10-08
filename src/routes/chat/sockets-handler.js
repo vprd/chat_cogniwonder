@@ -20,6 +20,7 @@ function Chat(io) {
             // console.log('data', data)
             io.sockets.in(data.room).emit('message', data);
         });
+
         socket.on('message', async function (message) {
             if (message.toxicity) {
                 io.sockets.in('conversation' + message.conversation_id).emit('message', message)

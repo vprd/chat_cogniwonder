@@ -17,9 +17,9 @@ module.exports = function (io) {
         conversations_socket.on('connection', socket => {
 
             socket.on('conversations', async data => {
-                if (data.action === 'get') {
-                    const user = await dbController.authorize(data.cookies);
-                    if (user) {
+                const user = await dbController.authorize(data.cookies);
+                if (user) {
+                    if (data.action === 'get') {
                         let convos = await dbController.getConversations(user.id);
                         async function updateActivity(convo) {
                             const data = (await dbController.getMessages(convo.conversation_id))
@@ -43,6 +43,10 @@ module.exports = function (io) {
                             } */
                         }
                         socket.emit('update', convos)
+                    } else if (data.action === 'changename') {
+
+                        await dbController.setConversationName(data)
+                        io.sockets.in('conversation' + data.conversation_id).emit('convo-update', { type: 'name', conversation_name: data.conversation_name })
                     }
                 }
             })
@@ -78,6 +82,10 @@ module.exports = function (io) {
 
         router.post('/sarch', async (req, res) => {
             res.send(JSON.stringify(await dbController.searchUsers(req.body)))
+        });
+
+        router.post('/nameconversation', async (req, res) => {
+
         });
 
         router.post('/search', async (req, res) => {

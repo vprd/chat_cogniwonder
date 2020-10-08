@@ -514,25 +514,12 @@
         font-weight: 800;
     }
 
-    .messages {
-        margin-left: 10px;
-        max-width: 300px;
 
-        &>:first-child {
-            border-top-right-radius: 12px;
-            border-bottom-right-radius: 12px;
-        }
-
-        &>:nth-last-child(2) {
-            border-top-right-radius: 12px;
-            border-bottom-right-radius: 12px;
-        }
-    }
 
     .message {
-        margin: 2px 0;
+        margin: 1px 0;
         width: fit-content;
-        padding: 10px 12px;
+        padding: 10px 16px;
         background-color: var(--accent-color);
         color: white;
         font-size: 1rem;
@@ -540,6 +527,24 @@
         border-radius: 8px;
         word-break: break-word;
         white-space: pre-line;
+
+        border-top-right-radius: 1.5rem;
+        border-bottom-right-radius: 1.5rem;
+    }
+
+    .messages {
+        margin-left: 10px;
+        max-width: 300px;
+
+        &>:first-child .message {
+            border-top-left-radius: 1.5rem;
+            // border-bottom-right-radius: 12px;
+        }
+
+        &>:nth-last-child(2) .message {
+            // border-top-right-radius: 12px;
+            border-bottom-left-radius: 1.5rem;
+        }
     }
 }
 
@@ -560,20 +565,14 @@
             text-align: right;
         }
 
-        &>:first-child {
-            border-top-left-radius: 12px;
-            border-bottom-left-radius: 12px;
-
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
+        &>:first-child .message {
+            border-top-right-radius: 1.5rem;
+            // border-bottom-right-radius: 12px;
         }
 
-        &>:nth-last-child(2) {
-            border-bottom-left-radius: 12px;
-            border-top-left-radius: 12px;
-
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
+        &>:nth-last-child(2) .message {
+            // border-top-right-radius: 12px;
+            border-bottom-right-radius: 1.5rem;
         }
     }
 
@@ -584,6 +583,8 @@
         display: flex;
         flex-direction: column;
         border-radius: 8px;
+        border-top-left-radius: 1.5rem;
+        border-bottom-left-radius: 1.5rem;
 
         span {
             display: block;
