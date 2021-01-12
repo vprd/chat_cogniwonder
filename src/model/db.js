@@ -14,11 +14,11 @@ const mysql2 = require('mysql2');
 
 const con2 = mysql2.createConnection({
     host: process.env.HOST || "localhost",
-    port: 25060,
+    port: 3306,
     /* ssl: true, */
-    user: process.env.USER_NAME,
-    password: process.env.PASSWORD,
-    database: process.env.DATABASE,
+    user: 'root',
+    password: 'root',
+    database: 'cogniwon_dev',
 });
 
 // TABLE NAME = conversations
@@ -51,7 +51,7 @@ async function addUser(mobile, email, first_name, last_name) {
 function query(sql) {
     return new Promise((resolve, reject) => {
 
-        con.query(sql, function (err, result) {
+        con.query(sql, function(err, result) {
             if (err) reject(err);
             resolve(result);
         });
